@@ -2,11 +2,12 @@
 
 ## Table of Contents
 1. [Architecture Overview](#architecture-overview)
-2. [When to Use Which Tool](#when-to-use-which-tool)
-3. [HTML Snippet Editing Flow](#html-snippet-editing-flow)
-4. [Zoho Save API](#zoho-save-api)
-5. [Common Patterns](#common-patterns)
-6. [Troubleshooting](#troubleshooting)
+2. [Session Persistence](#session-persistence)
+3. [When to Use Which Tool](#when-to-use-which-tool)
+4. [HTML Snippet Editing Flow](#html-snippet-editing-flow)
+5. [Zoho Save API](#zoho-save-api)
+6. [Common Patterns](#common-patterns)
+7. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -28,6 +29,32 @@
 │ • Get Fields     │                                      │
 └──────────────────┴──────────────────────────────────────┘
 ```
+
+## Session Persistence
+
+### How It Works
+- Playwright MCP automatically persists browser sessions in `.playwright-mcp/` directory
+- Login cookies (including `zccpn` token) are saved between sessions
+- Future automation runs reuse existing sessions without requiring re-login
+- Session expires after several hours/days (Zoho cookie lifetime)
+
+### Session Storage
+- **Location**: `.playwright-mcp/` directory (already in `.gitignore`)
+- **What's stored**: Browser cookies, localStorage, session data
+- **Security**: Session data is NOT source controlled (gitignored)
+- **Benefit**: Future agents automatically inherit active sessions
+
+### When Manual Login is Required
+- First time running automation
+- Session has expired
+- Cookies have been cleared
+- Switching to a different Zoho account
+
+### Workflow for Agents
+1. Try navigating to the page builder URL
+2. If redirected to login page → ask user to login manually
+3. After login → session is automatically persisted
+4. Future runs → skip login, proceed directly to automation
 
 ## When to Use Which Tool
 
@@ -57,57 +84,86 @@ browser_wait_for: 3 seconds
 ### Step 2: Click HTML Snippet Component
 ```
 # Find the HTML Snippet in the preview iframe
-browser_click on the HTML Snippet component
+browser_snapshot  # Get fresh refs
+browser_click on ref of HTML Snippet component
 browser_wait_for: 2 seconds
 ```
 
 ### Step 3: Open Code Editor
 ```
 # Click Configure button
-browser_click on Configure button
+browser_snapshot  # Get fresh refs
+browser_click on ref of "Configure" button
 browser_wait_for: 3 seconds
 ```
 
-### Step 4: Edit Content via CodeMirror
+### Step 4: Find the Text to Edit
 ```javascript
-// The HTML content is in the 3rd CodeMirror (index 2) in frame 0
-const cm = document.querySelectorAll('.CodeMirror')[2].CodeMirror;
-
-// Find the line containing your text
-for (let i = 0; i < cm.lineCount(); i++) {
-  if (cm.getLine(i).includes('Text to find')) {
-    // Select and replace
-    const lineContent = cm.getLine(i);
-    const start = lineContent.indexOf('Text to find');
-    cm.setSelection(
-      { line: i, ch: start },
-      { line: i, ch: start + 'Text to find'.length }
-    );
-    cm.replaceSelection('Replacement text');
-    break;
-  }
+async (page) => {
+  const result = await page.frames()[0].evaluate(() => {
+    const cm = document.querySelectorAll('.CodeMirror')[2].CodeMirror;
+    for (let i = 0; i < cm.lineCount(); i++) {
+      const line = cm.getLine(i);
+      if (line.includes('Text to find')) {
+        return { found: true, line: i + 1, content: line };
+      }
+    }
+    return { found: false };
+  });
+  return result;
 }
 ```
 
-### Step 5: Save Changes
+### Step 5: Edit Content via CodeMirror
+```javascript
+async (page) => {
+  const result = await page.frames()[0].evaluate(() => {
+    const cmElements = document.querySelectorAll('.CodeMirror');
+    const cm = cmElements[2].CodeMirror;  // 3rd editor
+    
+    cm.focus();
+    
+    const lineIdx = 41;  // UI line 42 = index 41
+    const lineContent = cm.getLine(lineIdx);
+    const startPos = lineContent.indexOf('Old Text');
+    
+    cm.setSelection(
+      { line: lineIdx, ch: startPos },
+      { line: lineIdx, ch: startPos + 'Old Text'.length }
+    );
+    
+    cm.replaceSelection('New Text');
+    cm.scrollIntoView({ line: lineIdx, ch: 0 }, 200);
+    
+    return { success: true, newContent: cm.getLine(lineIdx) };
+  });
+  return result;
+}
 ```
-# Click Save button in popup
-browser_run_code: (click #zctemplate-dialog-okBtn)
+
+### Step 6: Save Changes
+```
+# Click Save button in code editor popup
+browser_snapshot  # Get fresh refs
+browser_click on ref of "Save" button
 browser_wait_for: 2 seconds
 
 # Close popup
 browser_press_key: Escape
+browser_wait_for: 1 second
 
 # Exit page builder
-browser_click on Done link (#builder-close)
+browser_snapshot  # Get fresh refs
+browser_click on ref of "Done" link
+browser_wait_for: 2 seconds
 ```
 
-### Step 6: Verify on Live Page
+### Step 7: Verify on Live Page
 ```
 browser_navigate:
   url: "https://creatorapp.zoho.com/{account}/{app}/#Page:{page}"
 browser_wait_for: 3 seconds
-browser_take_screenshot
+browser_snapshot  # Verify the changes are visible
 ```
 
 ---
@@ -180,6 +236,13 @@ Call this before performing actions to capture all API calls.
 
 ## Troubleshooting
 
+### Issue: Redirected to login page
+**Cause:** Session expired or no active session
+**Fix:** 
+1. Ask user to login manually
+2. After login, session will be persisted automatically
+3. Future runs won't require re-login
+
 ### Issue: CodeMirror content is empty (length: 0)
 **Cause:** Wrong CodeMirror instance selected
 **Fix:** Use index 2 (3rd instance), not index 0
@@ -190,7 +253,7 @@ Call this before performing actions to capture all API calls.
 
 ### Issue: Changes don't persist after save
 **Cause:** Save button wasn't clicked before closing editor
-**Fix:** Always click `#zctemplate-dialog-okBtn` before pressing Escape
+**Fix:** Always click Save button before pressing Escape
 
 ### Issue: Can't find element by ref
 **Cause:** Page state changed, refs are stale
@@ -199,3 +262,19 @@ Call this before performing actions to capture all API calls.
 ### Issue: Line number not found
 **Cause:** CodeMirror uses 0-based indexing
 **Fix:** UI line 128 = CodeMirror index 127
+
+### Issue: Text replacement doesn't work
+**Cause:** CodeMirror not focused or wrong selection
+**Fix:** 
+1. Call `cm.focus()` before making selections
+2. Verify the text exists using the find script first
+3. Check that `startPos` is not -1 (text not found)
+
+### Issue: Page builder doesn't close after Done
+**Cause:** Done button not clicked or Save popup still open
+**Fix:** 
+1. Click Save button
+2. Wait 2 seconds
+3. Press Escape to close popup
+4. Wait 1 second
+5. Click Done button
