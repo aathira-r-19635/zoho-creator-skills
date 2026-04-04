@@ -1,0 +1,140 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e4]: CONTINENTAL GROUP
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - text:         
+      - generic:
+        - text:     󯄩   
+        - generic [ref=e8]:
+          - link "" [ref=e10] [cursor=pointer]:
+            - /url: javascript:;
+            - generic [ref=e11]: 
+          - list [ref=e13]:
+            - listitem [ref=e14]:
+              - link " Design" [ref=e15] [cursor=pointer]:
+                - /url: /appbuilder/achyutmenont0_zohotest/continental-group/edit
+                - generic [ref=e16]: 
+                - generic [ref=e17]: Design
+            - listitem [ref=e18]:
+              - link "Workflow" [ref=e19] [cursor=pointer]:
+                - /url: /appbuilder/achyutmenont0_zohotest/continental-group/workflow/edit
+                - generic [ref=e20]: 
+                - generic [ref=e21]: Workflow
+            - listitem [ref=e22]:
+              - link "Settings" [ref=e23] [cursor=pointer]:
+                - /url: /appbuilder/achyutmenont0_zohotest/continental-group/settings/edit
+                - generic [ref=e24]: 
+                - generic [ref=e25]: Settings
+        - list [ref=e26]:
+          - listitem
+          - listitem [ref=e27]:
+            - generic "Notifications" [ref=e29] [cursor=pointer]:
+              - generic [ref=e30]: 
+          - listitem [ref=e31]:
+            - link "Share" [ref=e32] [cursor=pointer]:
+              - /url: javascript:;
+              - generic [ref=e33]: 
+              - text: Share
+          - listitem [ref=e34]:
+            - link "Access this application" [ref=e35] [cursor=pointer]:
+              - /url: https://creatorapp.zoho.com/achyutmenont0_zohotest/continental-group/#Page:Dashboard
+              - generic [ref=e36]: 
+              - text: Access this application
+      - generic [ref=e37]:
+        - img [ref=e39]
+        - paragraph [ref=e40]: Aathira PR
+        - paragraph [ref=e41]: aathira.r+j1@zohotest.com
+        - generic [ref=e42]: "User ID: 859798137"
+        - generic [ref=e43]:
+          - link "Logout" [ref=e44] [cursor=pointer]:
+            - /url: /logoutpage.jsp?sharedBy=740304054
+            - generic [ref=e45]: 
+            - text: Logout
+          - link " My Account" [ref=e46] [cursor=pointer]:
+            - /url: https://accounts.zoho.com/u/h#profile/personal
+            - generic [ref=e47]: 
+            - text: My Account
+      - generic [ref=e56] [cursor=pointer]:
+        - generic [ref=e57]: CONTINENTAL GROUP
+        - generic [ref=e58]: Dashboard
+      - generic: 
+      - generic [ref=e60]:
+        - generic [ref=e62]:
+          - generic [ref=e63]: My Applications
+          - list [ref=e65]
+        - generic [ref=e66]:
+          - link [ref=e67] [cursor=pointer]:
+            - /url: https://accounts.zoho.com/u/h#profile/personal
+            - img [ref=e68]
+          - generic [ref=e69]: Aathira PR
+          - generic [ref=e70]: aathira.r+j1@zohotest.com
+          - generic [ref=e71]:
+            - link "Home" [ref=e73] [cursor=pointer]:
+              - /url: /userhome/dashboard
+            - link "Subscription" [ref=e75] [cursor=pointer]:
+              - /url: javascript:void(0);
+            - link "Setup" [ref=e77] [cursor=pointer]:
+              - /url: /userhome/achyutmenont0_zohotest/dashboard/setup
+          - link "Logout" [ref=e79] [cursor=pointer]:
+            - /url: /logoutpage.jsp?sharedBy=740304054
+            - generic [ref=e80]: 
+            - text: Logout
+      - text: 
+    - generic [ref=e81]:
+      - list [ref=e82]:
+        - listitem [ref=e83]:
+          - link "" [ref=e84] [cursor=pointer]:
+            - /url: javascript:;
+            - generic [ref=e85]: 
+        - listitem [ref=e86]:
+          - link "" [ref=e87] [cursor=pointer]:
+            - /url: javascript:;
+            - generic [ref=e88]: 
+        - listitem [ref=e89]:
+          - link "" [ref=e90] [cursor=pointer]:
+            - /url: javascript:;
+            - generic [ref=e91]: 
+      - list [ref=e92]:
+        - listitem [ref=e93]:
+          - generic "Themes" [ref=e94] [cursor=pointer]:
+            - generic [ref=e95]: 
+        - listitem [ref=e96]:
+          - generic "App Menu Builder" [ref=e97] [cursor=pointer]:
+            - generic [ref=e98]: 
+    - generic [ref=e99]:
+      - iframe [ref=e109]:
+        
+      - generic [ref=e110]:
+        - heading "Page Customization - Web" [level=2] [ref=e112]:  Page Customization - Web
+        - generic [ref=e118]:
+          - generic [ref=e119]: Display as
+          - generic [ref=e120]:
+            - generic [ref=e121]:
+              - radio "Card" [ref=e122]
+              - generic [ref=e123] [cursor=pointer]: Card
+            - generic [ref=e124]:
+              - radio "Plain" [checked] [ref=e125]
+              - generic [ref=e126] [cursor=pointer]: Plain
+          - generic [ref=e128]:
+            - generic [ref=e129]: Margin
+            - generic [ref=e130]:
+              - spinbutton [ref=e131]: "0"
+              - generic [ref=e132]: px
+              - generic [ref=e133]: Top
+            - generic [ref=e134]:
+              - spinbutton [ref=e135]: "0"
+              - generic [ref=e136]: px
+              - generic [ref=e137]: Right
+            - generic [ref=e138]:
+              - spinbutton [ref=e139]: "0"
+              - generic [ref=e140]: px
+              - generic [ref=e141]: Bottom
+            - generic [ref=e142]:
+              - spinbutton [ref=e143]: "0"
+              - generic [ref=e144]: px
+              - generic [ref=e145]: Left
+    - generic:
+      - generic:        
+      - text:     
+  - img
+  - img

@@ -1,0 +1,215 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - dialog "Quick Access Cntrl + ." [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - text: Quick Access
+          - generic [ref=e6]:
+            - generic [ref=e7]: Cntrl
+            - text: +
+            - generic [ref=e8]: .
+        - generic [ref=e9]: Esc
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - link "Go to Top Navigation Bar" [ref=e12] [cursor=pointer]:
+            - /url: javascript:;
+        - listitem [ref=e13]:
+          - link "Go to Main Menu" [ref=e14] [cursor=pointer]:
+            - /url: javascript:;
+        - listitem [ref=e15]:
+          - link "Go to App Content Cntrl + /" [ref=e16] [cursor=pointer]:
+            - /url: javascript:;
+            - text: Go to App Content
+            - generic [ref=e17]:
+              - generic [ref=e18]: Cntrl
+              - text: +
+              - generic [ref=e19]: /
+        - listitem [ref=e20]:
+          - link "Go to Accessibility Controls Ctrl + ," [ref=e21] [cursor=pointer]:
+            - /url: javascript:;
+            - text: Go to Accessibility Controls
+            - generic [ref=e22]:
+              - generic [ref=e23]: Ctrl
+              - text: +
+              - generic [ref=e24]: ","
+    - complementary "Top navigation bar" [ref=e25]:
+      - list [ref=e26]:
+        - listitem [ref=e27]:
+          - link [ref=e28] [cursor=pointer]:
+            - /url: https://creator.zoho.com
+        - listitem [ref=e29]:
+          - link "CONTINENTAL GROUP" [ref=e30] [cursor=pointer]:
+            - /url: ""
+      - tablist [ref=e31]:
+        - tab "Web" [selected] [ref=e32] [cursor=pointer]:
+          - generic [ref=e33]: 
+        - tab "Phone" [ref=e34] [cursor=pointer]:
+          - generic [ref=e35]: 
+        - tab "Tablet" [ref=e36] [cursor=pointer]:
+          - generic [ref=e37]: 
+      - list [ref=e38]:
+        - listitem [ref=e39]:
+          - link "Subscription" [ref=e40] [cursor=pointer]:
+            - /url: javascript:void(0);
+        - listitem [ref=e41]:
+          - link " Edit this application" [ref=e42] [cursor=pointer]:
+            - /url: https://creator.zoho.com/appbuilder/achyutmenont0_zohotest/continental-group/page/Dashboard/edit
+            - generic [ref=e43]: 
+            - text: Edit this application
+        - listitem [ref=e44]:
+          - link " Help" [ref=e45] [cursor=pointer]:
+            - /url: javascript:;
+            - generic [ref=e46]: 
+            - text: Help
+        - listitem [ref=e47]:
+          - button "Choose Language" [ref=e48] [cursor=pointer]:
+            - generic [ref=e49]: 
+          - text:   
+    - generic [ref=e51]:
+      - complementary [ref=e52]:
+        - generic [ref=e53]:
+          - heading "Application name CONTINENTAL GROUP" [level=1] [ref=e54]:
+            - link "Application name CONTINENTAL GROUP" [ref=e55] [cursor=pointer]:
+              - /url: ""
+              - generic "Application name CONTINENTAL GROUP" [ref=e57]: CONTINENTAL GROUP
+          - navigation "Menu navigation" [ref=e58]:
+            - list [ref=e62]:
+              - listitem [ref=e63] [cursor=pointer]:
+                - link "Dashboard" [expanded] [ref=e64]:
+                  - /url: "#Dashboard"
+                  - generic [ref=e65]: 
+                  - generic [ref=e66]: Dashboard
+                - text: 
+              - link "Track Status" [ref=e67] [cursor=pointer]:
+                - /url: "#Track_Status"
+                - generic [ref=e68]:
+                  - generic [ref=e69]: 
+                  - generic [ref=e70]: Track Status
+                - generic [ref=e71]: 
+              - text:  
+              - listitem [ref=e72] [cursor=pointer]:
+                - link "Ship Motor" [ref=e73]:
+                  - /url: "#Ship_Motor"
+                  - generic [ref=e74]: 
+                  - generic [ref=e75]: Ship Motor
+                - text: 
+              - link "Inspection" [ref=e76] [cursor=pointer]:
+                - /url: "#Inspection"
+                - generic [ref=e77]:
+                  - generic [ref=e78]: 
+                  - generic [ref=e79]: Inspection
+                - generic [ref=e80]: 
+              - text:  
+              - link "Configurations" [ref=e81] [cursor=pointer]:
+                - /url: "#Configurations"
+                - generic [ref=e82]:
+                  - generic [ref=e83]: 
+                  - generic [ref=e84]: Configurations
+                - generic [ref=e85]: 
+              - text:   
+      - main [ref=e86]:
+        - generic [ref=e87]:
+          - text:  
+          - generic [ref=e88]:
+            - button "Accessibility" [ref=e90] [cursor=pointer]: 
+            - button "Notification" [ref=e92] [cursor=pointer]: 
+            - generic [ref=e93]:
+              - button "profile image" [ref=e94] [cursor=pointer]
+              - text:   
+        - main [ref=e111]:
+          - generic [ref=e114]: Dashboard
+          - generic [ref=e115]:
+            - generic [ref=e116]:
+              - generic [ref=e117]: "42"
+              - text: Total Shipments
+              - generic [ref=e118]: ↑ 3 Added this month
+            - generic [ref=e119]:
+              - generic [ref=e120]: "12"
+              - text: In-Facility (AB)
+              - generic [ref=e121]: 7 Edmonton | 5 Calgary
+            - generic [ref=e122]:
+              - generic [ref=e123]: "5"
+              - text: Under Teardown
+              - generic [ref=e124]: Requires Approval
+            - generic [ref=e125]:
+              - generic [ref=e126]: 88%
+              - text: OverAll
+              - generic [ref=e127]: ↑ 2% vs Last Quarter
+          - generic [ref=e128]:
+            - generic [ref=e129]:
+              - generic [ref=e130]:
+                - text: Shipment Details
+                - generic [ref=e131] [cursor=pointer]: VIEW ALL SHIPMENTS →
+              - table [ref=e132]:
+                - rowgroup [ref=e133]:
+                  - row "MOTOR NAME TAG NUMBER LOCATION CURRENT STEP STATUS" [ref=e134]:
+                    - columnheader "MOTOR NAME" [ref=e135]
+                    - columnheader "TAG NUMBER" [ref=e136]
+                    - columnheader "LOCATION" [ref=e137]
+                    - columnheader "CURRENT STEP" [ref=e138]
+                    - columnheader "STATUS" [ref=e139]
+                - rowgroup [ref=e140]:
+                  - row "Primary Conveyor B1 SN-9921-X Edmonton 2. Inspection Testing" [ref=e141]:
+                    - cell "Primary Conveyor B1" [ref=e142]:
+                      - strong [ref=e143]: Primary Conveyor B1
+                    - cell "SN-9921-X" [ref=e144]
+                    - cell "Edmonton" [ref=e145]: Edmonton
+                    - cell "2. Inspection" [ref=e147]
+                    - cell "Testing" [ref=e148]
+                  - 'row "Cooling Fan Motor #4 SN-4410-F Calgary 4. Repair In Progress" [ref=e149]':
+                    - 'cell "Cooling Fan Motor #4" [ref=e150]':
+                      - strong [ref=e151]: "Cooling Fan Motor #4"
+                    - cell "SN-4410-F" [ref=e152]
+                    - cell "Calgary" [ref=e153]: Calgary
+                    - cell "4. Repair" [ref=e155]
+                    - cell "In Progress" [ref=e156]
+                  - row "Hydraulic Pump Drive SN-1102-P Edmonton 1. Shipping In Transit" [ref=e157]:
+                    - cell "Hydraulic Pump Drive" [ref=e158]:
+                      - strong [ref=e159]: Hydraulic Pump Drive
+                    - cell "SN-1102-P" [ref=e160]
+                    - cell "Edmonton" [ref=e161]: Edmonton
+                    - cell "1. Shipping" [ref=e163]
+                    - cell "In Transit" [ref=e164]
+                  - row "Crusher Motor C1 SN-8850-Z Site - On Field 5. Monitoring Optimal" [ref=e165]:
+                    - cell "Crusher Motor C1" [ref=e166]:
+                      - strong [ref=e167]: Crusher Motor C1
+                    - cell "SN-8850-Z" [ref=e168]
+                    - cell "Site - On Field" [ref=e169]
+                    - cell "5. Monitoring" [ref=e170]
+                    - cell "Optimal" [ref=e171]
+                  - row "Exhaust Fan B SN-2291-E Calgary 3. Reporting Awaiting Quote" [ref=e172]:
+                    - cell "Exhaust Fan B" [ref=e173]:
+                      - strong [ref=e174]: Exhaust Fan B
+                    - cell "SN-2291-E" [ref=e175]
+                    - cell "Calgary" [ref=e176]: Calgary
+                    - cell "3. Reporting" [ref=e178]
+                    - cell "Awaiting Quote" [ref=e179]
+            - generic [ref=e181]:
+              - generic [ref=e182]: Recent Activities
+              - list [ref=e183]:
+                - listitem [ref=e184]:
+                  - strong [ref=e185]: Quote Pending Inspection
+                  - text: "Cooling Fan Motor #4 - Calgary Facility"
+                  - text: "Est. Completion: Feb 15"
+                - listitem [ref=e186]:
+                  - strong [ref=e187]: Inspection Completed
+                  - text: Crusher Motor C1 - High Vibration Detected
+                  - text: "Plan: Schedule predictive check."
+              - generic [ref=e188]: Facility Load Distribution
+              - generic [ref=e190]:
+                - generic [ref=e191]: Edmonton Facility
+                - generic [ref=e192]: 70% Capacity
+              - generic [ref=e196]:
+                - generic [ref=e197]: Calgary Facility
+                - generic [ref=e198]: 45% Capacity
+              - generic [ref=e201]: Stage Wise Split
+              - generic [ref=e202]:
+                - generic [ref=e203]: 80% Initiated
+                - generic [ref=e204]: 15% On Progress
+                - generic [ref=e205]: 5% Final
+    - generic:
+      - generic:          
+      - text:            
+    - text:          
+  - status [ref=e206]
+  - iframe

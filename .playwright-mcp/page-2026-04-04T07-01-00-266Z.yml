@@ -1,0 +1,697 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - text:         
+      - generic [ref=e245]:
+        - link "Done" [ref=e247] [cursor=pointer]:
+          - /url: javascript:;
+        - list [ref=e248]:
+          - listitem [ref=e249]:
+            - link "More" [ref=e250] [cursor=pointer]:
+              - /url: javascript:;
+            - text:   
+          - listitem [ref=e255]:
+            - link "" [ref=e256] [cursor=pointer]:
+              - /url: javascript:;
+              - generic [ref=e257]: 
+          - listitem [ref=e258]:
+            - link "󯄩" [ref=e259] [cursor=pointer]:
+              - /url: javascript:;
+              - generic [ref=e260]: 󯄩
+          - listitem: 
+          - text:  
+        - generic [ref=e8]:
+          - link "" [ref=e10] [cursor=pointer]:
+            - /url: javascript:;
+            - generic [ref=e11]: 
+          - text:   
+        - text:   
+      - generic [ref=e37]:
+        - img [ref=e39]
+        - paragraph [ref=e40]: Aathira PR
+        - paragraph [ref=e41]: aathira.r+j1@zohotest.com
+        - generic [ref=e42]: "User ID: 859798137"
+        - generic [ref=e43]:
+          - link "Logout" [ref=e44] [cursor=pointer]:
+            - /url: /logoutpage.jsp?sharedBy=740304054
+            - generic [ref=e45]: 
+            - text: Logout
+          - link " My Account" [ref=e46] [cursor=pointer]:
+            - /url: https://accounts.zoho.com/u/h#profile/personal
+            - generic [ref=e47]: 
+            - text: My Account
+      - generic [ref=e56] [cursor=pointer]:
+        - generic [ref=e57]: CONTINENTAL GROUP
+        - generic [ref=e58]: Dashboard
+      - generic:                                                     
+      - generic [ref=e60]:
+        - generic [ref=e62]:
+          - link "View All" [ref=e149] [cursor=pointer]:
+            - /url: /userhome/dashboard
+          - generic [ref=e63]: My Applications
+          - list [ref=e65]:
+            - listitem [ref=e150] [cursor=pointer]:
+              - link "WIP Wipro" [ref=e151]:
+                - /url: /appbuilder/achyutmenont0_zohotest/wipro/edit
+                - generic [ref=e153]: WIP
+                - generic [ref=e154]: Wipro
+            - listitem [ref=e155] [cursor=pointer]:
+              - link "ACI Asset custom ID" [ref=e156]:
+                - /url: /appbuilder/achyutmenont0_zohotest/asset-custom-id/edit
+                - generic [ref=e158]: ACI
+                - generic [ref=e159]: Asset custom ID
+            - listitem [ref=e160] [cursor=pointer]:
+              - link "LOW lowa" [ref=e161]:
+                - /url: /appbuilder/achyutmenont0_zohotest/lowa/edit
+                - generic [ref=e163]: LOW
+                - generic [ref=e164]: lowa
+            - listitem [ref=e165] [cursor=pointer]:
+              - link "IAM Itron Acces Manager" [ref=e166]:
+                - /url: /appbuilder/achyutmenont0_zohotest/itron-acces-manager/edit
+                - generic [ref=e168]: IAM
+                - generic [ref=e169]: Itron Acces Manager
+            - listitem [ref=e170] [cursor=pointer]:
+              - link "Candidate Onboarding Solution_Bosch" [ref=e171]:
+                - /url: /appbuilder/achyutmenont0_zohotest/candidate-onboarding-solution-bosch/edit
+                - img [ref=e173]
+                - generic [ref=e174]: Candidate Onboarding Solution_Bosch
+            - listitem [ref=e175] [cursor=pointer]:
+              - link "ADM ADMP" [ref=e176]:
+                - /url: /appbuilder/achyutmenont0_zohotest/admp/edit
+                - generic [ref=e178]: ADM
+                - generic [ref=e179]: ADMP
+            - listitem [ref=e180] [cursor=pointer]:
+              - link "WID Widget" [ref=e181]:
+                - /url: /appbuilder/achyutmenont0_zohotest/test1/edit
+                - generic [ref=e183]: WID
+                - generic [ref=e184]: Widget
+            - listitem [ref=e185] [cursor=pointer]:
+              - link "IAM Itron - Access Management" [ref=e186]:
+                - /url: /appbuilder/achyutmenont0_zohotest/itron-access-management/edit
+                - generic [ref=e188]: IAM
+                - generic [ref=e189]: Itron - Access Management
+            - listitem [ref=e190] [cursor=pointer]:
+              - link "SIG Signature" [ref=e191]:
+                - /url: /appbuilder/achyutmenont0_zohotest/signature/edit
+                - generic [ref=e193]: SIG
+                - generic [ref=e194]: Signature
+            - listitem [ref=e195] [cursor=pointer]:
+              - link "BT Button Test" [ref=e196]:
+                - /url: /appbuilder/achyutmenont0_zohotest/button-test/edit
+                - generic [ref=e198]: BT
+                - generic [ref=e199]: Button Test
+            - listitem [ref=e200] [cursor=pointer]:
+              - link " Smart Start Demo - 2" [ref=e201]:
+                - /url: /appbuilder/achyutmenont0_zohotest/smart-start/edit
+                - generic [ref=e203]: 
+                - generic [ref=e204]: Smart Start Demo - 2
+            - listitem [ref=e205] [cursor=pointer]:
+              - link "ZDU Zip download url" [ref=e206]:
+                - /url: /appbuilder/achyutmenont0_zohotest/zip-download-url/edit
+                - generic [ref=e208]: ZDU
+                - generic [ref=e209]: Zip download url
+            - listitem [ref=e210] [cursor=pointer]:
+              - link " Smart Start demo 1" [ref=e211]:
+                - /url: /appbuilder/achyutmenont0_zohotest/candidate-onboarding/edit
+                - generic [ref=e213]: 
+                - generic [ref=e214]: Smart Start demo 1
+            - listitem [ref=e215] [cursor=pointer]:
+              - link " ASTER DM HEALTHCARE" [ref=e216]:
+                - /url: /appbuilder/achyutmenont0_zohotest/aster-dm-healthcare/edit
+                - generic [ref=e218]: 
+                - generic [ref=e219]: ASTER DM HEALTHCARE
+            - listitem [ref=e220] [cursor=pointer]:
+              - link "EOS Employee Onboarding Solution" [ref=e221]:
+                - /url: /appbuilder/achyutmenont0_zohotest/employee-onboarding-solution/edit
+                - generic [ref=e223]: EOS
+                - generic [ref=e224]: Employee Onboarding Solution
+        - generic [ref=e66]:
+          - link [ref=e67] [cursor=pointer]:
+            - /url: https://accounts.zoho.com/u/h#profile/personal
+            - img [ref=e68]
+          - generic [ref=e69]: Aathira PR
+          - generic [ref=e70]: aathira.r+j1@zohotest.com
+          - generic [ref=e71]:
+            - link "Home" [ref=e73] [cursor=pointer]:
+              - /url: /userhome/dashboard
+            - link "Subscription" [ref=e75] [cursor=pointer]:
+              - /url: javascript:void(0);
+            - link "Setup" [ref=e77] [cursor=pointer]:
+              - /url: /userhome/achyutmenont0_zohotest/dashboard/setup
+          - link "Logout" [ref=e79] [cursor=pointer]:
+            - /url: /logoutpage.jsp?sharedBy=740304054
+            - generic [ref=e80]: 
+            - text: Logout
+      - text: 
+    - generic [ref=e81]:
+      - list [ref=e82]:
+        - listitem [ref=e83]:
+          - link "" [ref=e84] [cursor=pointer]:
+            - /url: javascript:;
+            - generic [ref=e85]: 
+        - listitem [ref=e86]:
+          - link "" [ref=e87] [cursor=pointer]:
+            - /url: javascript:;
+            - generic [ref=e88]: 
+        - listitem [ref=e89]:
+          - link "" [ref=e90] [cursor=pointer]:
+            - /url: javascript:;
+            - generic [ref=e91]: 
+      - list [ref=e92]:
+        - listitem [ref=e93]:
+          - generic "Themes" [ref=e94] [cursor=pointer]:
+            - generic [ref=e95]: 
+        - listitem [ref=e96]:
+          - generic "App Menu Builder" [ref=e97] [cursor=pointer]:
+            - generic [ref=e98]: 
+    - generic [ref=e99]:
+      - iframe [ref=e109]:
+        - generic [active] [ref=f54e1]:
+          - generic [ref=f54e2]:
+            - dialog "Quick Access Cntrl + ." [ref=f54e3]:
+              - generic [ref=f54e4]:
+                - generic [ref=f54e5]:
+                  - text: Quick Access
+                  - generic [ref=f54e6]:
+                    - generic [ref=f54e7]: Cntrl
+                    - text: +
+                    - generic [ref=f54e8]: .
+                - generic [ref=f54e9]: Esc
+              - list [ref=f54e10]:
+                - listitem [ref=f54e11]:
+                  - link "Go to Top Navigation Bar" [ref=f54e12] [cursor=pointer]:
+                    - /url: javascript:;
+                - listitem [ref=f54e13]:
+                  - link "Go to AppMenu Space" [ref=f54e14] [cursor=pointer]:
+                    - /url: javascript:;
+                - listitem [ref=f54e15]:
+                  - link "Go to Main Menu" [ref=f54e16] [cursor=pointer]:
+                    - /url: javascript:;
+                - listitem [ref=f54e17]:
+                  - link "Go to App Content Cntrl + /" [ref=f54e18] [cursor=pointer]:
+                    - /url: javascript:;
+                    - text: Go to App Content
+                    - generic [ref=f54e19]:
+                      - generic [ref=f54e20]: Cntrl
+                      - text: +
+                      - generic [ref=f54e21]: /
+                - listitem [ref=f54e22]:
+                  - link "Go to Accessibility Controls Ctrl + ," [ref=f54e23] [cursor=pointer]:
+                    - /url: javascript:;
+                    - text: Go to Accessibility Controls
+                    - generic [ref=f54e24]:
+                      - generic [ref=f54e25]: Ctrl
+                      - text: +
+                      - generic [ref=f54e26]: ","
+            - generic [ref=f54e28]:
+              - complementary [ref=f54e29]:
+                - generic [ref=f54e30]:
+                  - heading "Application name CONTINENTAL GROUP" [level=1] [ref=f54e31]:
+                    - link "Application name CONTINENTAL GROUP" [ref=f54e32] [cursor=pointer]:
+                      - /url: ""
+                      - generic "Application name CONTINENTAL GROUP" [ref=f54e34]: CONTINENTAL GROUP
+                  - navigation "Menu navigation" [ref=f54e35]:
+                    - list [ref=f54e39]:
+                      - listitem [ref=f54e40] [cursor=pointer]:
+                        - link "Dashboard" [expanded] [ref=f54e41]:
+                          - /url: "#Dashboard"
+                          - generic [ref=f54e42]: 
+                          - generic [ref=f54e43]: Dashboard
+                        - text: 
+                      - link "Track Status" [ref=f54e44] [cursor=pointer]:
+                        - /url: "#Track_Status"
+                        - generic [ref=f54e45]:
+                          - generic [ref=f54e46]: 
+                          - generic [ref=f54e47]: Track Status
+                        - generic [ref=f54e48]: 
+                      - text:  
+                      - listitem [ref=f54e49] [cursor=pointer]:
+                        - link "Ship Motor" [ref=f54e50]:
+                          - /url: "#Ship_Motor"
+                          - generic [ref=f54e51]: 
+                          - generic [ref=f54e52]: Ship Motor
+                        - text: 
+                      - link "Inspection" [ref=f54e53] [cursor=pointer]:
+                        - /url: "#Inspection"
+                        - generic [ref=f54e54]:
+                          - generic [ref=f54e55]: 
+                          - generic [ref=f54e56]: Inspection
+                        - generic [ref=f54e57]: 
+                      - text:  
+                      - link "Configurations" [ref=f54e58] [cursor=pointer]:
+                        - /url: "#Configurations"
+                        - generic [ref=f54e59]:
+                          - generic [ref=f54e60]: 
+                          - generic [ref=f54e61]: Configurations
+                        - generic [ref=f54e62]: 
+                      - text:   
+              - main [ref=f54e63]:
+                - generic [ref=f54e64]:
+                  - text:  
+                  - generic [ref=f54e65]:
+                    - button "Accessibility" [ref=f54e67] [cursor=pointer]: 
+                    - button "Notification" [ref=f54e69] [cursor=pointer]: 
+                    - generic [ref=f54e70]:
+                      - button "profile image" [ref=f54e71] [cursor=pointer]
+                      - text:   
+                - generic [ref=f54e74]:
+                  - generic [ref=f54e75] [cursor=pointer]: Open Page Builder
+                  - generic [ref=f54e87]:
+                    - generic [ref=f54e89]: 󯁹
+                    - generic [ref=f54e90]: HTML Snippet
+            - generic:
+              - generic:          
+              - text:            
+            - text:          
+          - status [ref=f54e91]
+      - generic [ref=e110]:
+        - heading "Page Customization - Web" [level=2] [ref=e112]:  Page Customization - Web
+        - generic [ref=e118]:
+          - generic [ref=e119]: Display as
+          - generic [ref=e120]:
+            - generic [ref=e121]:
+              - radio "Card" [ref=e122]
+              - generic [ref=e123] [cursor=pointer]: Card
+            - generic [ref=e124]:
+              - radio "Plain" [checked] [ref=e125]
+              - generic [ref=e126] [cursor=pointer]: Plain
+          - generic [ref=e128]:
+            - generic [ref=e129]: Margin
+            - generic [ref=e130]:
+              - spinbutton [ref=e131]: "0"
+              - generic [ref=e132]: px
+              - generic [ref=e133]: Top
+            - generic [ref=e134]:
+              - spinbutton [ref=e135]: "0"
+              - generic [ref=e136]: px
+              - generic [ref=e137]: Right
+            - generic [ref=e138]:
+              - spinbutton [ref=e139]: "0"
+              - generic [ref=e140]: px
+              - generic [ref=e141]: Bottom
+            - generic [ref=e142]:
+              - spinbutton [ref=e143]: "0"
+              - generic [ref=e144]: px
+              - generic [ref=e145]: Left
+    - generic:
+      - generic:        
+      - text:     
+    - generic [ref=e265]:
+      - generic [ref=e266]:
+        - list [ref=e271]:
+          - listitem [ref=e272]:
+            - generic [ref=e273] [cursor=pointer]:
+              - generic [ref=e274]: 
+              - generic [ref=e275]: Panel
+          - listitem [ref=e276]:
+            - generic [ref=e277] [cursor=pointer]:
+              - generic [ref=e278]: 󯄳
+              - generic [ref=e279]: Board
+          - listitem [ref=e280]:
+            - generic [ref=e281] [cursor=pointer]:
+              - generic [ref=e282]: 
+              - generic [ref=e283]: Chart
+          - listitem [ref=e284]:
+            - generic [ref=e285] [cursor=pointer]:
+              - generic [ref=e286]: 󯂔
+              - generic [ref=e287]: Gauge
+          - listitem [ref=e288]:
+            - generic [ref=e289] [cursor=pointer]:
+              - generic [ref=e290]: 
+              - generic [ref=e291]: Search
+          - listitem [ref=e292]:
+            - generic [ref=e293] [cursor=pointer]:
+              - generic [ref=e294]: 
+              - generic [ref=e295]: Form
+          - listitem [ref=e296]:
+            - generic [ref=e297] [cursor=pointer]:
+              - generic [ref=e298]: 
+              - generic [ref=e299]: Report
+          - listitem [ref=e300]:
+            - generic [ref=e301] [cursor=pointer]:
+              - generic [ref=e302]: 
+              - generic [ref=e303]: Snippets
+          - listitem [ref=e304]:
+            - generic [ref=e305] [cursor=pointer]:
+              - generic [ref=e306]: 
+              - generic [ref=e307]: Button
+          - listitem [ref=e308]:
+            - generic [ref=e309] [cursor=pointer]:
+              - generic [ref=e310]: 󯄡
+              - generic [ref=e311]: Widgets
+        - generic [ref=e312]:
+          - generic [ref=e315]:
+            - text:   󯄓       󯂆   󯂆   󯂄       󯂄   󯂄 
+            - generic [ref=e316]:
+              - generic [ref=e318]:
+                - generic [ref=e319]: "Element Name:"
+                - generic [ref=e320]: HTML Snippet
+              - generic [ref=e321]:
+                - generic "Configure" [ref=e324]:
+                  - generic [ref=e326] [cursor=pointer]: Configure
+                - generic [ref=e327]:
+                  - generic "Background color" [ref=e329]
+                  - generic "Enable title" [ref=e334]:
+                    - generic [ref=e336] [cursor=pointer]: 
+                - generic "Delete snippet" [ref=e339]:
+                  - generic [ref=e341] [cursor=pointer]: 
+            - text:  󯂄   󯂄   
+          - generic [ref=e356]:
+            - generic [ref=e358]: 󯁹
+            - generic [ref=e359]: HTML Snippet
+      - generic:
+        - generic:    󯀃
+      - generic:
+        - link:
+          - /url: "#"
+    - generic [ref=e360]:
+      - text: 
+      - generic [ref=e364]:
+        - text: 󯀥 󯀦 󯄥 
+        - generic [ref=e365]:
+          - generic [ref=e379]: HTML snippet
+          - generic [ref=e366]:
+            - generic "Element Name" [ref=e380]: HTML Snippet
+            - generic "Edit" [ref=e367] [cursor=pointer]: 
+        - generic [ref=e368] [cursor=pointer]: 
+      - generic [ref=e383]:
+        - generic [ref=e384]:
+          - generic [ref=e387]: Deluge
+          - generic [ref=e388]:
+            - generic [ref=e391] [cursor=pointer]: 
+            - generic [ref=e395] [cursor=pointer]: 
+            - generic [ref=e398] [cursor=pointer]: 
+        - generic [ref=e399]:
+          - generic [ref=e401]:
+            - generic [ref=e402]: Embed
+            - generic [ref=e404]: Form
+            - generic [ref=e406]: Report
+            - generic [ref=e408]: Widget
+            - generic [ref=e409]: Condition
+            - generic [ref=e411]: if
+            - generic [ref=e413]: else if
+            - generic [ref=e415]: else
+            - generic [ref=e417]: conditional if
+            - generic [ref=e418]: Data access
+            - generic [ref=e420]: fetch records
+            - generic [ref=e422]: aggregate records
+            - generic [ref=e424]: update record
+            - generic [ref=e426]: update multiple fields
+            - generic [ref=e428]: for each record
+            - generic [ref=e429]: Miscellaneous
+            - generic [ref=e431]: set variable
+            - generic [ref=e433]: call function
+            - generic [ref=e435]: add comment
+            - generic [ref=e437]: info
+            - generic [ref=e438]: List manipulation
+            - generic [ref=e440]: create list
+            - generic [ref=e442]: add
+            - generic [ref=e444]: remove index
+            - generic [ref=e446]: remove element
+            - generic [ref=e448]: add all | remove all
+            - generic [ref=e450]: clear list
+            - generic [ref=e452]: sort
+            - generic [ref=e454]: for each element
+            - generic [ref=e456]: for each index
+            - generic [ref=e457]: Map manipulation
+            - generic [ref=e459]: create map
+            - generic [ref=e461]: put
+            - generic [ref=e463]: put all keys
+            - generic [ref=e465]: remove key
+            - generic [ref=e467]: clear map
+            - generic [ref=e468]: Web data
+            - generic [ref=e470]: zoho integration
+            - generic [ref=e472]: other integration
+            - generic [ref=e474]: get url
+            - generic [ref=e476]: post url
+            - generic [ref=e478]: invoke url
+            - generic [ref=e480]: open url
+            - generic [ref=e482]: invoke API
+            - generic [ref=e484]: FTP/SFTP
+            - generic [ref=e485]: Xml manipulation
+            - generic [ref=e487]: execute XPath
+          - generic [ref=e490]:
+            - textbox [ref=e491]
+            - generic [ref=e496]:
+              - generic [ref=e933]:
+                - generic [ref=e961]:
+                  - generic [ref=e962]: "69"
+                  - generic [ref=e963]: ▾
+                - text: ".badge-inspect { background: #fff4e6; color: var(--status-orange); }"
+              - generic [ref=e936]:
+                - generic [ref=e964]:
+                  - generic [ref=e965]: "70"
+                  - generic [ref=e966]: ▾
+                - text: ".badge-repair { background: #fdf2f2; color: var(--accent-red); }"
+              - generic [ref=e939]:
+                - generic [ref=e967]:
+                  - generic [ref=e968]: "71"
+                  - generic [ref=e969]: ▾
+                - text: ".badge-healthy { background: #e6ffed; color: var(--status-green); }"
+              - generic [ref=e971]: "72"
+              - generic [ref=e945]:
+                - generic [ref=e972]:
+                  - generic [ref=e973]: "73"
+                  - generic [ref=e974]: ▾
+                - text: "/* RIGHT PANEL: ANALYTICS */"
+              - generic [ref=e948]:
+                - generic [ref=e975]:
+                  - generic [ref=e976]: "74"
+                  - generic [ref=e977]: ▾
+                - text: ".analytics-item { margin-bottom: 25px; }"
+              - generic [ref=e951]:
+                - generic [ref=e978]:
+                  - generic [ref=e979]: "75"
+                  - generic [ref=e980]: ▾
+                - text: ".progress-label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 8px; font-weight: 500; }"
+              - generic [ref=e954]:
+                - generic [ref=e981]:
+                  - generic [ref=e982]: "76"
+                  - generic [ref=e983]: ▾
+                - text: ".progress-bar-bg { background: #eee; height: 8px; border-radius: 4px; overflow: hidden; }"
+              - generic [ref=e984]:
+                - generic [ref=e985]:
+                  - generic [ref=e986]: "77"
+                  - generic [ref=e987]: ▾
+                - text: ".progress-fill { height: 100%; background: var(--accent-red); }"
+              - generic [ref=e990]: "78"
+              - generic [ref=e991]:
+                - generic [ref=e992]:
+                  - generic [ref=e993]: "79"
+                  - generic [ref=e994]: ▾
+                - text: ".approval-list { list-style: none; padding: 0; margin: 0; }"
+              - generic [ref=e995]:
+                - generic [ref=e996]:
+                  - generic [ref=e997]: "80"
+                  - generic [ref=e998]: ▾
+                - text: ".approval-item {"
+              - generic [ref=e999]:
+                - generic [ref=e1001]: "81"
+                - text: "padding: 12px; border-radius: 8px; background: #fff5f5; border-left: 4px solid var(--accent-red);"
+              - generic [ref=e1002]:
+                - generic [ref=e1004]: "82"
+                - text: "margin-bottom: 10px; font-size: 0.8rem;"
+              - generic [ref=e1005]:
+                - generic [ref=e1007]: "83"
+                - text: "}"
+              - generic [ref=e1008]:
+                - generic [ref=e1009]:
+                  - generic [ref=e1010]: "84"
+                  - generic [ref=e1011]: ▾
+                - text: ".approval-item strong { display: block; color: var(--primary-burgundy); }"
+              - generic [ref=e1014]: "85"
+              - generic [ref=e1015]:
+                - generic [ref=e1016]:
+                  - generic [ref=e1017]: "86"
+                  - generic [ref=e1018]: ▾
+                - text: ".location-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }"
+              - generic [ref=e1021]: "87"
+              - generic [ref=e1022]:
+                - generic [ref=e1023]:
+                  - generic [ref=e1024]: "88"
+                  - generic [ref=e1025]: ▾
+                - text: "@media (max-width: 1100px) { .main-layout { grid-template-columns: 1fr; } }"
+              - generic [ref=e1026]:
+                - generic [ref=e1028]: "89"
+                - text: </style>
+              - generic [ref=e1029]:
+                - generic [ref=e1031]: "90"
+                - text: </head>
+              - generic [ref=e1032]:
+                - generic [ref=e1034]: "91"
+                - text: <body>
+              - generic [ref=e1037]: "92"
+              - generic [ref=e1038]:
+                - generic [ref=e1040]: "93"
+                - text: <main class="dashboard-card">
+              - generic [ref=e1041]:
+                - generic [ref=e1043]: "94"
+                - text: <!-- HEADER -->
+              - generic [ref=e1044]:
+                - generic [ref=e1046]: "95"
+                - text: <div class="page-header">
+              - generic [ref=e1047]:
+                - generic [ref=e1049]: "96"
+                - text: <div class="red-accent-bar"></div>
+              - generic [ref=e1050]:
+                - generic [ref=e1052]: "97"
+                - text: <div class="header-text">Dashboard</div>
+              - generic [ref=e1053]:
+                - generic [ref=e1055]: "98"
+                - text: </div>
+              - generic [ref=e1058]: "99"
+              - generic [ref=e1059]:
+                - generic [ref=e1061]: "100"
+                - text: <!-- KEY PERFORMANCE INDICATORS -->
+              - generic [ref=e1062]:
+                - generic [ref=e1064]: "101"
+                - text: <div class="stats-grid">
+              - generic [ref=e1065]:
+                - generic [ref=e1067]: "102"
+                - text: <div class="stat-card">
+              - generic [ref=e1068]:
+                - generic [ref=e1070]: "103"
+                - text: <span class="stat-value">42</span>
+              - generic [ref=e1071]:
+                - generic [ref=e1073]: "104"
+                - text: <span class="stat-label">Total Shipments</span>
+              - generic [ref=e1074]:
+                - generic [ref=e1076]: "105"
+                - text: <span class="stat-trend trend-up">↑ 3 Added this month</span>
+              - generic [ref=e1077]:
+                - generic [ref=e1079]: "106"
+                - text: </div>
+              - generic [ref=e1080]:
+                - generic [ref=e1082]: "107"
+                - text: <div class="stat-card">
+              - generic [ref=e1083]:
+                - generic [ref=e1085]: "108"
+                - text: <span class="stat-value">12</span>
+              - generic [ref=e1086]:
+                - generic [ref=e1088]: "109"
+                - text: <span class="stat-label">In-Facility (AB)</span>
+              - generic [ref=e1089]:
+                - generic [ref=e1091]: "110"
+                - text: <span class="stat-trend">7 Edmonton | 5 Calgary</span>
+              - generic [ref=e1092]:
+                - generic [ref=e1094]: "111"
+                - text: </div>
+              - generic [ref=e1095]:
+                - generic [ref=e1097]: "112"
+                - text: <div class="stat-card">
+              - generic [ref=e1098]:
+                - generic [ref=e1100]: "113"
+                - text: <span class="stat-value">5</span>
+              - generic [ref=e1101]:
+                - generic [ref=e1103]: "114"
+                - text: <span class="stat-label">Under Teardown</span>
+              - generic [ref=e1104]:
+                - generic [ref=e1106]: "115"
+                - text: <span class="stat-trend" style="color:var(--accent-red)">Requires Approval</span>
+              - generic [ref=e1107]:
+                - generic [ref=e1109]: "116"
+                - text: </div>
+              - generic [ref=e1110]:
+                - generic [ref=e1112]: "117"
+                - text: <div class="stat-card">
+              - generic [ref=e1113]:
+                - generic [ref=e1115]: "118"
+                - text: <span class="stat-value">88%</span>
+              - generic [ref=e1116]:
+                - generic [ref=e1118]: "119"
+                - text: <span class="stat-label">OverAll</span>
+              - generic [ref=e1119]:
+                - generic [ref=e1121]: "120"
+                - text: <span class="stat-trend trend-up">↑ 2% vs Last Quarter</span>
+              - generic [ref=e1122]:
+                - generic [ref=e1124]: "121"
+                - text: </div>
+              - generic [ref=e1125]:
+                - generic [ref=e1127]: "122"
+                - text: </div>
+              - generic [ref=e1130]: "123"
+              - generic [ref=e1131]:
+                - generic [ref=e1133]: "124"
+                - text: <div class="main-layout">
+              - generic [ref=e1134]:
+                - generic [ref=e1136]: "125"
+                - text: "<!-- LEFT: ACTIVE PIPELINE -->"
+              - generic [ref=e1137]:
+                - generic [ref=e1139]: "126"
+                - text: <div class="section-container">
+              - generic [ref=e1140]:
+                - generic [ref=e1142]: "127"
+                - text: <div class="section-title">
+              - generic [ref=e1143]:
+                - generic [ref=e1145]: "128"
+                - text: Shipment Details
+              - generic [ref=e1146]:
+                - generic [ref=e1148]: "129"
+                - text: "<span style=\"font-weight: 400; font-size: 0.7rem; color: var(--accent-red); cursor:pointer;\">VIEW ALL SHIPMENTS →</span>"
+              - generic [ref=e1149]:
+                - generic [ref=e1151]: "130"
+                - text: </div>
+              - generic [ref=e1154]: "131"
+              - generic [ref=e1155]:
+                - generic [ref=e1157]: "132"
+                - text: <table class="fleet-table">
+              - generic [ref=e1158]:
+                - generic [ref=e1160]: "133"
+                - text: <thead>
+              - generic [ref=e1161]:
+                - generic [ref=e1163]: "134"
+                - text: <tr>
+              - generic [ref=e1164]:
+                - generic [ref=e1166]: "135"
+                - text: <th>MOTOR NAME</th>
+              - generic [ref=e1167]:
+                - generic [ref=e1169]: "136"
+                - text: <th>TAG NUMBER</th>
+              - generic [ref=e1170]:
+                - generic [ref=e1172]: "137"
+                - text: <th>LOCATION</th>
+              - generic [ref=e1173]:
+                - generic [ref=e1175]: "138"
+                - text: <th>CURRENT STEP</th>
+              - generic [ref=e1176]:
+                - generic [ref=e1178]: "139"
+                - text: <th>STATUS</th>
+              - generic [ref=e1179]:
+                - generic [ref=e1181]: "140"
+                - text: </tr>
+              - generic [ref=e1182]:
+                - generic [ref=e1184]: "141"
+                - text: </thead>
+              - generic [ref=e1185]:
+                - generic [ref=e1187]: "142"
+                - text: <tbody>
+              - generic [ref=e1188]:
+                - generic [ref=e1190]: "143"
+                - text: <tr>
+        - generic [ref=e700] [cursor=pointer]: 
+      - button "Save" [ref=e701] [cursor=pointer]
+  - img
+  - img
+  - generic [ref=e227]:
+    - generic [ref=e228]:
+      - text:     
+      - generic [ref=e229]:
+        - generic "Chats" [ref=e230] [cursor=pointer]:  Chats
+        - generic "Contacts" [ref=e231] [cursor=pointer]:  Contacts
+    - generic [ref=e232]: Here is your Smart Chat (Ctrl+Space)
+    - text: 
+    - generic [ref=e235]:
+      - text: 
+      - link "Subscription" [ref=e237] [cursor=pointer]:
+        - /url: javascript:void(0);
+        - generic [ref=e238]: Subscription
+      - generic "Keyboard Shortcuts" [ref=e239] [cursor=pointer]:
+        - generic [ref=e240]: 
+      - text:   
+      - generic [ref=e241] [cursor=pointer]:
+        - generic [ref=e242]: 
+        - generic [ref=e243]: Help
+    - text: 
+    - generic [ref=e244] [cursor=pointer]:  
+  - iframe
+  - text:  Search across Apps       
