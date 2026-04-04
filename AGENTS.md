@@ -3,6 +3,8 @@
 ## Overview
 This repo contains skills for automating Zoho Creator using Playwright MCP and Zoho MCP tools. Use these skills to perform data operations and UI customizations.
 
+**This is a living, multi-developer repository.** Multiple Zoho Creator developers contribute to and maintain these skills. Always follow the contributing guidelines in `CONTRIBUTING.md`.
+
 ## Quick Decision Tree
 
 ### Need to work with data (records)?
@@ -16,6 +18,12 @@ This repo contains skills for automating Zoho Creator using Playwright MCP and Z
 - Edit HTML snippets
 - Modify page components
 - Change visual elements
+
+### Need to make commits?
+→ Read `CONTRIBUTING.md` and `skills/github-identity-enforcement.md` first
+- Use only your corporate GitHub account
+- Follow the contribution workflow
+- Write clear commit messages
 
 ## Skill Dependencies
 ```
@@ -102,45 +110,69 @@ browser_snapshot → identify refs → browser_click
 - If changes don't persist → verify Save was clicked before Escape
 - If redirected to login → ask user to login, then session persists automatically
 
-## Tools Available
-- **Zoho MCP**: Data operations (forms, reports, records)
-- **Playwright MCP**: Browser automation (clicks, navigation, screenshots)
-- **browser_run_code**: Execute JavaScript in page context
-- **browser_network_requests**: Monitor API calls
-
 ## GitHub Identity Enforcement (CRITICAL)
 
 ### Rule
-This repository MUST ONLY use GitHub account: `https://github.com/aathira-r-19635`
+This repository MUST ONLY use your **corporate Zoho GitHub account**.
 
 ### Before Any Git Operations
 1. Verify git identity:
    ```bash
-   git config user.name  # Should be: aathira-r-19635
-   git config user.email  # Should be: aathira.r@zohocorp.com
+   git config user.name  # Your GitHub username
+   git config user.email  # Your @zohocorp.com email
    ```
 2. Verify remote:
    ```bash
-   git remote -v  # Should show: aathira-r-19635/zoho-creator-skills.git
+   git remote -v  # Should show: your-org/zoho-creator-skills.git
    ```
 3. Verify gh CLI:
    ```bash
-   gh auth status  # Should show: aathira-r-19635
+   gh auth status  # Should show your corporate account
    ```
 
 ### If Identity is Wrong
 - Stop immediately
-- Fix git config: `git config --local user.name "aathira-r-19635"` and `git config --local user.email "aathira.r@zohocorp.com"`
+- Fix git config: `git config --local user.name "your-username"` and `git config --local user.email "your.email@zohocorp.com"`
 - Fix gh auth: `gh auth login --hostname github.com`
 - See `skills/github-identity-enforcement.md` for detailed procedures
 
 ### Important
 - This is machine-specific configuration
 - DO NOT source control `.git/config` or auth tokens
-- Other developers will have their own setups
+- Each developer uses their own corporate account
+
+## Multi-Developer Workflow
+
+### This Repo is Shared
+- Multiple Zoho Creator developers contribute
+- Skills evolve over time
+- New skills are added regularly
+- Obsolete skills are deprecated
+
+### When You Discover New Patterns
+1. Test the pattern thoroughly
+2. Update relevant skill files
+3. Update this file if workflows change
+4. Commit with clear message explaining what and why
+5. Follow `CONTRIBUTING.md` guidelines
+
+### When MCP Tools Change
+- Check if existing skills can be simplified
+- Update skills to use new MCP tools when available
+- Mark old approaches as deprecated
+- Document the transition
+
+## Tools Available
+- **Zoho MCP**: Data operations (forms, reports, records)
+- **Playwright MCP**: Browser automation (clicks, navigation, screenshots)
+- **browser_run_code**: Execute JavaScript in page context
+- **browser_network_requests**: Monitor API calls
 
 ## Key References
-- See `skills/playwright-zoho-login.md` for authentication details
-- See `skills/playwright-zoho-page-builder.md` for page builder navigation
-- See `skills/playwright-code-editor.md` for CodeMirror editing examples
-- See `docs/zoho-creator-automation.md` for complete end-to-end documentation
+- `CONTRIBUTING.md` - Complete contributor guide
+- `docs/zoho-creator-automation.md` - End-to-end workflows
+- `docs/skills-index.md` - Complete skills index
+- `skills/playwright-zoho-login.md` - Authentication details
+- `skills/playwright-zoho-page-builder.md` - Page builder navigation
+- `skills/playwright-code-editor.md` - CodeMirror editing
+- `skills/github-identity-enforcement.md` - Git identity rules
