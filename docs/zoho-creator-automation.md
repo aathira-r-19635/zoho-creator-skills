@@ -278,3 +278,30 @@ Call this before performing actions to capture all API calls.
 3. Press Escape to close popup
 4. Wait 1 second
 5. Click Done button
+
+---
+
+## GitHub Identity Enforcement
+
+### Rule
+This repository uses **only** the GitHub account: `https://github.com/aathira-r-19635`
+
+### Verification
+Before making commits, always verify:
+```bash
+git config user.name   # Aathira PR
+git config user.email  # aadhirapr@gmail.com
+gh auth status         # aathira-r-19635
+git remote -v          # aathira-r-19635/zoho-creator-skills.git
+```
+
+### Configuration
+```bash
+git config --local user.name "Aathira PR"
+git config --local user.email "aadhirapr@gmail.com"
+```
+
+### Important
+- This is machine-specific (not source controlled)
+- Other developers will have their own setups
+- See `skills/github-identity-enforcement.md` for full details

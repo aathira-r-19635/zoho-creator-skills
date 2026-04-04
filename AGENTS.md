@@ -108,6 +108,37 @@ browser_snapshot → identify refs → browser_click
 - **browser_run_code**: Execute JavaScript in page context
 - **browser_network_requests**: Monitor API calls
 
+## GitHub Identity Enforcement (CRITICAL)
+
+### Rule
+This repository MUST ONLY use GitHub account: `https://github.com/aathira-r-19635`
+
+### Before Any Git Operations
+1. Verify git identity:
+   ```bash
+   git config user.name  # Should be: Aathira PR
+   git config user.email  # Should be: aadhirapr@gmail.com
+   ```
+2. Verify remote:
+   ```bash
+   git remote -v  # Should show: aathira-r-19635/zoho-creator-skills.git
+   ```
+3. Verify gh CLI:
+   ```bash
+   gh auth status  # Should show: aathira-r-19635
+   ```
+
+### If Identity is Wrong
+- Stop immediately
+- Fix git config: `git config --local user.name "Aathira PR"` and `git config --local user.email "aadhirapr@gmail.com"`
+- Fix gh auth: `gh auth login --hostname github.com`
+- See `skills/github-identity-enforcement.md` for detailed procedures
+
+### Important
+- This is machine-specific configuration
+- DO NOT source control `.git/config` or auth tokens
+- Other developers will have their own setups
+
 ## Key References
 - See `skills/playwright-zoho-login.md` for authentication details
 - See `skills/playwright-zoho-page-builder.md` for page builder navigation
