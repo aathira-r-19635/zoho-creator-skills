@@ -289,16 +289,16 @@ This repository uses **only** the GitHub account: `https://github.com/aathira-r-
 ### Verification
 Before making commits, always verify:
 ```bash
-git config user.name   # Aathira PR
-git config user.email  # aadhirapr@gmail.com
+git config user.name   # aathira-r-19635
+git config user.email  # aathira.r@zohocorp.com
 gh auth status         # aathira-r-19635
 git remote -v          # aathira-r-19635/zoho-creator-skills.git
 ```
 
 ### Configuration
 ```bash
-git config --local user.name "Aathira PR"
-git config --local user.email "aadhirapr@gmail.com"
+git config --local user.name "aathira-r-19635"
+git config --local user.email "aathira.r@zohocorp.com"
 ```
 
 ### Important

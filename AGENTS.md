@@ -116,8 +116,8 @@ This repository MUST ONLY use GitHub account: `https://github.com/aathira-r-1963
 ### Before Any Git Operations
 1. Verify git identity:
    ```bash
-   git config user.name  # Should be: Aathira PR
-   git config user.email  # Should be: aadhirapr@gmail.com
+   git config user.name  # Should be: aathira-r-19635
+   git config user.email  # Should be: aathira.r@zohocorp.com
    ```
 2. Verify remote:
    ```bash
@@ -130,7 +130,7 @@ This repository MUST ONLY use GitHub account: `https://github.com/aathira-r-1963
 
 ### If Identity is Wrong
 - Stop immediately
-- Fix git config: `git config --local user.name "Aathira PR"` and `git config --local user.email "aadhirapr@gmail.com"`
+- Fix git config: `git config --local user.name "aathira-r-19635"` and `git config --local user.email "aathira.r@zohocorp.com"`
 - Fix gh auth: `gh auth login --hostname github.com`
 - See `skills/github-identity-enforcement.md` for detailed procedures
 

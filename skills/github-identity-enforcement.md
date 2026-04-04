@@ -11,8 +11,8 @@ Ensure all git operations (commits, pushes, PRs) in this repository use the corr
 ### Git Identity (Local to this machine)
 ```bash
 # Set in .git/config (local, not source controlled)
-git config --local user.name "Aathira PR"
-git config --local user.email "aadhirapr@gmail.com"
+git config --local user.name "aathira-r-19635"
+git config --local user.email "aathira.r@zohocorp.com"
 ```
 
 ### Remote Configuration
@@ -34,8 +34,8 @@ gh auth status
 ### Before Making Commits
 1. Check git identity:
    ```bash
-   git config user.name
-   git config user.email
+   git config user.name   # Should be: aathira-r-19635
+   git config user.email  # Should be: aathira.r@zohocorp.com
    ```
 2. Verify remote:
    ```bash
@@ -51,7 +51,7 @@ gh auth status
    ```bash
    git log -1 --format="%an <%ae>"
    ```
-2. Should show: `Aathira PR <aadhirapr@gmail.com>`
+2. Should show: `aathira-r-19635 <aathira.r@zohocorp.com>`
 
 ## Enforcement
 
@@ -59,8 +59,8 @@ gh auth status
 1. Stop any pending operations
 2. Reset git config:
    ```bash
-   git config --local user.name "Aathira PR"
-   git config --local user.email "aadhirapr@gmail.com"
+   git config --local user.name "aathira-r-19635"
+   git config --local user.email "aathira.r@zohocorp.com"
    ```
 3. Verify gh auth:
    ```bash
@@ -69,14 +69,22 @@ gh auth status
 4. Re-do any commits made with wrong identity
 
 ### Correcting Historical Commits
-If commits were made with wrong identity, use `git filter-branch` or `git rebase` to rewrite history:
+If commits were made with wrong identity, use `git filter-branch` to rewrite history:
 ```bash
-git filter-branch --env-filter '
-export GIT_AUTHOR_NAME="Aathira PR"
-export GIT_AUTHOR_EMAIL="aadhirapr@gmail.com"
-export GIT_COMMITTER_NAME="Aathira PR"
-export GIT_COMMITTER_EMAIL="aadhirapr@gmail.com"
+git filter-branch -f --env-filter '
+export GIT_AUTHOR_NAME="aathira-r-19635"
+export GIT_AUTHOR_EMAIL="aathira.r@zohocorp.com"
+export GIT_COMMITTER_NAME="aathira-r-19635"
+export GIT_COMMITTER_EMAIL="aathira.r@zohocorp.com"
 ' -- --all
+
+# Clean up old refs
+git for-each-ref --format="%(refname)" refs/original/ | while read ref; do git update-ref -d "$ref"; done
+git reflog expire --expire=now --all
+git gc --prune=now --aggressive
+
+# Force push (if already pushed)
+git push origin main --force-with-lease
 ```
 
 ## Important Notes
