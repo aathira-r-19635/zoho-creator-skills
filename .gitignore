@@ -1,0 +1,33 @@
+# Playwright MCP logs and snapshots
+.playwright-mcp/
+*.log
+snapshot.md
+
+# Screenshots (keep only essential ones)
+current-state.png
+dashboard-edit.png
+dashboard-live.png
+dashboard-scrolled.png
+dashboard-verify.png
+dashboard-verify2.png
+editor-view.png
+final-verification.png
+final-verify.png
+page-builder-preview.png
+preview-after-save.png
+preview-changes.png
+verify-change.png
+verify-dashboard.png
+verify-logs.png
+verify-shipment-activities.png
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Node
+node_modules/
