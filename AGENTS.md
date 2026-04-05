@@ -219,6 +219,19 @@ This repository MUST ONLY use your **corporate Zoho GitHub account**.
 - Mark old approaches as deprecated
 - Document the transition
 
+## Zoho MCP Authentication (IMPORTANT - Apr 2026)
+
+### Use "Authorize via Connection" Mode
+- Configure at: `https://creator-XXXXXXX.zohomcp.com` → Connection tab
+- Select **"Authorize via Connection"** (not "Authorization on Demand")
+- All tools pre-authorized server-side, no client OAuth issues
+- If you see "invalid oauthscope" error → switch to Connection mode
+
+### Session Storage
+- OAuth tokens: `~/.qwen/mcp-oauth-tokens.json` (gitignored)
+- MCP config: `~/.qwen/settings.json`
+- Never commit tokens or auth files
+
 ## Tools Available
 - **Zoho MCP**: Data operations (forms, reports, records)
 - **Playwright MCP**: Browser automation (clicks, navigation, screenshots)

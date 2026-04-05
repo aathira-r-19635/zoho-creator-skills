@@ -48,8 +48,9 @@ playwright-zoho-save
 
 | Skill | File | Purpose |
 |-------|------|---------|
-| Basics | `zoho-mcp-basics.md` | List apps, forms, reports, pages |
+| Basics | `zoho-mcp-basics.md` | List apps, forms, reports, pages, auth setup |
 | Data Operations | `zoho-mcp-data-operations.md` | Add, update, query, delete records |
+| Session Closure | `zoho-mcp-session-closure.md` | Close session, save learnings, push to main |
 
 ---
 
@@ -186,6 +187,25 @@ playwright-zoho-save
 - Working with data (not UI)
 - Bulk operations
 - Automated data migrations
+
+---
+
+### zoho-mcp-session-closure.md
+**What it covers:**
+- Session closure workflow
+- Saving session learnings as skills
+- Zoho MCP authentication setup
+- Common OAuth errors and fixes
+- Commit and push to main
+
+**When to use:**
+- User asks to "close session" or "save learnings"
+- End of automation task with new discoveries
+
+**Key concepts:**
+- "Authorize via Connection" > "On Demand"
+- Use getApplications for workspace discovery
+- Max 100 lines per skill file
 
 ---
 
