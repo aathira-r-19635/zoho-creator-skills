@@ -51,6 +51,7 @@ playwright-zoho-save
 | Basics | `zoho-mcp-basics.md` | List apps, forms, reports, pages, auth setup |
 | Data Operations | `zoho-mcp-data-operations.md` | Add, update, query, delete records |
 | Session Closure | `zoho-mcp-session-closure.md` | Close session, save learnings, push to main |
+| Closure Workflow | `session-closure-workflow.md` | **MANDATORY** 10-step checklist for session closure |
 
 ---
 
@@ -197,7 +198,7 @@ playwright-zoho-save
 
 ### zoho-mcp-session-closure.md
 **What it covers:**
-- Session closure workflow
+- Session closure workflow overview
 - Saving session learnings as skills
 - Zoho MCP authentication setup
 - Common OAuth errors and fixes
@@ -211,6 +212,25 @@ playwright-zoho-save
 - "Authorize via Connection" > "On Demand"
 - Use getApplications for workspace discovery
 - Max 100 lines per skill file
+
+---
+
+### session-closure-workflow.md
+**What it covers:**
+- **MANDATORY 10-step checklist** for session closure
+- Trigger words that activate this workflow
+- Complete step-by-step process from learnings to push
+- Quick reference bash script
+
+**When to use:**
+- User says "close session", "be ready", "wrap up", "done for today"
+- **Every single time** - no exceptions
+
+**Key concepts:**
+- ALL 10 steps must be completed
+- Document learnings → Update skills → Update docs → Verify gitignore
+- Close browser → Verify identity → Review → Commit → Push → Final check
+- Never skip steps, never commit sensitive files
 
 ---
 

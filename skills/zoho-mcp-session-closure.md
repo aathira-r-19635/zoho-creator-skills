@@ -3,11 +3,17 @@
 ## Purpose
 Properly close a Zoho Creator automation session: save learnings, update docs, verify gitignore, commit to main.
 
+## IMPORTANT: Always Use the Mandatory Workflow
+**When user says "close session", "be ready", "wrap up":**
+→ **Follow `session-closure-workflow.md` completely**
+→ This file provides context; the workflow file is the mandatory checklist
+→ ALL 10 steps in `session-closure-workflow.md` must be completed
+
 ## When to Use
 - User asks to "close session", "wrap up", "save learnings", "push to main"
 - End of an automation task with new discoveries
 
-## Session Closure Workflow
+## Session Closure Workflow (See `session-closure-workflow.md` for full checklist)
 
 ### 1. Identify Learnings to Save
 Ask: **What did we discover/fix in this session?**

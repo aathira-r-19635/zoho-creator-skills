@@ -25,6 +25,13 @@ This repo contains skills for automating Zoho Creator using Playwright MCP and Z
 - Follow the contribution workflow
 - Write clear commit messages
 
+### User says "close session" / "be ready" / "wrap up"?
+→ **MUST follow `skills/session-closure-workflow.md` completely**
+- This is NOT optional - every session closure must complete ALL steps
+- Document learnings, update skills, update docs, verify gitignore
+- Close browser, verify identity, commit, push to main
+- Report completion to user
+
 ## Skill Dependencies
 ```
 playwright-zoho-login
