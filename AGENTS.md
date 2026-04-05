@@ -125,14 +125,45 @@ browser_snapshot → identify refs → browser_click
 ```
 
 ### CodeMirror Editing (Complete Flow)
+
+**Recommended: Set content by iterating all frames**
+
+```javascript
+async (page) => {
+  for (const frame of page.frames()) {
+    try {
+      await frame.evaluate(() => {
+        const cms = document.querySelectorAll('.CodeMirror');
+        cms.forEach((cmEl, i) => {
+          const cm = cmEl.CodeMirror;
+          if (cm && cm.getValue().includes('Hello World')) {
+            cm.setValue('<%{%>\n<h1>Hello Aathira</h1>\n<%}%>');
+          }
+        });
+      });
+    } catch(e) {}
+  }
+}
+```
+
+**Why iterate all frames:** The HTML snippet editor opens in a popup dialog (`zctemplate-dialog`). CodeMirror may be in any frame (main frame or child frame).
+
+**Alternative: Find and replace specific text**
 1. **Find the text**:
    ```javascript
-   // Search for text in CodeMirror (index 2 = 3rd editor)
-   const cm = document.querySelectorAll('.CodeMirror')[2].CodeMirror;
-   for (let i = 0; i < cm.lineCount(); i++) {
-     if (cm.getLine(i).includes('Text to find')) {
-       return { line: i + 1, content: cm.getLine(i) };
-     }
+   for (const frame of page.frames()) {
+     try {
+       const result = await frame.evaluate(() => {
+         const cm = document.querySelectorAll('.CodeMirror')[2].CodeMirror;
+         for (let i = 0; i < cm.lineCount(); i++) {
+           if (cm.getLine(i).includes('Text to find')) {
+             return { line: i + 1, content: cm.getLine(i) };
+           }
+         }
+         return { found: false };
+       });
+       if (result.found) break;
+     } catch(e) {}
    }
    ```
 
@@ -154,12 +185,21 @@ browser_snapshot → identify refs → browser_click
    - Click Done to exit page builder
 
 ### Save Sequence (CRITICAL)
-1. Click Save in code editor popup
+1. Click Save in code editor popup (id: `zctemplate-dialog-okBtn`)
 2. Wait 2 seconds
 3. Press Escape to close popup
 4. Wait 1 second
-5. Click Done to exit page builder
-6. Navigate to live page to verify
+5. Click Done to exit page builder (id: `builder-close`)
+6. Navigate to live page to verify:
+   - "Page" type (not in menu): `https://creatorapp.zoho.com/{account}/{app}/#Page:{page}`
+   - Menu page: `https://creatorapp.zoho.com/{account}/{app}/#{page}`
+
+### Live Page URL Formats (IMPORTANT)
+- **Pages NOT in app menu** ("Page" type): Use `#Page:{page}` format
+  - Example: `https://creatorapp.zoho.com/achyutmenont0_zohotest/continental-group/#Page:Dashboard_2`
+- **Menu pages**: Use `#{page}` format
+  - Example: `https://creatorapp.zoho.com/achyutmenont0_zohotest/continental-group/#Dashboard`
+- Using wrong format may show a loading spinner instead of page content
 
 ## Error Handling
 - If element not found → capture new `browser_snapshot`

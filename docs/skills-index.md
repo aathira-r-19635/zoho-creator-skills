@@ -96,8 +96,11 @@ playwright-zoho-save
 - Selecting HTML Snippet components
 - Opening code editor via Configure button
 - Save sequence and verification
+- URL formats for page builder and live pages
 
 **Key concepts:**
+- Page builder URL: `/appbuilder/{account}/{app}/pagebuilder/{page}/edit`
+- Live page URLs: `#Page:{page}` for non-menu pages, `#{page}` for menu pages
 - Always snapshot before clicking
 - Wait 2-3 seconds after each action
 - Use dynamic refs, not hardcoded IDs
@@ -106,16 +109,18 @@ playwright-zoho-save
 
 ### playwright-code-editor.md
 **What it covers:**
-- Finding CodeMirror instances
+- Finding CodeMirror instances across all frames
 - Locating specific text
 - Selecting and replacing text
+- Setting entire content via `cm.setValue()`
 - Verification of changes
 
 **Key concepts:**
-- 3rd CodeMirror (index 2) in frame 0 has content
+- **Recommended**: Iterate all frames to find CodeMirror by content match
+- HTML snippet editor opens in popup (`zctemplate-dialog`), CodeMirror in main frame
 - 0-based indexing (UI line 42 = index 41)
 - Always focus before editing
-- Use `setSelection()` + `replaceSelection()`
+- Use `setSelection()` + `replaceSelection()` for partial edits
 
 ---
 

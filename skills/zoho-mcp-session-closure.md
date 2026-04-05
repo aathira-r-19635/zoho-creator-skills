@@ -15,6 +15,7 @@ Ask: **What did we discover/fix in this session?**
 - API scope requirements
 - Error patterns and solutions
 - Configuration changes
+- UI automation patterns (CodeMirror editing, page URLs)
 
 ### 2. Update/Create Skills
 - Create new skill files (max 100 lines each)
@@ -24,6 +25,7 @@ Ask: **What did we discover/fix in this session?**
 ### 3. Update Documentation
 - `AGENTS.md` - Add new patterns/flows
 - `docs/skills-index.md` - Add new skill entries
+- `docs/zoho-creator-automation.md` - Update end-to-end workflows
 - `README.md` - Update overview if needed
 
 ### 4. Verify .gitignore (CRITICAL)
@@ -31,6 +33,7 @@ Check that sensitive/temp files are properly ignored:
 - OAuth tokens: `mcp-oauth-tokens.json`, `oauth_creds.json`
 - Debug logs: `.qwen/debug/*.txt`, `.qwen/tmp/**`
 - Browser session: `.playwright-mcp/`
+- Debug screenshots: `*.png` (all PNG screenshots)
 - OS files: `.DS_Store`, `Thumbs.db`
 - IDE configs: `.vscode/`, `.idea/`
 

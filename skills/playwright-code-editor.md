@@ -53,68 +53,88 @@ Zoho Creator HTML snippets use special Deluge tags for server-side processing:
 - Reference: https://help.zoho.com/portal/en/kb/creator/developer-guide/pages/snippets
 - See `html-snippet-syntax.md` for complete syntax reference
 
-## Complete Working Example: Find and Replace Text
+## Complete Working Example: Set Content (Recommended Approach)
+
+This approach iterates over ALL frames and finds the CodeMirror with matching content. Most reliable:
+
+```javascript
+async (page) => {
+  for (const frame of page.frames()) {
+    try {
+      await frame.evaluate(() => {
+        const cms = document.querySelectorAll('.CodeMirror');
+        cms.forEach((cmEl, i) => {
+          const cm = cmEl.CodeMirror;
+          if (cm && cm.getValue().includes('Hello World')) {
+            cm.setValue('<%{%>\n<h1>Hello Aathira</h1>\n<%}%>');
+            console.log('Updated CM editor ' + i);
+          }
+        });
+      });
+    } catch(e) {}
+  }
+}
+```
+
+**Why this works:**
+- HTML snippet editor opens in a popup dialog (`zctemplate-dialog`), not inside an iframe
+- CodeMirror may be in any frame (main frame or child frame)
+- Iterating over all frames ensures we find the correct editor
+- Checking content (e.g., `includes('Hello World')`) ensures we edit the right one
+
+## Find and Replace Text (Alternative)
+
+If you need to find and replace specific text:
 
 ### Step 1: Find the Text Location
 ```javascript
 async (page) => {
-  const frame = page.frames().find(f => f.url().includes('appbuilder'));
-  const result = await frame.evaluate(() => {
-    const cm = document.querySelectorAll('.CodeMirror')[2].CodeMirror;
-    for (let i = 0; i < cm.lineCount(); i++) {
-      const line = cm.getLine(i);
-      if (line.includes('Text to find')) {
-        return { found: true, line: i + 1, content: line };
-      }
-    }
-    return { found: false };
-  });
-  return result;
+  for (const frame of page.frames()) {
+    try {
+      const result = await frame.evaluate(() => {
+        const cm = document.querySelectorAll('.CodeMirror')[2].CodeMirror;
+        for (let i = 0; i < cm.lineCount(); i++) {
+          const line = cm.getLine(i);
+          if (line.includes('Text to find')) {
+            return { found: true, line: i + 1, content: line };
+          }
+        }
+        return { found: false };
+      });
+      if (result.found) return result;
+    } catch(e) {}
+  }
 }
 ```
 
 ### Step 2: Replace the Text
 ```javascript
 async (page) => {
-  const frame = page.frames().find(f => f.url().includes('appbuilder'));
-  const result = await frame.evaluate(() => {
-    const cmElements = document.querySelectorAll('.CodeMirror');
-    const cm = cmElements[2].CodeMirror;  // 3rd editor
+  for (const frame of page.frames()) {
+    try {
+      const result = await frame.evaluate(() => {
+        const cmElements = document.querySelectorAll('.CodeMirror');
+        const cm = cmElements[2].CodeMirror;  // 3rd editor
 
-    cm.focus();
+        cm.focus();
 
-    const lineIdx = 41;  // UI line 42 = index 41
-    const lineContent = cm.getLine(lineIdx);
-    const startPos = lineContent.indexOf('Old Text');
+        const lineIdx = 41;  // UI line 42 = index 41
+        const lineContent = cm.getLine(lineIdx);
+        const startPos = lineContent.indexOf('Old Text');
 
-    cm.setSelection(
-      { line: lineIdx, ch: startPos },
-      { line: lineIdx, ch: startPos + 'Old Text'.length }
-    );
+        cm.setSelection(
+          { line: lineIdx, ch: startPos },
+          { line: lineIdx, ch: startPos + 'Old Text'.length }
+        );
 
-    cm.replaceSelection('New Text');
-    cm.scrollIntoView({ line: lineIdx, ch: 0 }, 200);
+        cm.replaceSelection('New Text');
+        cm.scrollIntoView({ line: lineIdx, ch: 0 }, 200);
 
-    return { success: true, newContent: cm.getLine(lineIdx) };
-  });
-  return result;
-}
-```
-
-### Step 3: Set Entire Content (Alternative)
-```javascript
-async (page) => {
-  const frame = page.frames().find(f => f.url().includes('appbuilder'));
-  const result = await frame.evaluate(() => {
-    const cm = document.querySelectorAll('.CodeMirror')[2].CodeMirror;
-    cm.focus();
-    
-    // Set entire content - useful for HTML snippets with Deluge
-    cm.setValue('<h1><%= "Hello World" %></h1>');
-    
-    return 'Content set to: ' + cm.getValue();
-  });
-  return result;
+        return { success: true, newContent: cm.getLine(lineIdx) };
+      });
+      if (result.success) return result;
+    } catch(e) {}
+  }
 }
 ```
 
@@ -122,45 +142,46 @@ async (page) => {
 
 ```javascript
 async (page) => {
-  const frame = page.frames().find(f => f.url().includes('appbuilder'));
-  const result = await frame.evaluate(() => {
-    const cmElements = document.querySelectorAll('.CodeMirror');
-    const cm = cmElements[2].CodeMirror;  // 3rd editor
-
-    cm.focus();
-
-    const lineIdx = 127;  // UI line 128 = index 127
-    const lineContent = cm.getLine(lineIdx);
-    const startPos = lineContent.indexOf('Old Text');
-
-    cm.setSelection(
-      { line: lineIdx, ch: startPos },
-      { line: lineIdx, ch: startPos + 'Old Text'.length }
-    );
-
-    cm.replaceSelection('New Text');
-    cm.scrollIntoView({ line: lineIdx, ch: 0 }, 200);
-
-    return { success: true, newContent: cm.getLine(lineIdx) };
-  });
-  return result;
+  for (const frame of page.frames()) {
+    try {
+      const result = await frame.evaluate(() => {
+        const cmElements = document.querySelectorAll('.CodeMirror');
+        const cm = cmElements[2].CodeMirror;  // 3rd editor
+        cm.focus();
+        const lineIdx = 127;  // UI line 128 = index 127
+        const lineContent = cm.getLine(lineIdx);
+        const startPos = lineContent.indexOf('Old Text');
+        cm.setSelection(
+          { line: lineIdx, ch: startPos },
+          { line: lineIdx, ch: startPos + 'Old Text'.length }
+        );
+        cm.replaceSelection('New Text');
+        cm.scrollIntoView({ line: lineIdx, ch: 0 }, 200);
+        return { success: true, newContent: cm.getLine(lineIdx) };
+      });
+      if (result.success) return result;
+    } catch(e) {}
+  }
 }
 ```
 
 ## Find Text Location
 ```javascript
 async (page) => {
-  const frame = page.frames().find(f => f.url().includes('appbuilder'));
-  const result = await frame.evaluate(() => {
-    const cm = document.querySelectorAll('.CodeMirror')[2].CodeMirror;
-    for (let i = 0; i < cm.lineCount(); i++) {
-      if (cm.getLine(i).includes('Search Text')) {
-        return { found: true, line: i + 1, content: cm.getLine(i) };
-      }
-    }
-    return { found: false };
-  });
-  return result;
+  for (const frame of page.frames()) {
+    try {
+      const result = await frame.evaluate(() => {
+        const cm = document.querySelectorAll('.CodeMirror')[2].CodeMirror;
+        for (let i = 0; i < cm.lineCount(); i++) {
+          if (cm.getLine(i).includes('Search Text')) {
+            return { found: true, line: i + 1, content: cm.getLine(i) };
+          }
+        }
+        return { found: false };
+      });
+      if (result.found !== undefined) return result;
+    } catch(e) {}
+  }
 }
 ```
 
@@ -176,6 +197,7 @@ async (page) => {
 - **Use 0-based indexing** for CodeMirror (UI line 42 = index 41)
 - **Verify the replacement** by checking the returned `newContent`
 - **Scroll into view** to ensure the change is visible: `cm.scrollIntoView()`
-- **Access correct frame**: Use appbuilder frame, not frame 0
+- **Iterate all frames**: Use `for (const frame of page.frames())` to find CodeMirror in any frame
+- **HTML snippet editor** opens in a popup dialog (`zctemplate-dialog`), CodeMirror is in the main frame
 - **Deluge syntax**: Use `<%{ }%>` for logic, `<%= %>` for output
 - **Session recovery**: If browser context closes, re-navigate and re-edit

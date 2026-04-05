@@ -77,9 +77,14 @@
 ### Step 1: Navigate to Page Builder
 ```
 browser_navigate:
-  url: "https://creator.zoho.com/appbuilder/{account}/{app}/page/{page}/edit"
-browser_wait_for: 3 seconds
+  url: "https://creator.zoho.com/appbuilder/{account}/{app}/pagebuilder/{page}/edit"
+browser_wait_for: 5 seconds
 ```
+
+**URL Formats:**
+- Page builder: `https://creator.zoho.com/appbuilder/{account}/{app}/pagebuilder/{page}/edit`
+- Live page ("Page" type, not in menu): `https://creatorapp.zoho.com/{account}/{app}/#Page:{page}`
+- Live page (menu item): `https://creatorapp.zoho.com/{account}/{app}/#{page}`
 
 ### Step 2: Click HTML Snippet Component
 ```
@@ -100,46 +105,45 @@ browser_wait_for: 3 seconds
 ### Step 4: Find the Text to Edit
 ```javascript
 async (page) => {
-  const result = await page.frames()[0].evaluate(() => {
-    const cm = document.querySelectorAll('.CodeMirror')[2].CodeMirror;
-    for (let i = 0; i < cm.lineCount(); i++) {
-      const line = cm.getLine(i);
-      if (line.includes('Text to find')) {
-        return { found: true, line: i + 1, content: line };
-      }
-    }
-    return { found: false };
-  });
-  return result;
+  for (const frame of page.frames()) {
+    try {
+      const result = await frame.evaluate(() => {
+        const cm = document.querySelectorAll('.CodeMirror')[2].CodeMirror;
+        for (let i = 0; i < cm.lineCount(); i++) {
+          const line = cm.getLine(i);
+          if (line.includes('Text to find')) {
+            return { found: true, line: i + 1, content: line };
+          }
+        }
+        return { found: false };
+      });
+      if (result.found) return result;
+    } catch(e) {}
+  }
 }
 ```
 
 ### Step 5: Edit Content via CodeMirror
 ```javascript
 async (page) => {
-  const result = await page.frames()[0].evaluate(() => {
-    const cmElements = document.querySelectorAll('.CodeMirror');
-    const cm = cmElements[2].CodeMirror;  // 3rd editor
-    
-    cm.focus();
-    
-    const lineIdx = 41;  // UI line 42 = index 41
-    const lineContent = cm.getLine(lineIdx);
-    const startPos = lineContent.indexOf('Old Text');
-    
-    cm.setSelection(
-      { line: lineIdx, ch: startPos },
-      { line: lineIdx, ch: startPos + 'Old Text'.length }
-    );
-    
-    cm.replaceSelection('New Text');
-    cm.scrollIntoView({ line: lineIdx, ch: 0 }, 200);
-    
-    return { success: true, newContent: cm.getLine(lineIdx) };
-  });
-  return result;
+  // Recommended: iterate all frames, find CodeMirror by content match
+  for (const frame of page.frames()) {
+    try {
+      await frame.evaluate(() => {
+        const cms = document.querySelectorAll('.CodeMirror');
+        cms.forEach((cmEl, i) => {
+          const cm = cmEl.CodeMirror;
+          if (cm && cm.getValue().includes('Hello World')) {
+            cm.setValue('<%{%>\n<h1>Hello Aathira</h1>\n<%}%>');
+          }
+        });
+      });
+    } catch(e) {}
+  }
 }
 ```
+
+**Note:** The HTML snippet editor opens in a popup dialog (`zctemplate-dialog`). CodeMirror is in the main page frame, not an iframe.
 
 ### Step 6: Save Changes
 ```
@@ -160,9 +164,15 @@ browser_wait_for: 2 seconds
 
 ### Step 7: Verify on Live Page
 ```
+# For "Page" type pages (not in menu):
 browser_navigate:
   url: "https://creatorapp.zoho.com/{account}/{app}/#Page:{page}"
-browser_wait_for: 3 seconds
+
+# For menu pages:
+browser_navigate:
+  url: "https://creatorapp.zoho.com/{account}/{app}/#{page}"
+
+browser_wait_for: 5 seconds
 browser_snapshot  # Verify the changes are visible
 ```
 
@@ -215,13 +225,24 @@ document.getElementById('builder-close').click();
 
 ### Pattern 2: Find CodeMirror Content
 ```javascript
-// There are 3 CodeMirror instances; content is in the 3rd one
-const editors = document.querySelectorAll('.CodeMirror');
-const contentEditor = editors[2];  // Index 2 = 3rd editor
-
-// Verify it has content
-console.log(contentEditor.CodeMirror.getValue().length);  // Should be > 0
+// Recommended: iterate all frames to find the right CodeMirror
+for (const frame of page.frames()) {
+  try {
+    await frame.evaluate(() => {
+      const cms = document.querySelectorAll('.CodeMirror');
+      cms.forEach((cmEl, i) => {
+        const cm = cmEl.CodeMirror;
+        if (cm && cm.getValue().includes('Search Text')) {
+          // Found it - now edit
+          cm.setValue('New content');
+        }
+      });
+    });
+  } catch(e) {}
+}
 ```
+
+**Why iterate all frames:** The HTML snippet editor opens in a popup dialog (`zctemplate-dialog`) and CodeMirror may be in any frame (main frame or child frame).
 
 ### Pattern 3: Monitor Network Requests
 ```
@@ -350,6 +371,13 @@ document.querySelectorAll('.zc-freezer, .zc-freezer-layer').forEach(el => el.rem
 2. Use `<%= %>` for output, `<%{ }%>` for logic
 3. Check Zoho help docs for correct syntax
 4. Reference: https://help.zoho.com/portal/en/kb/creator/developer-guide/pages/snippets
+
+### Issue: Live page shows only loading spinner
+**Cause:** Page is a "Page" type (not in menu) and URL format is wrong
+**Fix:**
+1. Use `#Page:{page}` format for pages not in menu: `https://creatorapp.zoho.com/{account}/{app}/#Page:Dashboard_2`
+2. Use `#{page}` format for menu pages: `https://creatorapp.zoho.com/{account}/{app}/#Dashboard`
+3. Verify the page was saved correctly in the page builder
 
 ---
 

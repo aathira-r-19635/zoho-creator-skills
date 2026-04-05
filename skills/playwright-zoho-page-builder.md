@@ -13,9 +13,16 @@ Navigate Zoho Creator page builder to access HTML Snippet components.
 ### 1. Navigate to Page Builder
 ```
 browser_navigate:
-  url: "https://creator.zoho.com/appbuilder/{account}/{app}/page/{page}/edit"
+  url: "https://creator.zoho.com/appbuilder/{account}/{app}/pagebuilder/{page}/edit"
 browser_wait_for: 5 seconds
 ```
+
+**URL Formats:**
+- Page builder (edit mode): `https://creator.zoho.com/appbuilder/{account}/{app}/pagebuilder/{page}/edit`
+- Live page ("Page" type, not in menu): `https://creatorapp.zoho.com/{account}/{app}/#Page:{page}`
+- Live page (menu item): `https://creatorapp.zoho.com/{account}/{app}/#{page}`
+
+**Note:** Pages that are NOT in the app menu (like "Dashboard 2") must be accessed via `#Page:{page}` URL. Menu pages use `#{page}` format.
 
 ### 2. Handle Notification Popups (if any)
 Zoho Creator may show notification permission popups. If visible:
@@ -28,42 +35,52 @@ browser_click on "Edit this application" link
 browser_wait_for: 3 seconds
 ```
 
-### 4. Access HTML Snippet in Design Preview Frame
-The HTML Snippet component lives inside an iframe. Access it like this:
-```javascript
-async (page) => {
-  const frame = page.frames().find(f => f.url().includes('appbuilder'));
-  const previewFrame = frame.childFrames()[0];  // Design preview iframe
-  
-  const result = await previewFrame.evaluate(() => {
-    const el = document.querySelector('.zc-pb-embed-cnt-holder');
-    if (el) {
-      el.click();
-      return 'Clicked HTML snippet';
-    }
-    return 'Element not found';
-  });
-  return result;
-}
+### 4. Click HTML Snippet Component
 ```
+# The HTML Snippet component appears in the design canvas
+# After clicking, a properties panel appears on the right
+browser_snapshot  # Get fresh refs
+browser_click on ref of HTML Snippet component
 browser_wait_for: 2 seconds
+```
 
 ### 5. Open Code Editor via Configure Button
 ```
 # The properties panel appears after clicking the snippet
-browser_snapshot  # Get fresh refs for Configure button
+# Click "Configure" to open the code editor popup (zctemplate-dialog)
+browser_snapshot  # Get fresh refs
 browser_click on ref of "Configure" button
 browser_wait_for: 3 seconds
 ```
 
-### 6. Find CodeMirror Editor
-- Content is in the **3rd CodeMirror instance** (index 2) in the appbuilder frame
+### 6. Edit Content via CodeMirror
+- The HTML snippet editor opens in a popup dialog (`zctemplate-dialog`)
+- CodeMirror is in the **main page frame** (not in an iframe)
+- Content is in the **3rd CodeMirror instance** (index 2)
 - Use `playwright-code-editor` skill to edit content
-- See `html-snippet-syntax.md` for proper Deluge syntax
+- Recommended: iterate all frames to find the right CodeMirror:
+
+```javascript
+async (page) => {
+  for (const frame of page.frames()) {
+    try {
+      await frame.evaluate(() => {
+        const cms = document.querySelectorAll('.CodeMirror');
+        cms.forEach((cmEl, i) => {
+          const cm = cmEl.CodeMirror;
+          if (cm && cm.getValue().includes('Hello World')) {
+            cm.setValue('<%{%>\n<h1>Hello Aathira</h1>\n<%}%>');
+          }
+        });
+      });
+    } catch(e) {}
+  }
+}
+```
 
 ### 7. Save Changes
 ```
-# Click Save button in code editor popup
+# Click Save button in code editor popup (id: zctemplate-dialog-okBtn)
 browser_snapshot  # Get fresh refs
 browser_click on ref of "Save" button
 browser_wait_for: 2 seconds
@@ -88,10 +105,10 @@ browser_snapshot  # Verify the changes are visible
 ```
 
 ## Key Refs to Find
-- HTML Snippet component: inside design preview iframe (`.zc-pb-embed-cnt-holder`)
-- Configure button: Look for button with text "Configure" in the properties panel
-- Save button: Look for button with text "Save" in the code editor
-- Done link: Look for link with id "builder-close" in the top bar
+- HTML Snippet component: in the design canvas (`.zc-pb-embed-cnt-holder`)
+- Configure button: button with text "Configure" in the properties panel
+- Save button: button with text "Save" (id: `zctemplate-dialog-okBtn`) in the code editor popup
+- Done link: link with id `builder-close` in the top bar
 
 ## Tips
 - Always wait 2-3 seconds after each click
@@ -102,18 +119,7 @@ browser_snapshot  # Verify the changes are visible
 - **Handle freezer overlays**: Remove `.zc-freezer` elements if they block clicks
 - **Handle notification popups**: Click "Allow" if notification permission dialog appears
 - **Session recovery**: If browser context closes, re-navigate (cookies persist)
-
-## Iframe Navigation Pattern
-```javascript
-// Access design preview iframe
-const frame = page.frames().find(f => f.url().includes('appbuilder'));
-const previewFrame = frame.childFrames()[0];
-
-// Interact with elements inside iframe
-await previewFrame.evaluate(() => {
-  document.querySelector('.zc-pb-embed-cnt-holder').click();
-});
-```
+- **CodeMirror in popup**: The HTML snippet editor opens in a `zctemplate-dialog` popup, not an iframe
 
 ## Freezer Overlay Handling
 ```javascript

@@ -44,8 +44,14 @@ Zoho Creator may show browser notification permission popups during save:
 
 ### 5. Navigate to Live Page
 ```
+# For "Page" type pages (not in menu):
 browser_navigate:
   url: "https://creatorapp.zoho.com/{account}/{app}/#Page:{page}"
+
+# For menu pages:
+browser_navigate:
+  url: "https://creatorapp.zoho.com/{account}/{app}/#{page}"
+
 browser_wait_for: 5 seconds
 ```
 
