@@ -234,14 +234,71 @@ Call this before performing actions to capture all API calls.
 
 ---
 
+## HTML Snippet Syntax Reference
+
+### Overview
+Zoho Creator HTML snippets combine standard HTML markup with server-side Deluge scripting. The code executes server-side before the page renders in the browser.
+
+### Deluge Tags
+
+| Tag | Purpose | Example |
+|-----|---------|---------|
+| `<%{ ... }%>` | Execute Deluge logic (no output) | `<%{ if(input.Status == "Approved") { } }%>` |
+| `<%= ... %>` | Output Deluge value | `<%= input.Field_Name %>` |
+
+### Examples
+
+**Display a field value:**
+```html
+<p>Customer: <%= input.Customer_Name %></p>
+<h1><%= "Hello World" %></h1>
+```
+
+**Conditional rendering:**
+```html
+<%{ if(input.Status == "Approved") { %>
+  <p style="color: green;">Status: Approved</p>
+<%{ } %>
+```
+
+**Loop through records:**
+```html
+<ul>
+<%{ for each item in input.Order_Items { %>
+  <li><%= item.Product_Name %> - $<%= item.Price %></li>
+<%{ } %>
+</ul>
+```
+
+### Important Notes
+- HTML snippets execute server-side before page renders
+- Do NOT use `<% %>` for output - use `<%= %>` instead
+- Always close Deluge blocks: `<%{ ... }%>`
+- Cannot directly manipulate client-side DOM (use JavaScript for that)
+- Keep logic lightweight - complex data fetching should be done in Page "On Load" workflow
+
+### Official Documentation
+- https://help.zoho.com/portal/en/kb/creator/developer-guide/pages/snippets
+- https://help.zoho.com/portal/en/kb/creator/developer-guide/pages/snippets/articles/understand-html-snippets
+
+---
+
 ## Troubleshooting
 
 ### Issue: Redirected to login page
 **Cause:** Session expired or no active session
-**Fix:** 
+**Fix:**
 1. Ask user to login manually
 2. After login, session will be persisted automatically
 3. Future runs won't require re-login
+
+### Issue: Browser context closed
+**Cause:** Browser session terminated during automation
+**Fix:**
+1. Re-navigate to the target URL
+2. Session cookies should persist (no re-login needed)
+3. If redirected to login, session expired - ask user to login
+**Prevention:** Handle navigation errors gracefully
 
 ### Issue: CodeMirror content is empty (length: 0)
 **Cause:** Wrong CodeMirror instance selected
@@ -250,6 +307,9 @@ Call this before performing actions to capture all API calls.
 ### Issue: Click is intercepted by overlay
 **Cause:** Zoho shows a freezer overlay during saves
 **Fix:** Remove `.zc-freezer` elements via JavaScript before clicking
+```javascript
+document.querySelectorAll('.zc-freezer, .zc-freezer-layer').forEach(el => el.remove());
+```
 
 ### Issue: Changes don't persist after save
 **Cause:** Save button wasn't clicked before closing editor
@@ -265,19 +325,31 @@ Call this before performing actions to capture all API calls.
 
 ### Issue: Text replacement doesn't work
 **Cause:** CodeMirror not focused or wrong selection
-**Fix:** 
+**Fix:**
 1. Call `cm.focus()` before making selections
 2. Verify the text exists using the find script first
 3. Check that `startPos` is not -1 (text not found)
 
 ### Issue: Page builder doesn't close after Done
 **Cause:** Done button not clicked or Save popup still open
-**Fix:** 
+**Fix:**
 1. Click Save button
 2. Wait 2 seconds
 3. Press Escape to close popup
 4. Wait 1 second
 5. Click Done button
+
+### Issue: Notification popup appears
+**Cause:** Zoho requests browser notification permissions
+**Fix:** Click "Allow" to dismiss and continue automation
+
+### Issue: HTML snippet not rendering on live page
+**Cause:** Deluge syntax error or incorrect tags
+**Fix:**
+1. Verify Deluge tags are properly closed: `<%{ ... }%>`
+2. Use `<%= %>` for output, `<%{ }%>` for logic
+3. Check Zoho help docs for correct syntax
+4. Reference: https://help.zoho.com/portal/en/kb/creator/developer-guide/pages/snippets
 
 ---
 

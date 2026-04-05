@@ -27,6 +27,7 @@ Complete index of all skills in this repository, organized by category.
 | Skill | File | Purpose |
 |-------|------|---------|
 | Network Monitoring | `playwright-network-monitoring.md` | Capture and analyze Zoho API calls |
+| HTML Snippet Syntax | `html-snippet-syntax.md` | Deluge syntax reference for HTML snippets |
 
 ### Skill Dependencies
 ```
@@ -38,6 +39,8 @@ playwright-code-editor
     ↓
 playwright-zoho-save
 ```
+
+**Reference:** `html-snippet-syntax.md` - Consult when writing HTML snippet content
 
 ---
 
@@ -139,6 +142,22 @@ playwright-zoho-save
 - Use before performing actions
 - Extract IDs and tokens
 - Understand save API endpoint
+
+---
+
+### html-snippet-syntax.md
+**What it covers:**
+- Deluge tag syntax (`<%{ }%>` and `<%= %>`)
+- Common patterns for HTML snippets
+- Conditional rendering and loops
+- Code editor workflow
+- Troubleshooting snippet issues
+
+**Key concepts:**
+- `<%{ }%>` for logic execution (no output)
+- `<%= %>` for value output
+- Server-side execution before page render
+- Reference Zoho help docs for complex patterns
 
 ---
 

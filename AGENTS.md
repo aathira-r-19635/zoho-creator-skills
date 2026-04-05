@@ -44,6 +44,15 @@ playwright-zoho-save
 - **Future agents automatically inherit active sessions** - no re-login needed
 - Session expires after several hours/days (Zoho cookie lifetime)
 
+### Session Recovery (CRITICAL)
+- Browser context can close unexpectedly during long sessions
+- If you see "Target page, context or browser has been closed" error:
+  1. The browser session has terminated
+  2. You must re-navigate to the target URL
+  3. Session cookies should still be valid (no re-login needed)
+  4. If re-login is required, ask the user to login manually
+- **Always handle navigation errors gracefully** - retry navigation if context closes
+
 ### Session Storage
 - **Location**: `.playwright-mcp/` directory (already in `.gitignore`)
 - **Security**: Session data is NOT source controlled
@@ -54,6 +63,38 @@ playwright-zoho-save
 2. If redirected to login → ask user to login manually
 3. After login → session is automatically persisted
 4. Future runs → skip login, proceed directly to automation
+5. **If browser context closes** → re-navigate (cookies should persist)
+
+## HTML Snippet Syntax Reference
+
+### Deluge Tags in HTML Snippets
+Zoho Creator HTML snippets support embedding Deluge code using special tags:
+
+| Tag | Purpose | Example |
+|-----|---------|---------|
+| `<%{ ... }%>` | Execute Deluge logic (no output) | `<%{ if(input.Status == "Approved") { } }%>` |
+| `<%= ... %>` | Output Deluge value | `<%= input.Field_Name %>` |
+
+### Common Patterns
+```html
+<!-- Display a field value -->
+<p>Customer: <%= input.Customer_Name %></p>
+
+<!-- Conditional rendering -->
+<%{ if(input.Status == "Approved") { %>
+  <p style="color: green;">Status: Approved</p>
+<%{ } %>
+
+<!-- Simple text output -->
+<h1><%= "Hello World" %></h1>
+```
+
+### Important Notes
+- HTML snippets are executed server-side before page renders
+- Do NOT use `<% %>` for output - use `<%= %>` instead
+- Always close Deluge blocks properly: `<%{ ... }%>`
+- See `skills/html-snippet-syntax.md` for complete syntax reference
+- Official docs: https://help.zoho.com/portal/en/kb/creator/developer-guide/pages/snippets
 
 ## Important Patterns
 
@@ -109,6 +150,22 @@ browser_snapshot → identify refs → browser_click
 - If click is blocked → remove overlay elements via JavaScript
 - If changes don't persist → verify Save was clicked before Escape
 - If redirected to login → ask user to login, then session persists automatically
+- **If browser context closes** → re-navigate to target URL (cookies should persist)
+- **If notification popup appears** → click "Allow" to dismiss and proceed
+- **If freezer overlay blocks clicks** → remove `.zc-freezer` elements via JavaScript
+
+### Notification Popup Handling
+Zoho Creator may show browser notification permission popups. When this happens:
+1. Look for notification permission dialog
+2. Click "Allow" to dismiss
+3. Continue with automation
+
+### Freezer Overlay Handling
+Zoho shows freezer overlays during saves that can block clicks:
+```javascript
+// Remove freezer overlays
+document.querySelectorAll('.zc-freezer, .zc-freezer-layer').forEach(el => el.remove());
+```
 
 ## GitHub Identity Enforcement (CRITICAL)
 
@@ -175,4 +232,6 @@ This repository MUST ONLY use your **corporate Zoho GitHub account**.
 - `skills/playwright-zoho-login.md` - Authentication details
 - `skills/playwright-zoho-page-builder.md` - Page builder navigation
 - `skills/playwright-code-editor.md` - CodeMirror editing
-- `skills/github-identity-enforcement.md` - Git identity rules
+- `skills/playwright-zoho-save.md` - Save & verify workflow
+- `skills/html-snippet-syntax.md` - HTML snippet Deluge syntax reference
+- **Zoho Official Docs**: https://help.zoho.com/portal/en/kb/creator/developer-guide/pages/snippets
