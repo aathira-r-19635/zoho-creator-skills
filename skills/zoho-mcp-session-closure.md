@@ -1,7 +1,7 @@
 # Zoho MCP Session Closure & Handoff
 
 ## Purpose
-Properly close a Zoho Creator automation session: save learnings, update docs, commit to main.
+Properly close a Zoho Creator automation session: save learnings, update docs, verify gitignore, commit to main.
 
 ## When to Use
 - User asks to "close session", "wrap up", "save learnings", "push to main"
@@ -26,50 +26,53 @@ Ask: **What did we discover/fix in this session?**
 - `docs/skills-index.md` - Add new skill entries
 - `README.md` - Update overview if needed
 
-### 4. Commit & Push to Main
+### 4. Verify .gitignore (CRITICAL)
+Check that sensitive/temp files are properly ignored:
+- OAuth tokens: `mcp-oauth-tokens.json`, `oauth_creds.json`
+- Debug logs: `.qwen/debug/*.txt`, `.qwen/tmp/**`
+- Browser session: `.playwright-mcp/`
+- OS files: `.DS_Store`, `Thumbs.db`
+- IDE configs: `.vscode/`, `.idea/`
+
+Review `.gitignore` and add any missing patterns.
+**Never commit** tokens, credentials, or debug files.
+
+### 5. Check for Untracked Files
+```bash
+git status  # Review all untracked files
+```
+- Add new skill files and docs to git
+- Leave sensitive files untracked (verify in .gitignore)
+
+### 6. Commit & Push to Main
 ```bash
 cd /path/to/zoho-creator-skills
 git add -A
 git commit -m "docs: <what was learned and updated>"
 git push origin main
 ```
+- Verify git identity before commit
+- Write clear, descriptive commit message
 
 ## Zoho MCP Authentication (Updated Apr 2026)
 
 ### Authorization Mode: "Authorize via Connection"
 - Configure at: `https://creator-XXXXXXX.zohomcp.com` → Connection tab
 - Select **"Authorize via Connection"** (not "On Demand")
-- Ensures all tools are pre-authorized server-side
-- No client-side OAuth scope issues
+- All tools pre-authorized server-side, no OAuth scope issues
+- Fix for error Code 2945 (invalid oauthscope)
 
 ### Configuration
-- MCP Server URL in `~/.qwen/settings.json`:
-  ```json
-  {
-    "mcpServers": {
-      "zoho-creator": {
-        "httpUrl": "https://creator-XXXXXXX.zohomcp.com/mcp/XXX/message"
-      }
-    }
-  }
-  ```
-- OAuth tokens stored in `~/.qwen/mcp-oauth-tokens.json` (gitignored)
-
-### Common Error: Invalid OAuth Scope (Code 2945)
-**Fix:** Switch from "Authorization on Demand" → "Authorize via Connection"
-- Go to Zoho MCP console → Connection → Select "Authorize via Connection"
-- Native Connection shows "Connected" status
-- All tools work without client-side OAuth issues
+- MCP URL in `~/.qwen/settings.json` (httpUrl field)
+- OAuth tokens in `~/.qwen/mcp-oauth-tokens.json` (gitignored)
 
 ## Key Zoho MCP Tools
 - `ZohoCreator_getApplications` - List apps (works ✅)
-- `ZohoCreator_getForms` - List forms in app
-- `ZohoCreator_getReports` - List reports in app
+- `ZohoCreator_getForms/Reports/Pages` - List app components
 - `ZohoCreator_getRecordByID` - Get single record
 - `ZohoCreator_addRecords` - Add records (up to 200)
-- `ZohoCreator_updateRecords` - Bulk update records
-- `ZohoCreator_deleteRecords` - Bulk delete records
-- `ZohoCreator_getWorkspaces` - Requires workspace scope (may fail with Connection auth)
+- `ZohoCreator_updateRecords/deleteRecords` - Bulk operations
+- `ZohoCreator_getWorkspaces` - May fail with scope errors
 
 ### Workspace Discovery
 - `getWorkspaces` may fail with scope errors
