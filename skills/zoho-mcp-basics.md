@@ -30,10 +30,20 @@ List and explore Zoho Creator applications, forms, reports, and pages using the 
 - `link_name` - The internal identifier used in all API calls
 - `account_owner_name` - Your Zoho workspace name (e.g., `achyutmenont0_zohotest`)
 
-## Workspace Discovery
-- `ZohoCreator_getWorkspaces` may fail with scope errors
-- **Workaround:** Use `getApplications` - each app includes `workspace_name`
-- Extract unique workspace names from the applications list
+## Workspace Discovery (IMPORTANT - Apr 2026)
+- `ZohoCreator_getWorkspaces` **FAILS with Code 2945** ("invalid oauthscope") — do NOT use this tool
+- This is a known Zoho MCP server-side issue; the tool lacks proper OAuth scopes
+- **Correct approach:** Use `ZohoCreator_getApplications` with `{complete: true}`
+  - Each application includes `workspace_name` in its response
+  - Extract unique workspace names from the list
+  - The response also includes `is_super_admin` and `default_workspace` fields
+  - Example extraction:
+    ```javascript
+    // From getApplications response:
+    const workspaces = [...new Set(apps.map(a => a.workspace_name))];
+    // Returns: ["achyutmenont0_zohotest"]
+    ```
+- Use the `default_workspace` value as your `account_owner_name` in all subsequent API calls
 
 ## Limitations
 - Zoho MCP does NOT support page layout/UI customization

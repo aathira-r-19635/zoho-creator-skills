@@ -3,6 +3,11 @@
 ## Purpose
 Add, update, and retrieve records in Zoho Creator forms and reports.
 
+## Finding Your Workspace Name (IMPORTANT)
+- Do NOT use `ZohoCreator_getWorkspaces` — it fails with Code 2945
+- Use `ZohoCreator_getApplications` with `{complete: true}` to find your `workspace_name`
+- The `default_workspace` field in the response is your `account_owner_name`
+
 ## Add Records
 ```
 ZohoCreator_addRecords:

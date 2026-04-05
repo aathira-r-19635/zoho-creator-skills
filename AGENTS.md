@@ -227,6 +227,15 @@ This repository MUST ONLY use your **corporate Zoho GitHub account**.
 - All tools pre-authorized server-side, no client OAuth issues
 - If you see "invalid oauthscope" error → switch to Connection mode
 
+### Known Tool Issue: `ZohoCreator_getWorkspaces` (Apr 2026)
+- `ZohoCreator_getWorkspaces` **fails with Code 2945** ("invalid oauthscope") even with Connection mode
+- This is a known Zoho MCP server-side scope configuration issue
+- **Workaround:** Use `ZohoCreator_getApplications` with `{complete: true}` instead
+  - Each application in the response includes a `workspace_name` field
+  - Extract unique workspace names from the applications list
+  - Example: All apps returned `workspace_name: "achyutmenont0_zohotest"`
+- Do NOT attempt to use `ZohoCreator_getWorkspaces` — it will always fail until Zoho fixes the scope
+
 ### Session Storage
 - OAuth tokens: `~/.qwen/mcp-oauth-tokens.json` (gitignored)
 - MCP config: `~/.qwen/settings.json`
