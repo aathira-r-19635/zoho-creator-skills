@@ -72,27 +72,43 @@ Zoho Creator HTML snippets support embedding Deluge code using special tags:
 
 | Tag | Purpose | Example |
 |-----|---------|---------|
+| `<%{%>` | Opening wrapper (REQUIRED) | `<%{%>` |
 | `<%{ ... }%>` | Execute Deluge logic (no output) | `<%{ if(input.Status == "Approved") { } }%>` |
 | `<%= ... %>` | Output Deluge value | `<%= input.Field_Name %>` |
+| `<%}%>` | Closing wrapper (REQUIRED) | `<%}%>` |
+
+### Complete Snippet Structure
+```html
+<%{%>
+  <!-- HTML content goes here -->
+  <h1>Hello World</h1>
+<%}%>
+```
 
 ### Common Patterns
 ```html
+<!-- Simple text output -->
+<%{%>
+<h1>Hello World</h1>
+<%}%>
+
 <!-- Display a field value -->
+<%{%>
 <p>Customer: <%= input.Customer_Name %></p>
+<%}%>
 
 <!-- Conditional rendering -->
+<%{%>
 <%{ if(input.Status == "Approved") { %>
   <p style="color: green;">Status: Approved</p>
 <%{ } %>
-
-<!-- Simple text output -->
-<h1><%= "Hello World" %></h1>
+<%}%>
 ```
 
 ### Important Notes
+- **CRITICAL**: Every snippet MUST start with `<%{%>` and end with `<%}%>`
+- Missing wrapper tags causes "Improper Statement" error at line 0
 - HTML snippets are executed server-side before page renders
-- Do NOT use `<% %>` for output - use `<%= %>` instead
-- Always close Deluge blocks properly: `<%{ ... }%>`
 - See `skills/html-snippet-syntax.md` for complete syntax reference
 - Official docs: https://help.zoho.com/portal/en/kb/creator/developer-guide/pages/snippets
 

@@ -6,6 +6,27 @@ Comprehensive reference for writing HTML snippets with Deluge code in Zoho Creat
 ## Overview
 HTML snippets combine standard HTML5 markup with server-side Deluge scripting. The code executes server-side before the page renders in the browser, allowing dynamic content injection.
 
+## Snippet Wrapper Structure (CRITICAL)
+
+Every HTML snippet in Zoho Creator **MUST** be wrapped with the following tags:
+
+```
+<%{%>
+<!-- Your HTML content goes here -->
+<%}%>
+```
+
+- `<%{%>` - Opening wrapper tag (execution block open + immediate close)
+- `<%}%>` - Closing wrapper tag (execution block close)
+- All HTML content must go **between** these two tags
+
+### Simple Example
+```html
+<%{%>
+<h1>Hello World</h1>
+<%}%>
+```
+
 ## Deluge Tags
 
 ### Execution Block: `<%{ ... }%>`
@@ -16,11 +37,14 @@ Executes Deluge logic without printing output to the browser. Used for:
 - Data processing
 
 ```html
-<%{ 
-  v_Name = "Zoho Creator"; 
+<%{%>
+<%{
+  v_Name = "Zoho Creator";
   v_Year = 2024;
   v_Count = input.Records.count();
 %>
+<p>Name: <%= v_Name %></p>
+<%}%>
 ```
 
 ### Output Block: `<%= ... %>`
@@ -30,27 +54,34 @@ Evaluates a Deluge expression and injects the resulting value directly into the 
 - Rendering computed strings
 
 ```html
+<%{%>
 <h2>Welcome to <%= v_Name %></h2>
 <p>Current Year: <%= v_Year %></p>
 <p>Total Records: <%= v_Count %></p>
+<%}%>
 ```
 
 ## Common Patterns
 
 ### Display Field Value
 ```html
+<%{%>
 <p>Customer Name: <%= input.Customer_Name %></p>
 <h1><%= input.Title %></h1>
+<%}%>
 ```
 
 ### Simple Text Output
 ```html
-<h1><%= "Hello World" %></h1>
-<p><%= "Welcome to our application" %></p>
+<%{%>
+<h1>Hello World</h1>
+<p>Welcome to our application</p>
+<%}%>
 ```
 
 ### Conditional Rendering
 ```html
+<%{%>
 <%{ if(input.Status == "Approved") { %>
   <p style="color: green;">Status: Approved</p>
 <%{ } %>
@@ -60,20 +91,24 @@ Evaluates a Deluge expression and injects the resulting value directly into the 
 <%{ } else { %>
   <p style="color: red;">Status: Rejected</p>
 <%{ } %>
+<%}%>
 ```
 
 ### Loop Through Records
 ```html
+<%{%>
 <ul>
 <%{ for each item in input.Order_Items { %>
   <li><%= item.Product_Name %> - $<%= item.Price %></li>
 <%{ } %>
 </ul>
+<%}%>
 ```
 
 ### Combined Logic and Output
 ```html
-<%{ 
+<%{%>
+<%{
   activeUsers = Users [Status == "Active"];
   total = activeUsers.count();
 %>
@@ -89,23 +124,26 @@ Evaluates a Deluge expression and injects the resulting value directly into the 
     </div>
   <%{ end for %>
 </div>
+<%}%>
 ```
 
 ## Important Rules
 
 ### Must Follow
-1. **Always close Deluge blocks**: Every `<%{` must have a matching `%>`
-2. **Use `<%= %>` for output**: Never use `<% %>` when you want text to appear
-3. **Proper HTML structure**: All HTML tags must be properly opened and closed
-4. **Case-sensitive Deluge**: Deluge syntax is case-sensitive
-5. **String quoting**: Use `" "` or `' '` for strings in Deluge
+1. **Always use wrapper tags**: Every snippet MUST start with `<%{%>` and end with `<%}%>`
+2. **Always close Deluge blocks**: Every `<%{` must have a matching `}%>`
+3. **Use `<%= %>` for output**: Never use `<% %>` when you want text to appear
+4. **Proper HTML structure**: All HTML tags must be properly opened and closed
+5. **Case-sensitive Deluge**: Deluge syntax is case-sensitive
+6. **String quoting**: Use `" "` or `' '` for strings in Deluge
 
 ### Must Avoid
-1. **Unclosed tags**: Missing `%>` or malformed HTML breaks rendering
-2. **Client/server confusion**: Deluge runs before page load, not on browser events
-3. **Complex logic in snippets**: Keep snippets lightweight; do heavy lifting in Page "On Load"
-4. **Direct database operations**: Fetch data in Page workflow, pass to snippet via `args`
-5. **Using `<% %>` for output**: This executes but doesn't print - use `<%= %>` instead
+1. **Missing wrapper tags**: Forgetting `<%{%>` and `<%}%>` causes "Improper Statement" errors
+2. **Unclosed tags**: Missing `}%>` or malformed HTML breaks rendering
+3. **Client/server confusion**: Deluge runs before page load, not on browser events
+4. **Complex logic in snippets**: Keep snippets lightweight; do heavy lifting in Page "On Load"
+5. **Direct database operations**: Fetch data in Page workflow, pass to snippet via `args`
+6. **Using `<% %>` for output**: This executes but doesn't print - use `<%= %>` instead
 
 ## Code Editor Workflow
 
@@ -130,6 +168,11 @@ Evaluates a Deluge expression and injects the resulting value directly into the 
 6. Navigate to live page to verify
 
 ## Troubleshooting
+
+### "Improper Statement" Error (Line 0)
+- **Most common cause**: Missing `<%{%>` wrapper at the start or `<%}%>` at the end
+- **Fix**: Ensure your snippet starts with `<%{%>` and ends with `<%}%>`
+- Also check for missing `;` at end of Deluge statements
 
 ### Snippet Not Rendering
 - Check for unclosed Deluge blocks
