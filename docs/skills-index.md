@@ -27,7 +27,7 @@ Complete index of all skills in this repository, organized by category.
 | Skill | File | Purpose |
 |-------|------|---------|
 | Network Monitoring | `playwright-network-monitoring.md` | Capture and analyze Zoho API calls |
-| HTML Snippet Syntax | `html-snippet-syntax.md` | Deluge syntax reference for HTML snippets |
+| HTML Snippet Syntax | `zoho-creator-html-snippet-syntax.md` | Deluge syntax reference for HTML snippets |
 
 ### Skill Dependencies
 ```
@@ -40,7 +40,7 @@ playwright-code-editor
 playwright-zoho-save
 ```
 
-**Reference:** `html-snippet-syntax.md` - Consult when writing HTML snippet content
+**Reference:** `zoho-creator-html-snippet-syntax.md` - Consult when writing HTML snippet content
 
 ---
 
@@ -152,19 +152,21 @@ playwright-zoho-save
 
 ---
 
-### html-snippet-syntax.md
+### zoho-creator-html-snippet-syntax.md
 **What it covers:**
-- Deluge tag syntax (`<%{ }%>` and `<%= %>`)
-- Common patterns for HTML snippets
-- Conditional rendering and loops
-- Code editor workflow
-- Troubleshooting snippet issues
+- Wrapper tag syntax (`<%{%>` and `<%}%>` with curly braces)
+- Internal Deluge blocks (`<% code %>` without curly braces)
+- Output expressions (`<%= value %>`)
+- Complete working examples
+- Common mistakes to avoid
+- Save sequence
 
 **Key concepts:**
-- `<%{ }%>` for logic execution (no output)
+- **ONLY** opening `<%{%>` and closing `<%}%>` use curly braces
+- All internal Deluge blocks use plain `<% %>` tags
 - `<%= %>` for value output
 - Server-side execution before page render
-- Reference Zoho help docs for complex patterns
+- Missing or wrong wrapper syntax causes "Improper Statement" error
 
 ---
 

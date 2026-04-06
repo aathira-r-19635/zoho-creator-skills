@@ -114,9 +114,10 @@ Zoho Creator HTML snippets support embedding Deluge code using special tags:
 
 ### Important Notes
 - **CRITICAL**: Every snippet MUST start with `<%{%>` and end with `<%}%>`
-- Missing wrapper tags causes "Improper Statement" error at line 0
+- **CRITICAL**: Internal Deluge blocks use plain `<% code %>` (NO curly braces)
+- Missing wrapper tags or wrong internal syntax causes "Improper Statement" error at line 0
 - HTML snippets are executed server-side before page renders
-- See `skills/html-snippet-syntax.md` for complete syntax reference
+- See `skills/zoho-creator-html-snippet-syntax.md` for complete syntax reference
 - Official docs: https://help.zoho.com/portal/en/kb/creator/developer-guide/pages/snippets
 
 ## Important Patterns
@@ -318,5 +319,5 @@ This repository MUST ONLY use your **corporate Zoho GitHub account**.
 - `skills/playwright-zoho-page-builder.md` - Page builder navigation
 - `skills/playwright-code-editor.md` - CodeMirror editing
 - `skills/playwright-zoho-save.md` - Save & verify workflow
-- `skills/html-snippet-syntax.md` - HTML snippet Deluge syntax reference
+- `skills/zoho-creator-html-snippet-syntax.md` - HTML snippet Deluge syntax reference
 - **Zoho Official Docs**: https://help.zoho.com/portal/en/kb/creator/developer-guide/pages/snippets
