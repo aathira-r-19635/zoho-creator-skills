@@ -1,124 +1,65 @@
 # AGENTS.md - Zoho Creator Automation Agent Instructions
 
 ## Overview
-This repo contains skills for automating Zoho Creator using Playwright MCP and Zoho MCP tools. Use these skills to perform data operations and UI customizations.
+Skills for automating Zoho Creator using Playwright MCP and Zoho MCP tools.
 
-**This is a living, multi-developer repository.** Multiple Zoho Creator developers contribute to and maintain these skills. Always follow the contributing guidelines in `CONTRIBUTING.md`.
+**This is a living, multi-developer repository.** Follow `CONTRIBUTING.md`.
 
 ## Quick Decision Tree
 
 ### Need to work with data (records)?
-→ Use **Zoho MCP tools** (see `skills/zoho-mcp-*`)
+→ Use **Zoho MCP tools** (see `skills/zoho-mcp.md`)
 - Add/update/delete records
 - Query reports
 - Get form metadata
 
-### Need to change page layout/UI?
-→ Use **Playwright MCP** (see `skills/playwright-*`)
-- Edit HTML snippets
-- Modify page components
-- Change visual elements
+### Need to change form structure (fields)?
+→ Use **Playwright Form Builder** (see `skills/playwright-zoho-form-builder.md`)
+- Add/delete fields
+- Configure lookups
+- Drag-and-drop UI
+
+### Need to navigate/authenticate?
+→ Use **Playwright Login** (see `skills/playwright-zoho-login.md`)
+- Session persistence
+- URL patterns
 
 ### Need to make commits?
-→ Read `CONTRIBUTING.md` and `skills/github-identity-enforcement.md` first
+→ Read `CONTRIBUTING.md` and `skills/github-identity-enforcement.md`
 - Use only your corporate GitHub account
-- Follow the contribution workflow
-- Write clear commit messages
 
 ### User says "close session" / "be ready" / "wrap up"?
 → **MUST follow `skills/session-closure-workflow.md` completely**
-- This is NOT optional - every session closure must complete ALL steps
-- Document learnings, update skills, update docs, verify gitignore
+- Document learnings, update skills, update docs
 - Close browser, verify identity, commit, push to main
-- Report completion to user
 
 ## Skill Dependencies
 ```
-playwright-zoho-login
+playwright-zoho-login (session/auth)
     ↓
-playwright-zoho-page-builder
-    ↓
-playwright-code-editor
-    ↓
-playwright-zoho-save
+zoho-mcp (data operations)       playwright-zoho-form-builder (UI changes)
 ```
 
-## Authentication & Session Persistence
+## Authentication & Session
 
-### Session Persistence (IMPORTANT)
-- Playwright MCP **automatically persists** browser sessions in `.playwright-mcp/` directory
-- Login cookies (including `zccpn` token) are saved between sessions
-- **Future agents automatically inherit active sessions** - no re-login needed
-- Session expires after several hours/days (Zoho cookie lifetime)
+### Session Persistence
+- Playwright MCP auto-persists sessions in `.playwright-mcp/` (gitignored)
+- Login cookies (including `zccpn` token) survive between runs
+- No re-login needed unless session expires
 
-### Session Recovery (CRITICAL)
-- Browser context can close unexpectedly during long sessions
-- If you see "Target page, context or browser has been closed" error:
-  1. The browser session has terminated
-  2. You must re-navigate to the target URL
-  3. Session cookies should still be valid (no re-login needed)
-  4. If re-login is required, ask the user to login manually
-- **Always handle navigation errors gracefully** - retry navigation if context closes
+### Session Recovery
+If "Target page, context or browser has been closed":
+1. Re-navigate to the target URL
+2. Session cookies should persist
+3. If redirected to login, session expired — ask user to login
 
-### Session Storage
-- **Location**: `.playwright-mcp/` directory (already in `.gitignore`)
-- **Security**: Session data is NOT source controlled
-- **Benefit**: Seamless automation across sessions
-
-### Login Flow
-1. Try navigating to page builder URL
-2. If redirected to login → ask user to login manually
-3. After login → session is automatically persisted
-4. Future runs → skip login, proceed directly to automation
-5. **If browser context closes** → re-navigate (cookies should persist)
-
-## HTML Snippet Syntax Reference
-
-### Deluge Tags in HTML Snippets
-Zoho Creator HTML snippets support embedding Deluge code using special tags:
-
-| Tag | Purpose | Example |
-|-----|---------|---------|
-| `<%{%>` | Opening wrapper (REQUIRED) | `<%{%>` |
-| `<%{ ... }%>` | Execute Deluge logic (no output) | `<%{ if(input.Status == "Approved") { } }%>` |
-| `<%= ... %>` | Output Deluge value | `<%= input.Field_Name %>` |
-| `<%}%>` | Closing wrapper (REQUIRED) | `<%}%>` |
-
-### Complete Snippet Structure
-```html
-<%{%>
-  <!-- HTML content goes here -->
-  <h1>Hello World</h1>
-<%}%>
-```
-
-### Common Patterns
-```html
-<!-- Simple text output -->
-<%{%>
-<h1>Hello World</h1>
-<%}%>
-
-<!-- Display a field value -->
-<%{%>
-<p>Customer: <%= input.Customer_Name %></p>
-<%}%>
-
-<!-- Conditional rendering -->
-<%{%>
-<%{ if(input.Status == "Approved") { %>
-  <p style="color: green;">Status: Approved</p>
-<%{ } %>
-<%}%>
-```
-
-### Important Notes
-- **CRITICAL**: Every snippet MUST start with `<%{%>` and end with `<%}%>`
-- **CRITICAL**: Internal Deluge blocks use plain `<% code %>` (NO curly braces)
-- Missing wrapper tags or wrong internal syntax causes "Improper Statement" error at line 0
-- HTML snippets are executed server-side before page renders
-- See `skills/playwright-html-snippet-syntax.md` for complete syntax reference
-- Official docs: https://help.zoho.com/portal/en/kb/creator/developer-guide/pages/snippets
+### URL Patterns
+| Type | URL Format |
+|------|-----------|
+| Live page ("Page" type) | `https://creatorapp.zoho.com/{account}/{app}/#Page:{page}` |
+| Live page (menu item) | `https://creatorapp.zoho.com/{account}/{app}/#{page}` |
+| Page builder | `https://creator.zoho.com/appbuilder/{account}/{app}/pagebuilder/{page}/edit` |
+| Form builder | `https://creator.zoho.com/appbuilder/{account}/{app}/formbuilder/{form}/edit` |
 
 ## Important Patterns
 
@@ -132,192 +73,90 @@ browser_navigate → browser_wait_for (3-5 seconds)
 browser_snapshot → identify refs → browser_click
 ```
 
-### CodeMirror Editing (Complete Flow)
-
-**Recommended: Set content by iterating all frames**
-
-```javascript
-async (page) => {
-  for (const frame of page.frames()) {
-    try {
-      await frame.evaluate(() => {
-        const cms = document.querySelectorAll('.CodeMirror');
-        cms.forEach((cmEl, i) => {
-          const cm = cmEl.CodeMirror;
-          if (cm && cm.getValue().includes('Hello World')) {
-            cm.setValue('<%{%>\n<h1>Hello Aathira</h1>\n<%}%>');
-          }
-        });
-      });
-    } catch(e) {}
-  }
-}
+### Screenshot for Debugging
 ```
-
-**Why iterate all frames:** The HTML snippet editor opens in a popup dialog (`zctemplate-dialog`). CodeMirror may be in any frame (main frame or child frame).
-
-**Alternative: Find and replace specific text**
-1. **Find the text**:
-   ```javascript
-   for (const frame of page.frames()) {
-     try {
-       const result = await frame.evaluate(() => {
-         const cm = document.querySelectorAll('.CodeMirror')[2].CodeMirror;
-         for (let i = 0; i < cm.lineCount(); i++) {
-           if (cm.getLine(i).includes('Text to find')) {
-             return { line: i + 1, content: cm.getLine(i) };
-           }
-         }
-         return { found: false };
-       });
-       if (result.found) break;
-     } catch(e) {}
-   }
-   ```
-
-2. **Replace the text**:
-   ```javascript
-   const cm = document.querySelectorAll('.CodeMirror')[2].CodeMirror;
-   cm.focus();
-   const lineIdx = UI_line - 1;  // 0-based indexing
-   const startPos = cm.getLine(lineIdx).indexOf('Old Text');
-   cm.setSelection({ line: lineIdx, ch: startPos }, { line: lineIdx, ch: startPos + 'Old Text'.length });
-   cm.replaceSelection('New Text');
-   ```
-
-3. **Save**:
-   - Click Save button in code editor
-   - Wait 2 seconds
-   - Press Escape to close popup
-   - Wait 1 second
-   - Click Done to exit page builder
-
-### Save Sequence (CRITICAL)
-1. Click Save in code editor popup (id: `zctemplate-dialog-okBtn`)
-2. Wait 2 seconds
-3. Press Escape to close popup
-4. Wait 1 second
-5. Click Done to exit page builder (id: `builder-close`)
-6. Navigate to live page to verify:
-   - "Page" type (not in menu): `https://creatorapp.zoho.com/{account}/{app}/#Page:{page}`
-   - Menu page: `https://creatorapp.zoho.com/{account}/{app}/#{page}`
-
-### Live Page URL Formats (IMPORTANT)
-- **Pages NOT in app menu** ("Page" type): Use `#Page:{page}` format
-  - Example: `https://creatorapp.zoho.com/achyutmenont0_zohotest/continental-group/#Page:Dashboard_2`
-- **Menu pages**: Use `#{page}` format
-  - Example: `https://creatorapp.zoho.com/achyutmenont0_zohotest/continental-group/#Dashboard`
-- Using wrong format may show a loading spinner instead of page content
+browser_take_screenshot: { filename: "step.png", type: "png" }
+```
 
 ## Error Handling
-- If element not found → capture new `browser_snapshot`
-- If click is blocked → remove overlay elements via JavaScript
-- If changes don't persist → verify Save was clicked before Escape
-- If redirected to login → ask user to login, then session persists automatically
-- **If browser context closes** → re-navigate to target URL (cookies should persist)
-- **If notification popup appears** → click "Allow" to dismiss and proceed
-- **If freezer overlay blocks clicks** → remove `.zc-freezer` elements via JavaScript
 
-### Notification Popup Handling
-Zoho Creator may show browser notification permission popups. When this happens:
-1. Look for notification permission dialog
-2. Click "Allow" to dismiss
-3. Continue with automation
+### Element Not Found
+→ Capture new `browser_snapshot`
 
-### Freezer Overlay Handling
-Zoho shows freezer overlays during saves that can block clicks:
+### Click Blocked by Overlay
+→ Remove `.zc-freezer` elements:
 ```javascript
-// Remove freezer overlays
 document.querySelectorAll('.zc-freezer, .zc-freezer-layer').forEach(el => el.remove());
 ```
+
+### Select2 Dropdown Mask Intercepts Clicks
+→ Press `Escape` first, then click
+
+### Notification Popup
+→ Click "Allow" to dismiss
 
 ## GitHub Identity Enforcement (CRITICAL)
 
 ### Rule
-This repository MUST ONLY use your **corporate Zoho GitHub account**.
+Use ONLY your corporate Zoho GitHub account.
 
 ### Before Any Git Operations
-1. Verify git identity:
-   ```bash
-   git config user.name  # Your GitHub username
-   git config user.email  # Your @zohocorp.com email
-   ```
-2. Verify remote:
-   ```bash
-   git remote -v  # Should show: your-org/zoho-creator-skills.git
-   ```
-3. Verify gh CLI:
-   ```bash
-   gh auth status  # Should show your corporate account
-   ```
+```bash
+git config user.name   # Your GitHub username
+git config user.email  # Your @zohocorp.com email
+git remote -v          # Your fork
+gh auth status         # Your account
+```
 
-### If Identity is Wrong
-- Stop immediately
-- Fix git config: `git config --local user.name "your-username"` and `git config --local user.email "your.email@zohocorp.com"`
-- Fix gh auth: `gh auth login --hostname github.com`
-- See `skills/github-identity-enforcement.md` for detailed procedures
-
-### Important
-- This is machine-specific configuration
-- DO NOT source control `.git/config` or auth tokens
-- Each developer uses their own corporate account
+### If Wrong
+```bash
+git config --local user.name "your-username"
+git config --local user.email "your.email@zohocorp.com"
+```
 
 ## Multi-Developer Workflow
 
-### This Repo is Shared
-- Multiple Zoho Creator developers contribute
-- Skills evolve over time
-- New skills are added regularly
-- Obsolete skills are deprecated
-
 ### When You Discover New Patterns
-1. Test the pattern thoroughly
+1. Test thoroughly
 2. Update relevant skill files
-3. Update this file if workflows change
-4. Commit with clear message explaining what and why
-5. Follow `CONTRIBUTING.md` guidelines
+3. Update `AGENTS.md` if workflows change
+4. Commit with clear message
+5. Follow `CONTRIBUTING.md`
 
 ### When MCP Tools Change
-- Check if existing skills can be simplified
-- Update skills to use new MCP tools when available
+- Update skills to use new tools
 - Mark old approaches as deprecated
 - Document the transition
 
-## Zoho MCP Authentication (IMPORTANT - Apr 2026)
+## Zoho MCP Authentication (Apr 2026)
 
 ### Use "Authorize via Connection" Mode
 - Configure at: `https://creator-XXXXXXX.zohomcp.com` → Connection tab
-- Select **"Authorize via Connection"** (not "Authorization on Demand")
-- All tools pre-authorized server-side, no client OAuth issues
-- If you see "invalid oauthscope" error → switch to Connection mode
+- All tools pre-authorized server-side
 
-### Known Tool Issue: `ZohoCreator_getWorkspaces` (Apr 2026)
-- `ZohoCreator_getWorkspaces` **fails with Code 2945** ("invalid oauthscope") even with Connection mode
-- This is a known Zoho MCP server-side scope configuration issue
-- **Workaround:** Use `ZohoCreator_getApplications` with `{complete: true}` instead
-  - Each application in the response includes a `workspace_name` field
-  - Extract unique workspace names from the applications list
-  - Example: All apps returned `workspace_name: "achyutmenont0_zohotest"`
-- Do NOT attempt to use `ZohoCreator_getWorkspaces` — it will always fail until Zoho fixes the scope
+### Known Issue: `ZohoCreator_getWorkspaces`
+- **Fails with Code 2945** — do NOT use
+- **Use instead:** `ZohoCreator_getApplications` with `{complete: true}`
+- Extract `workspace_name` from response
 
-### Session Storage
-- OAuth tokens: `~/.qwen/mcp-oauth-tokens.json` (gitignored)
+### Config Files (NOT source controlled)
+- OAuth tokens: `~/.qwen/mcp-oauth-tokens.json`
 - MCP config: `~/.qwen/settings.json`
-- Never commit tokens or auth files
 
-## Tools Available
-- **Zoho MCP**: Data operations (forms, reports, records)
-- **Playwright MCP**: Browser automation (clicks, navigation, screenshots)
-- **browser_run_code**: Execute JavaScript in page context
-- **browser_network_requests**: Monitor API calls
+## Skills Index
+
+| Skill | Purpose |
+|-------|---------|
+| `zoho-mcp.md` | MCP tools: getApps, getForms, getRecords, add/update/delete records |
+| `playwright-zoho-login.md` | Session persistence, navigation, URL patterns |
+| `playwright-zoho-form-builder.md` | Form builder: add/delete fields, configure lookups, drag-and-drop |
+| `deluge-aggregate-functions.md` | Use `.count()`, `.sum()`, `.avg()` instead of loops |
+| `github-identity-enforcement.md` | Git identity verification and correction |
+| `session-closure-workflow.md` | Mandatory steps when closing a session |
+| `zoho-mcp-session-closure.md` | MCP-specific session closure context |
 
 ## Key References
-- `CONTRIBUTING.md` - Complete contributor guide
-- `docs/zoho-creator-automation.md` - End-to-end workflows
+- `CONTRIBUTING.md` - Contributor guide
 - `docs/skills-index.md` - Complete skills index
-- `skills/playwright-zoho-login.md` - Authentication details
-- `skills/playwright-zoho-page-builder.md` - Page builder navigation
-- `skills/playwright-code-editor.md` - CodeMirror editing
-- `skills/playwright-zoho-save.md` - Save & verify workflow
-- `skills/playwright-html-snippet-syntax.md` - HTML snippet Deluge syntax reference
-- **Zoho Official Docs**: https://help.zoho.com/portal/en/kb/creator/developer-guide/pages/snippets
+- `docs/zoho-creator-automation.md` - End-to-end workflows
+- **Zoho Official Docs**: https://help.zoho.com/portal/en/kb/creator
