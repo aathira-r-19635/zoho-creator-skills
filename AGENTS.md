@@ -139,7 +139,15 @@ git config --local user.email "your.email@zohocorp.com"
 - **Use instead:** `ZohoCreator_getApplications` with `{complete: true}`
 - Extract `workspace_name` from response
 
+### Zoho Code IDE MCP Setup
+→ See `skills/zoho-code-mcp-setup.md` for complete guide
+- Config file: `.zcode/ai/mcp.json` (project-level, gitignored)
+- Transport type: `sse` (Server-Sent Events)
+- Requires **MCP Manager extension** (`nicepkg.aide-mcp-manager`) to be active
+- **Reload IDE** after config changes for connection to initialize
+
 ### Config Files (NOT source controlled)
+- Zoho Code IDE MCP: `.zcode/ai/mcp.json` (gitignored)
 - OAuth tokens: `~/.qwen/mcp-oauth-tokens.json`
 - MCP config: `~/.qwen/settings.json`
 
@@ -154,6 +162,7 @@ git config --local user.email "your.email@zohocorp.com"
 | `github-identity-enforcement.md` | Git identity verification and correction |
 | `session-closure-workflow.md` | Mandatory steps when closing a session |
 | `zoho-mcp-session-closure.md` | MCP-specific session closure context |
+| `zoho-code-mcp-setup.md` | Setting up MCP in Zoho Code IDE (.zcode/ai/mcp.json) |
 
 ## Key References
 - `CONTRIBUTING.md` - Contributor guide

@@ -45,6 +45,10 @@ List and explore Zoho Creator applications, forms, reports, and pages using the 
     ```
 - Use the `default_workspace` value as your `account_owner_name` in all subsequent API calls
 
+## IDE-Specific Setup
+- **Zoho Code IDE**: Configure in `.zcode/ai/mcp.json` — see `zoho-code-mcp-setup.md`
+- **Qwen/other**: Configure in `~/.qwen/settings.json`
+
 ## Limitations
 - Zoho MCP does NOT support page layout/UI customization
 - Use Playwright MCP for visual/page builder changes (see `playwright-zoho-page-builder`)

@@ -10,6 +10,10 @@ Zoho MCP provides excellent tools for **data operations** (records, forms, repor
 
 ### I Want to...
 
+#### ...Set Up MCP in Zoho Code IDE
+→ Read `skills/zoho-code-mcp-setup.md`  
+→ Configure `.zcode/ai/mcp.json`, activate MCP extension, reload IDE
+
 #### ...Automate Data Operations
 → Read `skills/zoho-mcp-basics.md` and `skills/zoho-mcp-data-operations.md`  
 → Use Zoho MCP tools directly (no browser automation needed)
@@ -30,6 +34,7 @@ Zoho MCP provides excellent tools for **data operations** (records, forms, repor
 ### Zoho MCP Skills
 | Skill | Purpose | When to Use |
 |-------|---------|-------------|
+| `zoho-code-mcp-setup` | Configure MCP in Zoho Code IDE | First-time IDE setup |
 | `zoho-mcp-basics` | List apps, forms, reports, pages | Getting app metadata |
 | `zoho-mcp-data-operations` | Add, update, query, delete records | Working with data |
 
@@ -170,6 +175,7 @@ zoho-creator-skills/
     ├── playwright-code-editor.md     # CodeMirror editing
     ├── playwright-zoho-save.md       # Save & verify
     ├── playwright-network-monitoring.md  # API monitoring
+    ├── zoho-code-mcp-setup.md        # Zoho Code IDE MCP configuration
     ├── zoho-mcp-basics.md            # Zoho MCP overview
     ├── zoho-mcp-data-operations.md   # Record operations
     └── github-identity-enforcement.md  # Git identity rules

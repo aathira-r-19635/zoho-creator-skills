@@ -6,6 +6,7 @@ snapshot.md
 # OAuth tokens and MCP config (sensitive - never commit)
 mcp-oauth-tokens.json
 oauth_creds.json
+.zcode/ai/mcp.json
 
 # All debugging screenshots (do not commit)
 *.png

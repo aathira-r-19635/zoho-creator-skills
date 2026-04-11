@@ -5,6 +5,7 @@ Complete index of all skills in this repository.
 ## Quick Reference
 
 ### Need to...
+- **Set up MCP in Zoho Code IDE?** → `zoho-code-mcp-setup.md`
 - **Login to Zoho?** → `playwright-zoho-login.md`
 - **Work with records?** → `zoho-mcp.md`
 - **Change form fields?** → `playwright-zoho-form-builder.md`
@@ -19,6 +20,9 @@ Complete index of all skills in this repository.
 | Skill | File | Purpose |
 |-------|------|---------|
 | MCP Tools | `zoho-mcp.md` | List apps, forms, records. Add/update/delete data |
+| MCP Basics | `zoho-mcp-basics.md` | List & explore apps, forms, reports, pages |
+| MCP Data Ops | `zoho-mcp-data-operations.md` | Add, update, query, delete records |
+| Zoho Code MCP Setup | `zoho-code-mcp-setup.md` | Configure MCP in Zoho Code IDE (.zcode/ai/mcp.json) |
 | Session Closure | `zoho-mcp-session-closure.md` | MCP auth setup, session closure context |
 
 ### Playwright (Browser Automation)

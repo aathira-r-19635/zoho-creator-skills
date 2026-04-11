@@ -21,5 +21,6 @@ User says "close session", "wrap up", "save learnings", "push to main"
 - Include code examples and common error fixes
 
 ## Config Files (NOT source controlled)
+- Zoho Code IDE MCP: `.zcode/ai/mcp.json` (gitignored)
 - OAuth tokens: `~/.qwen/mcp-oauth-tokens.json`
 - MCP config: `~/.qwen/settings.json`
