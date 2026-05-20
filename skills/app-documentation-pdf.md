@@ -69,11 +69,36 @@ Order sections as:
 
 **Per section template:**
 - List screenshot with caption
-- "How to" numbered steps
+- "How to" numbered steps (include Add button `+` annotation on list view)
 - Add form screenshot with caption
 - Fields table: `Field | Description | Required?`
+- **All action buttons must be documented** — for every list view, identify every button (inline row buttons, `···` context menus, header buttons) and document what each one does. Never skip a button.
 
 **Masters must always come before flow sections** — flow forms depend on master data being set up first.
+
+---
+
+## Skill 3a — Button & Action Discovery
+
+Before writing each section, scan all interactive elements on the page:
+
+### Row-level actions (hover `···` menu)
+- Hover over a row → `···` appears on the left
+- Click `···` → context menu shows inline actions (e.g. Mark as Active, Mark as Inactive, Edit, Delete)
+- Document every option in the context menu
+
+### Column action buttons
+- Buttons that appear as columns in list rows (e.g. Pick, Archive, Raise Quotation in RFQ)
+- Screenshot the list view and annotate each button column with a numbered callout
+- Explain what each button does when clicked — status changes, redirects, popups, etc.
+
+### Header buttons
+- `+` Add button — always annotate on list views
+- Search, Filter, Export icons — mention briefly in the section intro
+
+### Status indicators
+- `Active` (blue) / `Inactive` (gray) — always document with the `···` → Mark as Active/Inactive flow
+- One screenshot of the `···` context menu is enough; note it applies to all master records
 
 ---
 
