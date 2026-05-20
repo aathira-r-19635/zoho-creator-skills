@@ -136,6 +136,49 @@ Always add a **callout legend** below the annotated image:
 
 ---
 
+## Skill 4a — Annotation Alignment Verification
+
+After writing SVG annotations, always verify they are correctly positioned by rendering the HTML and screenshotting each annotated div with Node.js Playwright:
+
+```javascript
+const { chromium } = require('playwright');
+const path = require('path');
+(async () => {
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  await page.setViewportSize({ width: 1400, height: 900 });
+  await page.goto('file://' + path.resolve('<app>-doc/<app>-user-guide.html'));
+  await page.waitForTimeout(1500);
+  const divs = await page.locator('.annotated').all();
+  for (let i = 0; i < divs.length; i++) {
+    await divs[i].screenshot({ path: '<app>-doc/screenshots/ann-' + i + '.png' });
+  }
+  await browser.close();
+})();
+```
+
+Read each `ann-N.png` to visually confirm arrows hit their targets. If misaligned, fix the SVG coordinates and re-run.
+
+### Coordinate conversion formula
+
+SVG `viewBox="0 0 1290 600"` maps to the rendered image width. When the image renders at ~1044px wide inside the HTML container:
+
+```
+SVG_x = rendered_px_x × 1.236
+SVG_y = rendered_px_y × 0.834
+```
+
+Use this to convert observed pixel positions (from the rendered screenshot) to the correct SVG `x2`/`y2` endpoint values.
+
+### Badge placement rules
+
+- **Target is in top-right corner** (e.g. "+" button): place badge just below-left, arrow points up to the button
+- **Target is a column button** (e.g. Pick, Archive): place badges stacked on the right side (SVG x≈450), arrows fan left to each button at the correct row y
+- **Target is a status indicator in a column**: place badge to the right of the column, horizontal arrow pointing left at the value
+- **Target is a context menu item**: place badge outside the menu area to the right, diagonal arrow pointing into the menu item
+
+---
+
 ## Skill 5 — PDF Generation
 
 Playwright MCP blocks `file://` protocol — use Node.js Playwright directly:
