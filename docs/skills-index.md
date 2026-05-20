@@ -6,6 +6,7 @@ Complete index of all skills in this repository.
 
 ### Need to...
 - **Open the Creator app end-to-end?** → `open-creator-app.md` ⭐
+- **Generate a PDF user guide for an app?** → `app-documentation-pdf.md` ⭐
 - **Set up MCP in Zoho Code IDE?** → `zoho-code-mcp-setup.md`
 - **Login to Zoho?** → `playwright-zoho-login.md`
 - **Work with records?** → `zoho-mcp.md`
@@ -17,10 +18,11 @@ Complete index of all skills in this repository.
 
 ## Skills
 
-### App Launch (Combined MCP + Playwright)
+### App Launch & Documentation (Combined MCP + Playwright)
 | Skill | File | Purpose |
 |-------|------|---------|
 | Open Creator App | `open-creator-app.md` | Full end-to-end: MCP app discovery + Playwright browser login + app open |
+| App Documentation PDF | `app-documentation-pdf.md` | Screenshot every section, annotate with SVG callouts, build HTML user guide, export to PDF |
 
 ### Zoho MCP (Data Operations)
 | Skill | File | Purpose |
