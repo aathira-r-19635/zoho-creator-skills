@@ -72,7 +72,12 @@ Order sections as:
 - "How to" numbered steps (include Add button `+` annotation on list view)
 - Add form screenshot with caption
 - Fields table: `Field | Description | Required?`
-- **All action buttons must be documented** — for every list view, identify every button (inline row buttons, `···` context menus, header buttons) and document what each one does. Never skip a button.
+- **Every button MUST have its own screenshot** — do not describe buttons in text alone. For every button type, capture a screenshot that shows it and annotate with a numbered callout. This includes:
+  - `+` Add button on every list view
+  - `···` context menu (open it and screenshot the options)
+  - Every column-level action button (e.g. Pick, Archive, Raise Quotation)
+  - Bulk action buttons (screenshot with rows selected so button is visible)
+  - Any popup/result that appears after clicking a button
 
 **Masters must always come before flow sections** — flow forms depend on master data being set up first.
 
@@ -82,19 +87,31 @@ Order sections as:
 
 Before writing each section, scan all interactive elements on the page:
 
+**Rule: Every button type requires a dedicated screenshot with annotation. Never describe a button only in text.**
+
 ### Row-level actions (hover `···` menu)
 - Hover over a row → `···` appears on the left
 - Click `···` → context menu shows inline actions (e.g. Mark as Active, Mark as Inactive, Edit, Delete)
+- **Screenshot the open context menu** and annotate each option with a numbered callout
 - Document every option in the context menu
 
 ### Column action buttons
 - Buttons that appear as columns in list rows (e.g. Pick, Archive, Raise Quotation in RFQ)
-- Screenshot the list view and annotate each button column with a numbered callout
+- **Screenshot the list view** and annotate each button column with a numbered callout
+- If clicking a button opens a popup or changes state, **screenshot that result too**
 - Explain what each button does when clicked — status changes, redirects, popups, etc.
 
 ### Header buttons
-- `+` Add button — always annotate on list views
-- Search, Filter, Export icons — mention briefly in the section intro
+- `+` Add button — always annotate on the list view screenshot
+- Search, Filter, Export icons — annotate on the list view screenshot and briefly explain each
+
+### Bulk action buttons (row-selection toolbar)
+- Some list views have **developer-configured bulk actions** that only appear when rows are selected via checkboxes
+- To discover them: select one row → check if a custom toolbar appears at the top of the list
+- These buttons are in `.zc-report-customaction-header` inside `.zc-report-newheader` (shown only when rows are selected)
+- To find them via JS: `document.querySelectorAll('[class*="customaction"]')` after selecting a row
+- **Screenshot 1**: list with rows selected so the bulk button is visible, annotate it
+- **Screenshot 2**: the resulting popup/form that opens after clicking, annotate key fields
 
 ### Status indicators
 - `Active` (blue) / `Inactive` (gray) — always document with the `···` → Mark as Active/Inactive flow
@@ -106,10 +123,15 @@ Before writing each section, scan all interactive elements on the page:
 
 Use SVG overlays with numbered callout circles positioned absolutely over images:
 
+**Screenshot dimensions:** Playwright MCP screenshots are **2336×1619 px** (1.499x pixel ratio, viewport 1559×1080).
+- Use `viewBox="0 0 2336 1619"` — SVG coordinates map **1:1 to image pixels**
+- To convert a CSS browser position to SVG: `SVG_coord = CSS_px × 1.499`
+- Badge size: `width="26" height="26" rx="13"`, text `font-size="16"`, line `stroke-width="3"`
+
 ```html
 <div class="annotated">
   <img src="screenshots/NN-page.png" alt="...">
-  <svg viewBox="0 0 1290 600" preserveAspectRatio="none">
+  <svg viewBox="0 0 2336 1619" preserveAspectRatio="none">
     <defs>
       <marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
         <path d="M0,0 L0,6 L8,3 z" fill="#444"/>
