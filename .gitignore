@@ -11,6 +11,10 @@ oauth_creds.json
 # All debugging screenshots (do not commit)
 *.png
 
+# App-specific documentation output (not committed — contains app screenshots)
+wipro-doc/
+addax-doc/
+
 # OS files
 .DS_Store
 Thumbs.db
@@ -21,3 +25,10 @@ Thumbs.db
 
 # Node
 node_modules/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

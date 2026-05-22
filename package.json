@@ -1,0 +1,17 @@
+{
+  "name": "zoho-creator-skills",
+  "version": "1.0.0",
+  "description": "A living knowledge base of granular agent skills for automating Zoho Creator using Playwright MCP and Zoho MCP tools. Built by Zoho Creator developers, for Zoho Creator developers.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.8.0"
+  }
+}

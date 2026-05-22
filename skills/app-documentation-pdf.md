@@ -123,26 +123,32 @@ Before writing each section, scan all interactive elements on the page:
 
 Use SVG overlays with numbered callout circles positioned absolutely over images:
 
-**Screenshot dimensions:** Playwright MCP screenshots are **2336×1619 px** (1.499x pixel ratio, viewport 1559×1080).
-- Use `viewBox="0 0 2336 1619"` — SVG coordinates map **1:1 to image pixels**
-- To convert a CSS browser position to SVG: `SVG_coord = CSS_px × 1.499`
-- Badge size: `width="26" height="26" rx="13"`, text `font-size="16"`, line `stroke-width="3"`
+**Screenshot dimensions:** Playwright MCP screenshots depend on the viewport set with `browser_resize`.
+- At viewport **1559×1049** → image is **2224×1571 px** (DPR 1.499x). Use `viewBox="0 0 2224 1571"`.
+- At viewport **1559×700** → image is **2224×1049 px**. Use `viewBox="0 0 2224 1049"`.
+- SVG coordinates map **1:1 to image pixels**: `SVG_coord = CSS_px × 1.499`
+- Badge size: `width="26" height="26" rx="13"`, text `font-size="16"`
+
+**⚠️ Viewport height rule:** Use a viewport height that matches the content, not a fixed tall value. If the app content doesn't fill the full viewport, the screenshot will have a large empty grey area at the bottom, making images look small in the PDF. **Recommended: `browser_resize` to 1559×700 before capturing list and detail views.** If the page has more content, increase height as needed.
+
+- After resizing, adjust `viewBox` height to match the new image height (width stays 2224).
+- Badge X/Y coordinates (from `CSS_px × 1.499`) remain valid as long as the target element is still visible in the shorter viewport.
+
+**Badge-only style (preferred):** Place the numbered badge directly ON the UI element. No arrows.
 
 ```html
 <div class="annotated">
   <img src="screenshots/NN-page.png" alt="...">
-  <svg viewBox="0 0 2336 1619" preserveAspectRatio="none">
-    <defs>
-      <marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-        <path d="M0,0 L0,6 L8,3 z" fill="#444"/>
-      </marker>
-    </defs>
-    <line x1="X1" y1="Y1" x2="X2" y2="Y2" stroke="#444" stroke-width="2.5" marker-end="url(#a1)"/>
-    <rect x="X" y="Y" width="18" height="18" rx="9" fill="#444"/>
-    <text x="X" y="Y" text-anchor="middle" fill="white" font-size="11" font-weight="bold">1</text>
+  <svg viewBox="0 0 2224 1049" preserveAspectRatio="none">
+    <rect x="X" y="Y" width="26" height="26" rx="13" fill="#444"/>
+    <text x="Xcenter" y="Ycenter+4" text-anchor="middle" fill="white" font-size="16" font-weight="bold">1</text>
   </svg>
 </div>
 ```
+
+- Badge center = target element center in SVG coordinates
+- `rect x` = SVG_cx − 13, `rect y` = SVG_cy − 13
+- `text x` = SVG_cx, `text y` = SVG_cy + 6
 
 Always add a **callout legend** below the annotated image:
 ```html
