@@ -274,6 +274,9 @@ Before writing each section, scan all interactive elements on the page:
 
 Zoho Creator app content does **not** fill the full viewport width in list views. The right side is pure white — invisible in the browser but shows as empty grey space in the PDF. Always crop every screenshot to its actual content width.
 
+> **⚠️ Mandatory check before finalising any screenshot:**
+> Open the PDF and verify every image fills its grey box edge to edge — left, right, top, bottom. If any image has empty white space on the right side, go back and crop it (Steps 1–3 below). Never skip this check.
+
 ### Step 1 — Measure actual content width with PIL
 
 ```python
