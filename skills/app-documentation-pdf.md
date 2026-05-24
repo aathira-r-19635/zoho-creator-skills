@@ -57,6 +57,157 @@ browser_take_screenshot: filename="<app>-doc/screenshots/NN-popup.png"
 
 ---
 
+## Skill 2b — Standard HTML Template (Cover + CSS)
+
+Always use this template as the base for every new user guide. Replace `{COMPANY}`, `{APP_NAME}`, `{APP_DESC}`, `{ROLES}`, `{VERSION}`, `{DATE}` with app-specific values.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{COMPANY} {APP_NAME} — User Guide</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; color: #1a1a1a; background: #fff; font-size: 14px; line-height: 1.6; }
+
+  /* ---- COVER ---- */
+  .cover { width: 100%; height: 100vh; min-height: 820px; background: #fff; page-break-after: always; display: flex; flex-direction: column; border-top: 7px solid #1a1a2e; }
+  .cover-inner { flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 56px 72px 44px; }
+  .cover-co { font-size: 12px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #1a1a2e; }
+  .cover-mid { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 48px 0; }
+  .cover-tag { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #aaa; margin-bottom: 22px; }
+  .cover-h1 { font-size: 46px; font-weight: 700; color: #111; line-height: 1.2; margin-bottom: 20px; }
+  .cover-desc { font-size: 14px; color: #777; line-height: 1.65; max-width: 500px; }
+  .cover-bot { border-top: 1px solid #e5e5e5; padding-top: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .cover-bot-l { font-size: 11px; color: #999; line-height: 1.9; }
+  .cover-bot-r { font-size: 10px; color: #bbb; text-align: right; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.9; }
+
+  /* ---- TOC ---- */
+  .toc-page { padding: 40px 50px; page-break-after: always; }
+  .toc-page h2 { font-size: 20px; font-weight: 600; color: #111; margin-bottom: 20px; }
+  .toc-page ol { padding-left: 22px; list-style: decimal; }
+  .toc-page ol > li { padding: 5px 0; border-bottom: 1px solid #f5f5f5; font-size: 13px; color: #111; }
+  .toc-page ol > li > a { color: #111; text-decoration: none; }
+  .toc-page .sub { padding-left: 18px; margin: 3px 0 0; list-style: disc; }
+  .toc-page .sub li { font-size: 12px; color: #777; padding: 1px 0; border: none; }
+
+  /* ---- SECTION ---- */
+  .section { padding: 24px 50px; }
+  .section + .section { border-top: 1px solid #f0f0f0; }
+  .section h2 { font-size: 22px; font-weight: 600; color: #111; margin-bottom: 6px; }
+  .section h3 { font-size: 13px; font-weight: 600; color: #111; margin: 18px 0 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .section h4 { font-size: 13px; font-weight: 600; color: #444; margin: 12px 0 5px; }
+  .section p { font-size: 13px; line-height: 1.65; color: #555; margin-bottom: 7px; }
+  .section ul, .section ol { padding-left: 18px; font-size: 13px; color: #555; margin-bottom: 7px; }
+  .section li { margin-bottom: 3px; line-height: 1.55; }
+  .section .note { background: #fafafa; border-left: 2px solid #ccc; padding: 10px 14px; font-size: 12px; color: #666; margin: 10px 0; }
+
+  /* ---- ANNOTATED IMAGE ---- */
+  .annotated { display: grid; width: 100%; margin: 12px 0 4px; }
+  .annotated > * { grid-column: 1; grid-row: 1; }
+  .annotated img { display: block; width: 100%; height: auto; border: 1px solid #ebebeb; }
+  .annotated svg { width: 100%; height: 100%; pointer-events: none; overflow: visible; align-self: stretch; }
+
+  /* ---- CALLOUT LEGEND ---- */
+  .callout-legend { display: flex; flex-direction: column; gap: 5px; margin: 4px 0 14px; }
+  .callout-legend-item { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: #555; background: #fafafa; border: 1px solid #ebebeb; border-radius: 3px; padding: 6px 12px; }
+  .callout-badge { width: 18px; height: 18px; border-radius: 9px; background: #333; color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+
+  /* ---- TABLE ---- */
+  table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 12px 0 18px; }
+  th { background: #f5f5f5; color: #333; padding: 9px 12px; text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #e0e0e0; }
+  td { padding: 9px 12px; border-bottom: 1px solid #f0f0f0; color: #444; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+
+  /* ---- WORKFLOW ---- */
+  .workflow { background: #fafafa; border: 1px solid #ebebeb; border-radius: 3px; padding: 28px 36px; font-size: 13px; color: #444; margin: 18px 0; }
+  .workflow .step { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 8px; }
+  .workflow .step-num { width: 24px; height: 24px; border-radius: 12px; background: #333; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+  .workflow .arrow { color: #ccc; font-size: 16px; margin: 2px 0 2px 8px; }
+
+  /* ---- STATUS BADGES ---- */
+  .status { display: inline-block; padding: 1px 7px; border-radius: 2px; font-size: 11px; font-weight: 500; background: #f0f0f0; color: #555; }
+  .status.approved { background: #f0faf4; color: #2d6a4f; }
+  .status.pending { background: #fffbf0; color: #92400e; }
+  .status.rejected { background: #fff5f5; color: #9b2c2c; }
+  .status.archived { background: #f5f5ff; color: #4338ca; }
+  .status.deleted { background: #fdf4ff; color: #7e22ce; }
+  .status.picked { background: #f0f8ff; color: #1e40af; }
+
+  /* ---- PAGE BREAKS ---- */
+  .page-break { page-break-before: always; }
+  @media print {
+    .section { page-break-inside: auto; }
+    .annotated { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <div class="cover-inner">
+    <div class="cover-co">{COMPANY}</div>
+    <div class="cover-mid">
+      <div class="cover-tag">User Documentation</div>
+      <h1 class="cover-h1">{APP_NAME}</h1>
+      <div class="cover-desc">{APP_DESC} Covers {ROLES}.</div>
+    </div>
+    <div class="cover-bot">
+      <div class="cover-bot-l">
+        <div>Version {VERSION} &nbsp;·&nbsp; {DATE}</div>
+        <div>Built on Zoho Creator</div>
+      </div>
+      <div class="cover-bot-r">
+        <div>Confidential</div>
+        <div>For Internal Use Only</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc-page">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#section1">Section 1</a></li>
+    <!-- add items per app -->
+  </ol>
+</div>
+
+<!-- SECTIONS -->
+<div class="section" id="section1">
+  <h2>1. Section Title</h2>
+  <p>Description text.</p>
+
+  <div class="annotated">
+    <img src="01-screenshot.png" alt="Screenshot">
+    <svg viewBox="0 0 1500 1049" preserveAspectRatio="none">
+      <rect x="X" y="Y" width="26" height="26" rx="13" fill="#444"/>
+      <text x="Xcenter" y="Ycenter" text-anchor="middle" fill="white" font-size="16" font-weight="bold">1</text>
+    </svg>
+  </div>
+  <div class="callout-legend">
+    <div class="callout-legend-item"><div class="callout-badge">1</div><span><strong>Button Name</strong> — what it does</span></div>
+  </div>
+</div>
+
+</body>
+</html>
+```
+
+### Cover page design notes
+- **Top accent**: 7px solid `#1a1a2e` (dark navy) border at the very top of the page
+- **Company name**: small caps, letter-spaced, `#1a1a2e` — top left
+- **"User Documentation" tag**: 10px uppercase, `#aaa` — above the title
+- **Title (`cover-h1`)**: 46px bold, `#111`, line-height 1.2 — split across lines with `<br>` for impact
+- **Description**: 14px, `#777`, max-width 500px
+- **Footer**: thin `#e5e5e5` top border, version + date left, "Confidential / For Internal Use Only" right
+- **Background**: pure white — no gradients, no images, no color fill
+
+---
+
 ## Skill 3 — Document Structure
 
 Order sections as:
