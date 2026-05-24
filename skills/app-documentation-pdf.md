@@ -119,36 +119,82 @@ Before writing each section, scan all interactive elements on the page:
 
 ---
 
+## Skill 3b — Screenshot Sizing (Critical)
+
+Zoho Creator app content does **not** fill the full viewport width in list views. The right side is pure white — invisible in the browser but shows as empty grey space in the PDF. Always crop every screenshot to its actual content width.
+
+### Step 1 — Measure actual content width with PIL
+
+```python
+from PIL import Image
+import numpy as np
+
+img = Image.open('path/to/screenshot.png')
+arr = np.array(img)
+
+for y in [100, 200, 400, 600]:
+    row = arr[y]
+    non_white = np.where((row[:,0] < 245) | (row[:,1] < 245) | (row[:,2] < 245))[0]
+    if len(non_white) > 0:
+        print(f'y={y}: content ends at x={non_white[-1]}')
+```
+
+### Step 2 — Crop to content width (round up to nearest 100px)
+
+```python
+cropped = img.crop((0, 0, 1500, 1049))   # or 1300, 1400 etc.
+cropped.save('path/to/screenshot.png')
+```
+
+**Typical widths for Zoho Creator list views:**
+- Most list views: content ends ~x=1477 → crop to **1500px**
+- Narrower views (e.g. views with fewer columns): content ends ~x=1270 → crop to **1300px**
+- Full-width views (fills entire viewport): keep at **2224px**
+
+**⚠️ Different views have different content widths** — measure each screenshot individually. Never assume all screenshots from the same app are the same width.
+
+### Step 3 — Update SVG viewBox to match cropped width
+
+The `viewBox` width MUST match the cropped image pixel width exactly. These two are always coupled:
+
+```html
+<!-- image is 1500px wide → viewBox width = 1500 -->
+<svg viewBox="0 0 1500 1049" preserveAspectRatio="none">
+
+<!-- image is 1300px wide → viewBox width = 1300 -->
+<svg viewBox="0 0 1300 1049" preserveAspectRatio="none">
+```
+
+If the viewBox doesn't match the image width, all badge positions will shift incorrectly.
+
+---
+
 ## Skill 4 — Annotations
 
 Use SVG overlays with numbered callout circles positioned absolutely over images:
 
 **Screenshot dimensions:** Playwright MCP screenshots depend on the viewport set with `browser_resize`.
-- At viewport **1559×1049** → image is **2224×1571 px** (DPR 1.499x). Use `viewBox="0 0 2224 1571"`.
-- At viewport **1559×700** → image is **2224×1049 px**. Use `viewBox="0 0 2224 1049"`.
-- SVG coordinates map **1:1 to image pixels**: `SVG_coord = CSS_px × 1.499`
-- Badge size: `width="26" height="26" rx="13"`, text `font-size="16"`
+- At viewport **1559×700** → image is **2224×1049 px**. Then crop to content width (see Skill 3b).
+- SVG `viewBox` height is always **1049** (after height crop). Width matches the cropped image width.
 
-**⚠️ Viewport height rule:** Use a viewport height that matches the content, not a fixed tall value. If the app content doesn't fill the full viewport, the screenshot will have a large empty grey area at the bottom, making images look small in the PDF. **Recommended: `browser_resize` to 1559×700 before capturing list and detail views.** If the page has more content, increase height as needed.
-
-- After resizing, adjust `viewBox` height to match the new image height (width stays 2224).
-- Badge X/Y coordinates (from `CSS_px × 1.499`) remain valid as long as the target element is still visible in the shorter viewport.
+**⚠️ Viewport height rule:** Use a viewport height that matches the content, not a fixed tall value. If the app content doesn't fill the full viewport, the screenshot will have a large empty grey area at the bottom, making images look small in the PDF. **Recommended: `browser_resize` to 1559×700 before capturing list and detail views.**
 
 **Badge-only style (preferred):** Place the numbered badge directly ON the UI element. No arrows.
 
 ```html
 <div class="annotated">
   <img src="screenshots/NN-page.png" alt="...">
-  <svg viewBox="0 0 2224 1049" preserveAspectRatio="none">
+  <svg viewBox="0 0 1500 1049" preserveAspectRatio="none">
     <rect x="X" y="Y" width="26" height="26" rx="13" fill="#444"/>
     <text x="Xcenter" y="Ycenter+4" text-anchor="middle" fill="white" font-size="16" font-weight="bold">1</text>
   </svg>
 </div>
 ```
 
-- Badge center = target element center in SVG coordinates
-- `rect x` = SVG_cx − 13, `rect y` = SVG_cy − 13
-- `text x` = SVG_cx, `text y` = SVG_cy + 6
+- Badge center = target element center in image pixel coordinates (1:1 with viewBox)
+- `rect x` = cx − 13, `rect y` = cy − 13
+- `text x` = cx, `text y` = rect_y + 17
+- Badge size: `width="26" height="26" rx="13"`, text `font-size="16"`
 
 Always add a **callout legend** below the annotated image:
 ```html
@@ -161,6 +207,54 @@ Always add a **callout legend** below the annotated image:
 ```
 
 **Color rule: always use `#444` (dark gray) — never use bright or red colors for annotations.**
+
+### Finding exact badge coordinates with pixel scanning
+
+Never estimate badge positions by eye. Use PIL pixel cluster scanning to find the exact center of each button:
+
+```python
+from PIL import Image
+import numpy as np
+
+img = Image.open('path/to/screenshot.png')
+arr = np.array(img)
+
+def find_clusters(row_data, x_offset=0, gap=10, min_size=2):
+    non_white = np.where((row_data[:,0] < 200) | (row_data[:,1] < 200) | (row_data[:,2] < 200))[0] + x_offset
+    if len(non_white) < min_size: return []
+    gaps = np.where(np.diff(non_white) > gap)[0]
+    clusters, prev = [], 0
+    for g in gaps:
+        c = non_white[prev:g+1]
+        if len(c) >= min_size: clusters.append((int(c[0]), int(c[-1])))
+        prev = g+1
+    c = non_white[prev:]
+    if len(c) >= min_size: clusters.append((int(c[0]), int(c[-1])))
+    return clusters
+
+# Scan the first data row at the relevant y
+y = 120  # adjust to the row where buttons appear
+row = arr[y, 240:]  # skip nav sidebar (ends at ~x=240)
+clusters = find_clusters(row, x_offset=240)
+for s, e in clusters:
+    print(f'  x={s}-{e}, center={(s+e)//2}')
+```
+
+Each cluster center is the badge `cx`. The row's midpoint is the badge `cy`.
+
+### Badge placement rules for Zoho Creator list views
+
+**⚠️ Column header row ≠ button position.** In Zoho Creator, the column header labels appear at one y-level, and the actual button widgets in data rows appear at a lower y-level. Always scan for where the button text IS in the first data row — never place a badge at the column header y.
+
+**⚠️ x < 260 is a red flag.** The nav sidebar occupies x=0–239 in most screenshots. Any badge with x < 260 is likely pointing into the sidebar or empty space, not a real UI element.
+
+**Typical y levels in a Zoho Creator list view (1049px tall screenshot):**
+- `y ≈ 30–55`: Page title / toolbar (search, +Add button)
+- `y ≈ 55–90`: Column header row (labels only — do NOT badge here for buttons)
+- `y ≈ 115–130`: First data row button text — **badge here for row action buttons**
+- `y ≈ 155–170`: Second data row (if first row is a header-style list)
+
+**For dashboard section badges:** point to section title text (find via dark-pixel scan), not content rows within the section.
 
 ---
 
