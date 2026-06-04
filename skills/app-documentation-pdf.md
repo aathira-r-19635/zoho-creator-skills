@@ -482,6 +482,76 @@ Run with: `node -e "..."` or save as a script and run `node generate-pdf.js`
 
 ---
 
+## Skill 6 — Capturing custom action buttons (role-gated & workflow-gated)
+
+Many Creator apps put **custom action buttons** on a record's detail view (e.g. stage-transition buttons, Approve / Reject, Update / Submit). These are often gated, so a single screenshot won't show them all enabled.
+
+- **Role-gated**: action buttons frequently render **only for the assigned user/owner**, and may be absent entirely in an admin/owner preview. Switch to the right demo user first (see Skill 6a).
+- **Workflow-gated**: only the button for the record's *current* stage is enabled; the rest carry a `…-disable` class. The set of enabled buttons changes per record.
+- **Detect enabled vs disabled** without guessing:
+  ```js
+  [...document.querySelectorAll('.zc-custom-btn')].forEach(e => {
+    const t = e.textContent.trim();
+    const disabled = e.className.toString().includes('disable');
+    if (t) console.log(t, disabled ? 'disabled' : 'ENABLED');
+  });
+  ```
+- **Strategy to capture every button form**: open records across the different lifecycle tabs (Pending / In-Progress / Resolved …), probe each with the snippet above, and when a target button is ENABLED, click it and screenshot the form it opens. Different records will surface different enabled buttons; a few may never be enabled in the current data (note those in text instead of forcing a capture).
+- **Clicking a button opens a data-entry pop-up** (stage form, confirmation dialog, or sub-form). Capture both the button row and the resulting pop-up. Watch for a "save as draft" checkbox and `Submit`/`Cancel` at the bottom — scroll the pop-up to capture the full form.
+
+### Skill 6a — Switching the "View as" demo user (dev environment)
+
+Creator's dev environment has a **View as** switcher to preview the app as different users/roles. (Remove these dev-only screenshots from the final guide — production has no "View as".)
+- Open the list: click `.zc-current-demo-user`.
+- Switch user: click the inner `a.zc-demo-user-id-link` of the `.zc-demo-user-list` whose text starts with the user name — **a plain `li.click()` does NOT switch**, you must click the anchor.
+- Verify it took via `#zc-current-demo-user-name`.
+
+### Skill 6b — Detail-panel mechanics
+
+- The record detail opens in a side panel; its scroll container is `.zc-dem-record-popup-inner` (set `.scrollTop` to reach lower tabs/sub-forms).
+- **The panel persists across navigation** — always close it explicitly (`.zc-canvas-detail-view .popupClose`) before opening another record, or empty panels stack and block clicks.
+- **Expand → Collapse**: clicking *Expand* widens the record to full-screen, but in headless Chromium the content **does not reflow** until you fire a resize:
+  ```js
+  window.dispatchEvent(new Event('resize'));
+  ```
+
+### Skill 6c — Get real page/report names from the nav
+
+Don't guess SPA hash routes. Read the left-nav anchor `href` to get the exact name and prefix (`#Page:X` vs `#Report:X` vs `#X`); guessing yields a "Page not found" screen.
+```js
+[...document.querySelectorAll('a.zc-main-menu-link')].map(a => [a.textContent.trim(), a.getAttribute('href')]);
+```
+
+---
+
+## Skill 7 — Live coordinate measurement for annotations (faster than pixel-scanning)
+
+For app screenshots captured live in the browser, measure button positions directly instead of PIL pixel-scanning — the viewport CSS pixels map 1:1 to the screenshot (at `scale: 'css'`) and to the SVG `viewBox`:
+```js
+const r = el.getBoundingClientRect();   // {left, top, width, height} == SVG coords
+```
+Place the badge at `rect x = left - 11`, `y = top` (or just left of the element). This fixed mis-placed badges that were landing on the list *behind* an open panel.
+
+> **⚠️ Crop vs top-anchored toolbars.** Cropping the top ~36px to remove the Creator dev toolbar **also clips any panel toolbar that sits at y≈0** (e.g. the Expand/Collapse/Consultation bar on a full-screen record). For expanded / full-screen captures, **do not crop** — keep the full height and set the SVG `viewBox` height to the uncropped value (e.g. `700`) instead of the cropped one (`664`).
+
+---
+
+## Skill 8 — PDF pagination (avoid large blank gaps)
+
+`page-break-before: always` on every section forces each onto a fresh page, leaving big blank areas after short sections. Let content flow and only protect what must not split:
+```css
+.page-break { page-break-before: auto; }
+@media print {
+  .section { page-break-inside: auto; }
+  .annotated, .plain, table, .callout-legend { page-break-inside: avoid; }  /* keep figures/tables whole */
+  h2, h3, h4 { page-break-after: avoid; }                                   /* keep headings with their content */
+  .caption { page-break-before: avoid; }                                    /* keep caption with its image */
+}
+```
+Keep `page-break-after: always` only on the **cover** and **TOC** so they stay standalone pages.
+
+---
+
 ## Output
 ```
 <app>-doc/
