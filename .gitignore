@@ -11,9 +11,10 @@ oauth_creds.json
 # All debugging screenshots (do not commit)
 *.png
 
-# App-specific documentation output (not committed — contains app screenshots)
-wipro-doc/
-addax-doc/
+# App-specific documentation output and scratch captures (not committed —
+# contains client app screenshots, generated PDFs/DOCX, and raw page snapshots).
+# Covers wipro-doc/, addax-doc/, utcl-doc/, dsce-doc/, and any future <app>-doc/ folder.
+*-doc/
 
 # OS files
 .DS_Store
