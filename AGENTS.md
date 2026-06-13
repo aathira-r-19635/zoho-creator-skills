@@ -185,7 +185,7 @@ Before session closure, turn what you learned into reusable repo assets (skills/
 | `session-closure-workflow.md` | Mandatory steps when closing a session |
 | `zoho-mcp-session-closure.md` | MCP-specific session closure context |
 | `zoho-code-mcp-setup.md` | Setting up MCP in Zoho Code IDE (.zcode/ai/mcp.json) |
-| `creator-widget-js-sdk.md` | Verified v1 ZOHO.CREATOR.API contract for read/write CRUD from custom HTML widgets (init, double-data-wrap add/update, criteria delete, code 3000, UTIL theme/env, optimistic-CRUD hardening) |
+| `creator-widget-js-sdk.md` | Verified v1 ZOHO.CREATOR.API contract: server-side `criteria` read-filter (==/!=/&&/\|\|/contains/startsWith), double-data-wrap add/update, criteria/multi-row delete, code 3000, SYNC `getInitParams`, optimistic-CRUD hardening |
 | `creator-widget-build-register.md` | Hand-build, zet-pack, and register a custom HTML/JS widget in a Creator app, then embed it on a page |
 | `creator-widget-scalability.md` | Keep a widget responsive at scale: debounce search, event delegation, and IMPLEMENTED lazy-load/infinite-scroll (per-column cap, `.board-wrap` scroll, position preserved) — verified 545 records → 1,821 DOM nodes |
 | `creator-bulk-write-throttling.md` | Worker-pool (6) + exponential backoff for bulk/parallel writes; avoids the ~HTTP 429 that ~12 concurrent addRecord calls trigger after ~400 writes |

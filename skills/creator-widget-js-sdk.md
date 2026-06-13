@@ -30,6 +30,11 @@ function call(p) {
 ZOHO.CREATOR.API.getAllRecords({ appName, reportName, page, pageSize: 200 })
   .then(function (res) { var rows = res.data || []; /* ... */ });
 ```
+SERVER-SIDE FILTER (verified 2026-06-13): pass a `criteria` string — it filters on the SERVER, combine with pagination. Operators verified working: `==`, `!=`, `&&`, `||`, `.contains()`, `.startsWith()`. Response is `{ code, data }` ONLY — there is NO total-count field (compute counts with a criteria query if you need "X of N").
+```js
+ZOHO.CREATOR.API.getAllRecords({ appName, reportName, page: 1, pageSize: 200,
+  criteria: '(Status == "Done" && Task_Name.contains("LT"))' });
+```
 4. ADD — `data` MUST be DOUBLE-wrapped (`data:{ data:{...} }`), and use `formName` (NOT `reportName`):
 ```js
 ZOHO.CREATOR.API.addRecord({ appName, formName, data: { data: { Field: value } } });
@@ -42,12 +47,19 @@ ZOHO.CREATOR.API.updateRecord({ appName, reportName, id, data: { data: { Field: 
 ```js
 ZOHO.CREATOR.API.deleteRecord({ appName, reportName, criteria: 'ID == ' + id });
 ```
-7. UTIL (theme + env badge) — feature-detect first; `getInitParams` may be absent in some contexts. If absent → skip the badge, do not throw:
+Delete is criteria-based → ONE call can remove MANY rows (e.g. `criteria: 'Project_ID == "' + pid + '"'` cascade-deletes all a project's tasks). Response (verified 2026-06-13): `{ result: [ { code:3000, data:{ID}, message:"Record Deleted Successfully" } ], code:3000 }`. Shares the ~HTTP 429 write quota — throttle bulk deletes (see `creator-bulk-write-throttling.md`).
+7. UTIL — `getInitParams()` is SYNCHRONOUS (verified 2026-06-14): it returns an object DIRECTLY (not a Promise). Feature-detect, then read keys; NEVER `.then()` it (doing so throws — the STM widget did this and silently lost theming).
 ```js
-var u = ZOHO.CREATOR.UTIL && ZOHO.CREATOR.UTIL.getInitParams && ZOHO.CREATOR.UTIL.getInitParams();
-// u → { app, env, user, themeBrandColor }; use u.env for a DEV/STAGE badge, u.themeBrandColor for accent
+var u = (ZOHO.CREATOR.UTIL && ZOHO.CREATOR.UTIL.getInitParams) ? ZOHO.CREATOR.UTIL.getInitParams() : null;
+// u → { scope, envUrlFragment, appLinkName, loginUser, themeBrandColor }   (verified shape)
+if (u) {
+  if (u.themeBrandColor) { /* set accent */ }
+  if (/development|stage/i.test(u.envUrlFragment || "")) { /* DEV/STAGE badge — "" = production */ }
+  var me = u.loginUser;            // the viewer's EMAIL (key is `loginUser`, NOT `user`); match to a Member for "My Work"
+}
 ```
-Other UTIL keys (call same way): `setImageData`, `getQueryParams`, `getWidgetParams`, `navigateParentURL`.
+Other UTIL keys: `getQueryParams`, `getWidgetParams`, `navigateParentURL`, `setImageData` (shapes verify per use).
+Other UTIL keys: `setImageData`, `getQueryParams`, `getWidgetParams`, `navigateParentURL` — shapes UNVERIFIED; feature-detect + catch-guard the same way.
 
 ## If you see X → do Y
 - If ADD/UPDATE returns HTTP 401 with code `2945` (`EXTRA_KEY_FOUND_IN_JSON`) → you passed fields flat as `data:{...}`. Re-send DOUBLE-wrapped: `data:{ data:{...} }`.

@@ -45,7 +45,7 @@ Skills for building and modifying Zoho Creator apps — forms, pages, code, and 
 | Deluge Aggregates | `deluge-aggregate-functions.md` | Use `.count()`, `.sum()` etc. instead of `for each` loops |
 | MCP Data Operations | `zoho-mcp-data-operations.md` | Add, update, query, and delete records in Zoho Creator forms and reports |
 | Zoho Code MCP Setup | `zoho-code-mcp-setup.md` | Configure MCP server connection inside Zoho Code IDE |
-| Creator Widget JS SDK (v1) | `creator-widget-js-sdk.md` | Verified v1 ZOHO.CREATOR.API contract for read/write CRUD from custom HTML widgets (init, double-data-wrap add/update, criteria delete, code 3000, UTIL theme/env, optimistic-CRUD hardening) |
+| Creator Widget JS SDK (v1) | `creator-widget-js-sdk.md` | Verified v1 ZOHO.CREATOR.API contract: server-side `criteria` read-filter (==/!=/&&/\|\|/contains/startsWith), double-data-wrap add/update, criteria/multi-row delete, code 3000, SYNC `getInitParams`, optimistic-CRUD hardening |
 | Build, Package & Register a Creator Widget | `creator-widget-build-register.md` | Hand-build, zet-pack, and register a custom HTML/JS widget in a Creator app, then embed it on a page |
 | Creator Widget Scalability | `creator-widget-scalability.md` | Keep a widget responsive at scale: debounce, event delegation, IMPLEMENTED lazy-load/infinite-scroll (per-column cap, `.board-wrap` scroll, position preserved); verified 545 records → 1,821 DOM nodes |
 | Throttle Bulk / Parallel Writes | `creator-bulk-write-throttling.md` | Worker-pool (6) + exponential backoff for bulk/parallel writes; avoids ~HTTP 429 from ~12 concurrent addRecord after ~400 writes |
