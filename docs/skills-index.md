@@ -45,6 +45,13 @@ Skills for building and modifying Zoho Creator apps — forms, pages, code, and 
 | Deluge Aggregates | `deluge-aggregate-functions.md` | Use `.count()`, `.sum()` etc. instead of `for each` loops |
 | MCP Data Operations | `zoho-mcp-data-operations.md` | Add, update, query, and delete records in Zoho Creator forms and reports |
 | Zoho Code MCP Setup | `zoho-code-mcp-setup.md` | Configure MCP server connection inside Zoho Code IDE |
+| Creator Widget JS SDK (v1) | `creator-widget-js-sdk.md` | Verified v1 ZOHO.CREATOR.API contract for read/write CRUD from custom HTML widgets (init, double-data-wrap add/update, criteria delete, code 3000, UTIL theme/env, optimistic-CRUD hardening) |
+| Build, Package & Register a Creator Widget | `creator-widget-build-register.md` | Hand-build, zet-pack, and register a custom HTML/JS widget in a Creator app, then embed it on a page |
+| Creator Widget Scalability | `creator-widget-scalability.md` | Keep a widget responsive at scale: debounce, event delegation, IMPLEMENTED lazy-load/infinite-scroll (per-column cap, `.board-wrap` scroll, position preserved); verified 545 records → 1,821 DOM nodes |
+| Throttle Bulk / Parallel Writes | `creator-bulk-write-throttling.md` | Worker-pool (6) + exponential backoff for bulk/parallel writes; avoids ~HTTP 429 from ~12 concurrent addRecord after ~400 writes |
+| Test a Widget from Outside (iframe eval) | `creator-widget-iframe-testing.md` | Drive/seed/measure a deployed widget from a browser session via element-scoped eval on its cross-origin iframe (load-test, render timing, synthetic drag) |
+| Make a Creator App Single-Page (App Menu Builder) | `creator-single-page-app.md` | Trim the nav menu to one entry for a single-page/widget app without deleting any components or data |
+| Delete Creator Components (Report / Page) Safely | `creator-delete-components.md` | Permanently delete a Creator report or page via the builder without breaking the data layer the app depends on |
 
 ---
 
@@ -61,6 +68,29 @@ Foundational skills used across all three categories.
 | Git Identity | `github-identity-enforcement.md` | Ensure correct corporate Git identity for all commits |
 | Session Closure | `session-closure-workflow.md` | **MANDATORY** checklist when closing a session: document → update skills → commit → push |
 | MCP Session Closure | `zoho-mcp-session-closure.md` | MCP auth setup and session closure context |
+
+---
+
+## Meta / Process
+
+Skills for turning session work into durable, reusable repository assets.
+
+| Skill | File | Purpose |
+|-------|------|---------|
+| Knowledge Reflection Workflow (Repeatable) | `knowledge-reflection-workflow.md` | Repeatable process to turn a session's learnings into reusable repo assets (skills/agents/indexes) |
+
+---
+
+## Custom Agents
+
+Pre-built subagents that bundle the right skills for a whole job. Delegate to one when a task matches its scope.
+
+| Agent | File | Purpose |
+|-------|------|---------|
+| creator-widget-developer | `.claude/agents/creator-widget-developer.md` | Build, register, embed, and live-test a custom HTML/JS widget (Creator JS SDK v1, no server) inside a Zoho Creator app |
+| creator-app-builder | `.claude/agents/creator-app-builder.md` | Scaffold or restructure a Creator app's components — create app, add forms/fields/lookups, add list/Kanban reports, add pages, arrange the menu/single-page layout, or remove redundant components |
+| creator-app-documenter | `.claude/agents/creator-app-documenter.md` | When a user asks for a user guide / documentation / manual / PDF walkthrough of a Zoho Creator app |
+| creator-qa-tester | `.claude/agents/creator-qa-tester.md` | Test/QA/validate a Zoho Creator app or form — exercise CRUD, probe field validations, monitor network for silent failures, and report bugs with repro/severity |
 
 ---
 
