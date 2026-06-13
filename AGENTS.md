@@ -19,6 +19,9 @@ Skills for automating Zoho Creator using Playwright MCP and Zoho MCP tools.
 - Configure lookups
 - Drag-and-drop UI
 
+### Need a custom HTML UI / frontend for an app?
+→ Build a **Creator Widget (JS SDK)** — see `skills/creator-widget-js-sdk.md` + `skills/creator-widget-build-register.md` (or delegate to the **creator-widget-developer** agent)
+
 ### Need to navigate/authenticate?
 → Use **Playwright Login** (see `skills/playwright-zoho-login.md`)
 - Session persistence
@@ -151,6 +154,25 @@ git config --local user.email "your.email@zohocorp.com"
 - OAuth tokens: `~/.qwen/mcp-oauth-tokens.json`
 - MCP config: `~/.qwen/settings.json`
 
+## Custom Agents
+
+Pre-built subagents that bundle the right skills for a whole job. Delegate to one when a task matches its scope instead of wiring the skills together by hand.
+
+| Agent | File | Purpose |
+|-------|------|---------|
+| `creator-widget-developer` | `.claude/agents/creator-widget-developer.md` | Build, register, embed, and live-test a custom HTML/JS widget (Creator JS SDK v1, no server) inside a Zoho Creator app |
+| `creator-app-builder` | `.claude/agents/creator-app-builder.md` | Scaffold or restructure a Creator app's components — create app, add forms/fields/lookups, add list/Kanban reports, add pages, arrange the menu/single-page layout, or remove redundant components |
+| `creator-app-documenter` | `.claude/agents/creator-app-documenter.md` | When a user asks for a user guide / documentation / manual / PDF walkthrough of a Zoho Creator app |
+| `creator-qa-tester` | `.claude/agents/creator-qa-tester.md` | Test/QA/validate a Zoho Creator app or form — exercise CRUD, probe field validations, monitor network for silent failures, and report bugs with repro/severity |
+
+## Reflecting Learnings (Repeatable)
+
+Before session closure, turn what you learned into reusable repo assets (skills/agents/indexes).
+
+**Write every asset for the least capable model that will use it** — numbered imperative steps, exact commands/selectors/URLs, explicit decision rules, and an "if error X → do Y" line for each known failure.
+
+→ Follow `skills/knowledge-reflection-workflow.md` or run the `/reflect-learnings` command.
+
 ## Skills Index
 
 | Skill | Purpose |
@@ -163,6 +185,14 @@ git config --local user.email "your.email@zohocorp.com"
 | `session-closure-workflow.md` | Mandatory steps when closing a session |
 | `zoho-mcp-session-closure.md` | MCP-specific session closure context |
 | `zoho-code-mcp-setup.md` | Setting up MCP in Zoho Code IDE (.zcode/ai/mcp.json) |
+| `creator-widget-js-sdk.md` | Verified v1 ZOHO.CREATOR.API contract for read/write CRUD from custom HTML widgets (init, double-data-wrap add/update, criteria delete, code 3000, UTIL theme/env, optimistic-CRUD hardening) |
+| `creator-widget-build-register.md` | Hand-build, zet-pack, and register a custom HTML/JS widget in a Creator app, then embed it on a page |
+| `creator-widget-scalability.md` | Keep a widget responsive at scale: debounce search, event delegation, and IMPLEMENTED lazy-load/infinite-scroll (per-column cap, `.board-wrap` scroll, position preserved) — verified 545 records → 1,821 DOM nodes |
+| `creator-bulk-write-throttling.md` | Worker-pool (6) + exponential backoff for bulk/parallel writes; avoids the ~HTTP 429 that ~12 concurrent addRecord calls trigger after ~400 writes |
+| `creator-widget-iframe-testing.md` | Drive/seed/measure a deployed widget from a browser session via element-scoped eval on its cross-origin iframe (load-test, render timing, synthetic drag) |
+| `creator-single-page-app.md` | Trim the nav menu to one entry for a single-page/widget app without deleting any components or data |
+| `creator-delete-components.md` | Permanently delete a Creator report or page via the builder without breaking the data layer the app depends on |
+| `knowledge-reflection-workflow.md` | Repeatable process to turn a session's learnings into reusable repo assets (skills/agents/indexes) |
 
 ## Key References
 - `CONTRIBUTING.md` - Contributor guide

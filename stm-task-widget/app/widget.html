@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task Board</title>
+  <!-- Creator JS SDK (v1). Verified host: js.zohostatic.com. -->
+  <script src="https://js.zohostatic.com/creator/widgets/version/1.0/widgetsdk-min.js"></script>
+  <style>
+    /* ============ Theme tokens ============ */
+    :root {
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      --radius: 14px;
+      --radius-sm: 10px;
+      --accent: #6366f1;
+      --accent-2: #8b5cf6;
+      --accent-grad: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+      --todo: #64748b;
+      --progress: #f59e0b;
+      --done: #22c55e;
+      --danger: #ef4444;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --ring: 0 0 0 3px color-mix(in srgb, var(--accent) 38%, transparent);
+      --trans: .18s cubic-bezier(.4,0,.2,1);
+    }
+    html[data-theme="dark"] {
+      --bg: #0c0e14; --bg-2: #11141c; --surface: #161a24; --surface-2: #1c2130; --surface-3: #232a3b;
+      --border: #2a3142; --border-2: #353e54; --text: #e8eaf0; --text-muted: #9aa3b8; --text-faint: #6b7488; --chip: #232a3b;
+      --select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239aa3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    }
+    html[data-theme="light"] {
+      --bg: #f4f6fb; --bg-2: #eef1f7; --surface: #ffffff; --surface-2: #f7f9fc; --surface-3: #eef1f7;
+      --border: #e2e7f0; --border-2: #d2dae6; --text: #1a2030; --text-muted: #5a6477; --text-faint: #98a1b3; --chip: #eef1f7;
+      --select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235a6477' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      --shadow: 0 10px 30px rgba(30,40,80,.10);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; font-size: 14px; line-height: 1.45; transition: background var(--trans), color var(--trans); }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 20px; border: 2px solid transparent; background-clip: content-box; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-faint); background-clip: content-box; }
+    .app { display: flex; flex-direction: column; height: 100vh; }
+
+    /* ============ Topbar ============ */
+    .topbar { display: flex; align-items: center; gap: 16px; padding: 16px 22px; background: var(--bg-2); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+    .brand { display: flex; align-items: center; gap: 12px; margin-right: auto; min-width: 0; }
+    .logo { width: 38px; height: 38px; border-radius: 11px; background: var(--accent-grad); display: grid; place-items: center; box-shadow: 0 6px 16px color-mix(in srgb, var(--accent) 40%, transparent); flex-shrink: 0; }
+    .logo svg { width: 21px; height: 21px; }
+    .brand h1 { font-size: 17px; font-weight: 700; margin: 0; letter-spacing: -.2px; display: flex; align-items: center; gap: 8px; }
+    .env-badge { font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--progress); border: 1px solid var(--progress); border-radius: 6px; padding: 1px 6px; }
+    .brand p { font-size: 12px; color: var(--text-muted); margin: 1px 0 0; }
+    .toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .search { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; min-width: 200px; transition: border var(--trans), box-shadow var(--trans); }
+    .search:focus-within { border-color: var(--accent); box-shadow: var(--ring); }
+    .search svg { width: 15px; height: 15px; color: var(--text-faint); flex-shrink: 0; }
+    .search input { border: none; outline: none; background: transparent; color: var(--text); font-size: 13px; width: 100%; font-family: var(--font); }
+    .search input::placeholder { color: var(--text-faint); }
+    .icon-btn { width: 38px; height: 38px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; display: grid; place-items: center; transition: all var(--trans); }
+    .icon-btn:hover { color: var(--text); border-color: var(--border-2); transform: translateY(-1px); }
+    .icon-btn:focus-visible { outline: none; box-shadow: var(--ring); }
+    .icon-btn svg { width: 17px; height: 17px; }
+    .icon-btn.spin svg { animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn { border: none; border-radius: var(--radius-sm); padding: 9px 16px; font-size: 13px; font-weight: 600; font-family: var(--font); cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: all var(--trans); }
+    .btn:focus-visible { outline: none; box-shadow: var(--ring); }
+    .btn-primary { background: var(--accent-grad); color: #fff; box-shadow: 0 6px 16px color-mix(in srgb, var(--accent) 35%, transparent); }
+    .btn-primary:hover { transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+    .btn-ghost { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    .btn-ghost:hover { border-color: var(--border-2); }
+    .btn-danger { background: color-mix(in srgb, var(--danger) 14%, transparent); color: var(--danger); }
+    .btn-danger:hover { background: color-mix(in srgb, var(--danger) 22%, transparent); }
+    .btn svg { width: 15px; height: 15px; }
+
+    /* ============ Composer ============ */
+    .composer { display: flex; gap: 10px; padding: 16px 22px; align-items: center; flex-wrap: wrap; border-bottom: 1px solid var(--border); background: var(--bg); }
+    .composer input[type="text"] { flex: 1; min-width: 220px; background: var(--surface); border: 1px solid var(--border); color: var(--text); border-radius: var(--radius-sm); padding: 11px 14px; font-size: 14px; font-family: var(--font); outline: none; transition: border var(--trans), box-shadow var(--trans); }
+    .composer input[type="text"]:focus { border-color: var(--accent); box-shadow: var(--ring); }
+    .composer input[type="text"]::placeholder { color: var(--text-faint); }
+    select.field { background-color: var(--surface); background-image: var(--select-arrow); background-repeat: no-repeat; background-position: right 13px center; background-size: 12px; border: 1px solid var(--border); color: var(--text); border-radius: var(--radius-sm); padding: 11px 36px 11px 13px; font-size: 13px; font-family: var(--font); outline: none; cursor: pointer; -webkit-appearance: none; -moz-appearance: none; appearance: none; transition: border var(--trans), box-shadow var(--trans); }
+    select.field:focus { border-color: var(--accent); box-shadow: var(--ring); }
+
+    /* ============ Board / states ============ */
+    .board-wrap { flex: 1; overflow: auto; padding: 22px; }
+    .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; min-height: 100%; max-width: 1500px; margin: 0 auto; }
+    @media (max-width: 820px) { .board { grid-template-columns: 1fr; } }
+    .col { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); display: flex; flex-direction: column; min-height: 140px; transition: border var(--trans), background var(--trans); }
+    .col.drag-over { border-color: var(--accent); background: var(--surface-2); box-shadow: var(--ring); }
+    .col-head { display: flex; align-items: center; gap: 9px; padding: 14px 16px; border-bottom: 1px solid var(--border); }
+    .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .col-head h2 { font-size: 13px; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: .5px; }
+    .count { margin-left: auto; background: var(--chip); color: var(--text-muted); font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 20px; min-width: 24px; text-align: center; }
+    .col-body { padding: 12px; display: flex; flex-direction: column; gap: 10px; flex: 1; overflow-y: auto; }
+
+    .card { background: var(--surface-2); border: 1px solid var(--border); border-left: 3px solid var(--col-color, var(--border-2)); border-radius: var(--radius-sm); padding: 13px 14px; cursor: grab; transition: transform var(--trans), box-shadow var(--trans), border-color var(--trans), opacity var(--trans); position: relative; }
+    .card:hover { transform: translateY(-2px); box-shadow: var(--shadow); border-color: var(--border-2); }
+    .card:focus-visible { outline: none; box-shadow: var(--ring); }
+    .card:active { cursor: grabbing; }
+    .card.dragging { opacity: .4; }
+    .card.pending { opacity: .6; pointer-events: none; }
+    .card-title { font-size: 14px; font-weight: 600; word-break: break-word; padding-right: 46px; }
+    .card-meta { display: flex; align-items: center; gap: 6px; margin-top: 9px; }
+    .badge { font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 20px; }
+    .card-actions { position: absolute; top: 9px; right: 9px; display: flex; gap: 2px; opacity: 0; transition: opacity var(--trans); }
+    .card:hover .card-actions, .card:focus-within .card-actions { opacity: 1; }
+    .card-actions button { width: 24px; height: 24px; border: none; background: transparent; color: var(--text-faint); border-radius: 6px; cursor: pointer; display: grid; place-items: center; }
+    .card-actions button:hover { background: var(--chip); color: var(--text); }
+    .card-actions button.del:hover { color: var(--danger); }
+    .card-actions button:focus-visible { outline: none; box-shadow: var(--ring); }
+    .card-actions svg { width: 14px; height: 14px; }
+    .col-more { color: var(--text-faint); font-size: 11px; text-align: center; padding: 10px 8px 2px; letter-spacing: .2px; }
+    .empty-col { color: var(--text-faint); font-size: 12.5px; text-align: center; padding: 22px 10px; border: 1.5px dashed var(--border); border-radius: var(--radius-sm); }
+    .skel { height: 64px; border-radius: var(--radius-sm); background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-3) 37%, var(--surface-2) 63%); background-size: 400% 100%; animation: shimmer 1.3s ease infinite; }
+    @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+
+    .center-state { display: grid; place-items: center; height: 100%; text-align: center; color: var(--text-muted); gap: 14px; padding: 40px; }
+    .spinner { width: 34px; height: 34px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; }
+    .center-state .ttl { color: var(--text); font-weight: 700; font-size: 16px; }
+
+    /* ============ Modal ============ */
+    .overlay { position: fixed; inset: 0; background: rgba(4,6,12,.6); backdrop-filter: blur(3px); display: none; align-items: center; justify-content: center; z-index: 50; padding: 20px; }
+    .overlay.open { display: flex; }
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); width: 100%; max-width: 420px; box-shadow: var(--shadow); overflow: hidden; animation: pop .2s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes pop { from { transform: scale(.94); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal-head { padding: 18px 20px; border-bottom: 1px solid var(--border); font-size: 15px; font-weight: 700; }
+    .modal-body { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+    .modal-body label { font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 7px; }
+    .modal-body input[type="text"], .modal-body select { width: 100%; background: var(--surface-2); border: 1px solid var(--border); color: var(--text); border-radius: var(--radius-sm); padding: 11px 13px; font-size: 14px; font-family: var(--font); outline: none; transition: border var(--trans), box-shadow var(--trans); }
+    .modal-body input[type="text"]:focus, .modal-body select:focus { border-color: var(--accent); box-shadow: var(--ring); }
+    .modal-body select { -webkit-appearance: none; -moz-appearance: none; appearance: none; padding-right: 40px; cursor: pointer; background-image: var(--select-arrow); background-repeat: no-repeat; background-position: right 15px center; background-size: 12px; }
+    .modal-foot { padding: 16px 20px; border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: center; }
+    .modal-foot .spacer { flex: 1; }
+
+    /* ============ Toasts ============ */
+    .toasts { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 100; }
+    .toast { background: var(--surface-3); border: 1px solid var(--border-2); color: var(--text); padding: 12px 16px; border-radius: var(--radius-sm); font-size: 13px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 9px; max-width: 340px; animation: slidein .25s ease; border-left: 3px solid var(--accent); }
+    .toast.ok { border-left-color: var(--done); }
+    .toast.err { border-left-color: var(--danger); }
+    .toast svg { width: 16px; height: 16px; flex-shrink: 0; }
+    @keyframes slidein { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    .toast.out { animation: slideout .25s ease forwards; }
+    @keyframes slideout { to { transform: translateX(120%); opacity: 0; } }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <div>
+          <h1>Task Board <span id="envBadge" class="env-badge" style="display:none"></span></h1>
+          <p id="subtitle">Connecting to Zoho Creator…</p>
+        </div>
+      </div>
+      <div class="toolbar">
+        <div class="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input id="search" type="text" placeholder="Search tasks…" autocomplete="off" aria-label="Search tasks" />
+        </div>
+        <button class="icon-btn" id="refreshBtn" title="Refresh" aria-label="Refresh tasks">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg>
+        </button>
+        <button class="icon-btn" id="themeBtn" title="Toggle dark / light" aria-label="Toggle dark or light theme">
+          <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="composer">
+      <input id="newTask" type="text" placeholder="Add a new task and press Enter…" autocomplete="off" aria-label="New task name" maxlength="255" />
+      <select id="newStatus" class="field" aria-label="Status for new task"></select>
+      <button class="btn btn-primary" id="addBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        Add Task
+      </button>
+    </div>
+
+    <div class="board-wrap">
+      <div id="boardState" aria-live="polite"></div>
+      <div class="board" id="board" style="display:none"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalHead">
+    <div class="modal">
+      <div class="modal-head" id="modalHead">Edit Task</div>
+      <div class="modal-body">
+        <div>
+          <label for="editName">Task name</label>
+          <input id="editName" type="text" maxlength="255" />
+        </div>
+        <div>
+          <label for="editStatus">Status</label>
+          <select id="editStatus"></select>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-danger" id="deleteBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          Delete
+        </button>
+        <div class="spacer"></div>
+        <button class="btn btn-ghost" id="cancelBtn">Cancel</button>
+        <button class="btn btn-primary" id="saveBtn">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="assertive"></div>
+  <span id="srStatus" class="sr-only" aria-live="polite"></span>
+
+  <script>
+  (function () {
+    "use strict";
+
+    /* ===================== Config ===================== */
+    var APP = "simple-task-manager";   // host app (explicit; SDK also infers from context)
+    var FORM = "Tasks";                // addRecord targets a FORM
+    var REPORT = "Tasks_Report";       // get/update/delete target a REPORT
+    var STATUSES = ["To Do", "In Progress", "Done"];   // v1 SDK cannot read dropdown choices -> hardcoded
+    var COLORS = { "To Do": "var(--todo)", "In Progress": "var(--progress)", "Done": "var(--done)" };
+    var PAGE_SIZE = 200;               // max allowed by getAllRecords
+    var PAGE_LIMIT = 1000;             // safety valve for the pagination loop
+
+    /* ===================== State ===================== */
+    var tasks = [];        // [{ID, Task_Name, Status}]
+    var query = "";
+    var editingId = null;
+    var lastFocus = null;  // for modal focus restore
+    var tmpSeq = 0;        // monotonic counter for collision-free temp IDs
+    var pendingOps = 0;    // in-flight optimistic writes (gates refresh)
+
+    /* Lazy render (keeps the DOM light at scale): cap the cards rendered per column and grow
+       that cap as the user scrolls near the bottom. Pending cards always render (see render). */
+    var PAGE_RENDER = 50;            // cards shown per column before "scroll for more"
+    var limits = {};                 // per-status render cap; grows on scroll
+    function resetLimits() { for (var i = 0; i < STATUSES.length; i++) limits[STATUSES[i]] = PAGE_RENDER; }
+    resetLimits();
+
+    var $ = function (id) { return document.getElementById(id); };
+    var board = $("board"), boardState = $("boardState"), subtitle = $("subtitle");
+
+    /* ===================== Theme ===================== */
+    var SUN = '<circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1.5 12h3M19.5 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>';
+    var MOON = '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>';
+    function applyTheme(t) {
+      document.documentElement.setAttribute("data-theme", t);
+      $("themeIcon").innerHTML = (t === "dark") ? SUN : MOON;
+      try { localStorage.setItem("stm-theme", t); } catch (e) {}
+    }
+    (function () { var s = "dark"; try { s = localStorage.getItem("stm-theme") || "dark"; } catch (e) {} applyTheme(s); })();
+    $("themeBtn").addEventListener("click", function () {
+      applyTheme(document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark");
+    });
+
+    /* ===================== Status dropdowns ===================== */
+    function fillStatusSelect(sel) {
+      sel.innerHTML = STATUSES.map(function (s) { return '<option value="' + s + '">' + s + '</option>'; }).join("");
+    }
+    fillStatusSelect($("newStatus"));
+    fillStatusSelect($("editStatus"));
+
+    /* ===================== Toasts ===================== */
+    function toast(msg, type) {
+      var el = document.createElement("div");
+      el.className = "toast " + (type || "");
+      var icon = type === "ok"
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>'
+        : type === "err"
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/></svg>'
+        : "";
+      el.innerHTML = icon + "<span></span>";
+      el.querySelector("span").textContent = msg;
+      $("toasts").appendChild(el);
+      setTimeout(function () { el.classList.add("out"); setTimeout(function () { el.remove(); }, 250); }, 3000);
+    }
+    function announce(msg) { var sr = $("srStatus"); if (sr) sr.textContent = msg; }
+
+    function readErr(err) {
+      if (!err) return "unknown error";
+      if (typeof err === "string") return err;
+      if (err.description) return err.description;
+      if (err.responseText) return err.responseText;
+      if (err.message) return err.message;
+      try { return JSON.stringify(err); } catch (e) { return "error"; }
+    }
+
+    /* ===================== SDK call wrapper =====================
+       Resolves only on code === 3000; otherwise throws an Error carrying the
+       response. No auto-retry: a non-3000 (incl. 2945) is a deterministic
+       logic error; the only transient case (initial read) has a Retry button. */
+    function call(method, config) {
+      return ZOHO.CREATOR.API[method](config).then(function (res) {
+        if (res && res.code === 3000) return res;
+        var e = new Error(readErr(res));
+        e.response = res;
+        throw e;
+      });
+    }
+
+    /* ===================== Data ops (verified v1 shapes) ===================== */
+    function fetchPage(page) {
+      return call("getAllRecords", { appName: APP, reportName: REPORT, page: page, pageSize: PAGE_SIZE })
+        .then(function (res) { return res.data || []; });
+    }
+    // Page-based loop (v1 has no cursor); stop on a short/empty page.
+    // Only the FIRST page may legitimately be an "empty report" — and codes 3100/9280
+    // are unverified guesses, so tolerate them ONLY when we currently have nothing to
+    // show (never wipe a populated board). On page > 1 a short page already terminates
+    // the loop, so any error there is real and must propagate.
+    function fetchAll() {
+      var acc = [];
+      function next(page) {
+        return fetchPage(page).then(function (batch) {
+          acc = acc.concat(batch);
+          if (batch.length < PAGE_SIZE || page >= PAGE_LIMIT) return acc;
+          return next(page + 1);
+        });
+      }
+      return fetchPage(1).catch(function (err) {
+        var r = err && err.response;
+        if (r && (r.code === 3100 || r.code === 9280) && tasks.length === 0) return [];
+        throw err;
+      }).then(function (first) {
+        acc = acc.concat(first);
+        if (first.length < PAGE_SIZE || PAGE_LIMIT <= 1) return acc;
+        return next(2);
+      });
+    }
+    function createTask(name, status) {
+      return call("addRecord", { appName: APP, formName: FORM, data: { data: { Task_Name: name, Status: status } } })
+        .then(function (res) { return (res.data && res.data.ID) || null; });
+    }
+    function updateTask(id, fields) {
+      return call("updateRecord", { appName: APP, reportName: REPORT, id: String(id), data: { data: fields } });
+    }
+    function removeTask(id) {
+      return call("deleteRecord", { appName: APP, reportName: REPORT, criteria: "ID == " + id });
+    }
+
+    /* ===================== Rendering ===================== */
+    function escapeHTML(s) {
+      return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+      });
+    }
+    function findTask(id) {
+      for (var i = 0; i < tasks.length; i++) if (String(tasks[i].ID) === String(id)) return tasks[i];
+      return null;
+    }
+    function normStatus(s) { return STATUSES.indexOf(s) !== -1 ? s : STATUSES[0]; }
+
+    function showLoading() {
+      board.style.display = "none";
+      boardState.innerHTML =
+        '<div class="board" aria-hidden="true">' + STATUSES.map(function (s) {
+          return '<div class="col"><div class="col-head"><span class="dot" style="background:' + COLORS[s] + '"></span><h2>' + s + '</h2></div>' +
+                 '<div class="col-body"><div class="skel"></div><div class="skel" style="height:48px"></div></div></div>';
+        }).join("") + '</div>';
+    }
+    function showError(msg) {
+      board.style.display = "none";
+      boardState.innerHTML = '<div class="center-state"><div style="font-size:34px" aria-hidden="true">⚠️</div>' +
+        '<div><div class="ttl">Something went wrong</div>' + escapeHTML(msg) + '</div>' +
+        '<button class="btn btn-primary" id="retryBtn">Try again</button></div>';
+      var rb = $("retryBtn"); if (rb) rb.addEventListener("click", load);
+    }
+    function showFatal(msg) {
+      board.style.display = "none";
+      subtitle.textContent = "Not connected";
+      boardState.innerHTML = '<div class="center-state"><div style="font-size:34px" aria-hidden="true">🔌</div>' +
+        '<div><div class="ttl">Can\'t reach Zoho Creator</div>' + escapeHTML(msg) + '<br>Open this board from inside the Creator app.</div></div>';
+    }
+
+    function render() {
+      // pending (optimistic) cards always show, even under an active search filter,
+      // so the column counts and visible cards never disagree.
+      var visible = tasks.filter(function (t) { return t._pending || !query || (t.Task_Name || "").toLowerCase().indexOf(query) !== -1; });
+      if (!tasks.length) {
+        board.style.display = "none";
+        boardState.innerHTML = '<div class="center-state"><div style="font-size:38px" aria-hidden="true">\u{1F4CB}</div>' +
+          '<div><div class="ttl">No tasks yet</div>Add your first task using the box above.</div></div>';
+        updateSubtitle(); announce("No tasks yet"); return;
+      }
+      // Snapshot the board scroll position so growing the list (infinite scroll) or an optimistic
+      // re-render doesn't yank the user to the top. The whole board scrolls inside .board-wrap;
+      // emptying #board momentarily collapses its height, which would otherwise reset scrollTop to 0.
+      var scroller = board.parentNode;                            // .board-wrap (the scroll container)
+      var savedScroll = scroller ? scroller.scrollTop : 0;
+      boardState.innerHTML = "";
+      board.style.display = "grid";
+      board.innerHTML = "";
+      STATUSES.forEach(function (status) {
+        var items = visible.filter(function (t) { return normStatus(t.Status) === status; });
+        var total = tasks.filter(function (t) { return normStatus(t.Status) === status; }).length;
+        // Render pending cards always; cap the rest at limits[status]. Scrolling near the bottom
+        // raises the cap (see the delegated "scroll" handler in wireBoard) — keeps the DOM light.
+        var pend = items.filter(function (t) { return t._pending; });
+        var rest = items.filter(function (t) { return !t._pending; });
+        var shown = rest.slice(0, limits[status]);
+        var hidden = rest.length - shown.length;
+        var body = pend.concat(shown).map(cardHTML).join("") || '<div class="empty-col">Drop tasks here</div>';
+        var more = hidden > 0
+          ? '<div class="col-more" aria-hidden="true">Scroll for more · showing ' + (pend.length + shown.length) + ' of ' + total + '</div>'
+          : "";
+        var col = document.createElement("div");
+        col.className = "col"; col.dataset.status = status;
+        col.innerHTML = '<div class="col-head"><span class="dot" style="background:' + COLORS[status] + '"></span>' +
+          '<h2>' + status + '</h2><span class="count" title="' + total + ' task(s)">' + total + '</span></div>' +
+          '<div class="col-body" role="list">' + body + more + '</div>';
+        board.appendChild(col);
+      });
+      if (scroller) scroller.scrollTop = savedScroll;              // keep the user where they were
+      updateSubtitle();
+    }
+    function cardHTML(t) {
+      var color = COLORS[normStatus(t.Status)] || "var(--border-2)";
+      var name = escapeHTML(t.Task_Name || "(untitled)");
+      return '<div class="card' + (t._pending ? ' pending' : '') + '" role="listitem" tabindex="0" draggable="true" data-id="' + escapeHTML(t.ID) + '"' +
+        ' style="--col-color:' + color + '" aria-label="' + name + ', ' + normStatus(t.Status) + '. Press Enter to edit and change status.">' +
+        '<div class="card-actions">' +
+          '<button class="edit" title="Edit task" aria-label="Edit task: ' + name + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></button>' +
+          '<button class="del" title="Delete task" aria-label="Delete task: ' + name + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>' +
+        '</div>' +
+        '<div class="card-title">' + name + '</div>' +
+        '<div class="card-meta"><span class="badge" style="color:' + color + ';background:color-mix(in srgb,' + color + ' 16%,transparent)">' + normStatus(t.Status) + '</span></div>' +
+      '</div>';
+    }
+    function updateSubtitle() {
+      var done = tasks.filter(function (t) { return normStatus(t.Status) === "Done"; }).length;
+      subtitle.textContent = tasks.length + " task" + (tasks.length === 1 ? "" : "s") + " · " + done + " done";
+      announce(tasks.length + " task" + (tasks.length === 1 ? "" : "s") + " on the board, " + done + " done");
+    }
+
+    /* ===================== Interactions ===================== */
+    function clearDragOver() {
+      var hot = board.querySelectorAll(".col.drag-over");
+      for (var i = 0; i < hot.length; i++) hot[i].classList.remove("drag-over");
+    }
+    // One-time event delegation on the static #board. Listeners are attached ONCE (in boot),
+    // never per card/column — so render() stays O(N) for DOM work only, with no listener
+    // churn or memory growth as the board scales to hundreds/thousands of cards.
+    function wireBoard() {
+      board.addEventListener("click", function (e) {
+        var card = e.target.closest(".card"); if (!card) return;
+        if (e.target.closest(".edit")) { e.stopPropagation(); openEdit(card.dataset.id); }
+        else if (e.target.closest(".del")) { e.stopPropagation(); doDelete(card.dataset.id); }
+      });
+      board.addEventListener("keydown", function (e) {
+        if (e.key !== "Enter" && e.key !== " ") return;
+        var card = e.target.closest(".card");
+        if (card && e.target === card) { e.preventDefault(); openEdit(card.dataset.id); }   // only when the card itself is focused
+      });
+      board.addEventListener("dragstart", function (e) {
+        var card = e.target.closest(".card"); if (!card) return;
+        e.dataTransfer.setData("text/plain", card.dataset.id); e.dataTransfer.effectAllowed = "move";
+        card.classList.add("dragging");
+      });
+      board.addEventListener("dragend", function (e) {
+        var card = e.target.closest(".card"); if (card) card.classList.remove("dragging");
+        clearDragOver();
+      });
+      board.addEventListener("dragover", function (e) {
+        var col = e.target.closest(".col"); if (!col) return;
+        e.preventDefault();
+        if (!col.classList.contains("drag-over")) { clearDragOver(); col.classList.add("drag-over"); }
+      });
+      board.addEventListener("drop", function (e) {
+        var col = e.target.closest(".col"); if (!col) return;
+        e.preventDefault(); clearDragOver();
+        var id = e.dataTransfer.getData("text/plain");
+        var t = findTask(id);
+        if (t && normStatus(t.Status) !== col.dataset.status) changeStatus(id, col.dataset.status);
+      });
+      // Infinite scroll (lazy load): the whole board scrolls as ONE container (.board-wrap = board's
+      // parent). When scrolled near the bottom, raise the render cap for every column that still has
+      // hidden cards. render() restores scroll position, so the list grows in place (no jump to top).
+      var scroller = board.parentNode;
+      if (scroller && scroller.addEventListener) scroller.addEventListener("scroll", function () {
+        if (scroller.scrollTop + scroller.clientHeight < scroller.scrollHeight - 320) return;   // not near bottom yet
+        var grew = false;
+        STATUSES.forEach(function (status) {
+          var total = tasks.filter(function (t) { return normStatus(t.Status) === status; }).length;
+          if (limits[status] < total) { limits[status] += PAGE_RENDER; grew = true; }
+        });
+        if (grew) render();
+      });
+    }
+
+    function changeStatus(id, newStatus) {
+      var t = findTask(id); if (!t || t._pending) return;          // per-card lock
+      var prev = t.Status; t.Status = newStatus; t._pending = true;
+      var mi = tasks.indexOf(t); if (mi > 0) { tasks.splice(mi, 1); tasks.unshift(t); }  // surface moved card at top of its new column (stays visible under the render cap)
+      render();   // optimistic + lock
+      pendingOps++;
+      updateTask(id, { Status: newStatus })
+        .then(function () { toast("Moved to " + newStatus, "ok"); })
+        .catch(function (err) {
+          var cur = findTask(id);
+          if (cur && cur.Status === newStatus) cur.Status = prev;  // last-write-wins; re-resolve by id
+          toast("Couldn't move task: " + readErr(err), "err");
+        })
+        .then(function () { var cur = findTask(id); if (cur) cur._pending = false; render(); pendingOps--; });
+    }
+
+    function doDelete(id) {
+      var t = findTask(id); if (!t || t._pending) return;
+      var idx = tasks.indexOf(t);
+      tasks.splice(idx, 1); render();                              // optimistic
+      pendingOps++;
+      removeTask(id)
+        .then(function () { toast("Task deleted", "ok"); })
+        .catch(function (err) {
+          if (tasks.indexOf(t) === -1) tasks.splice(Math.min(idx, tasks.length), 0, t);  // idempotent, clamped
+          render(); toast("Couldn't delete: " + readErr(err), "err");
+        })
+        .then(function () { pendingOps--; });
+    }
+
+    /* ----- Composer ----- */
+    function submitNew() {
+      var addBtn = $("addBtn");
+      if (addBtn.disabled) return;                                 // re-entry guard (Enter + click)
+      var name = $("newTask").value.trim();
+      if (!name) { toast("Type a task name first", "err"); $("newTask").focus(); return; }
+      var status = $("newStatus").value;
+      addBtn.disabled = true;
+      var temp = { ID: "_tmp_" + (++tmpSeq), Task_Name: name, Status: status, _pending: true };  // collision-free id
+      tasks.unshift(temp); render();                               // new card at top of its column (visible under the render cap)
+      $("newTask").value = "";
+      pendingOps++;
+      createTask(name, status)
+        .then(function (newId) {
+          temp.ID = newId != null ? newId : temp.ID; temp._pending = false; render();
+          toast("Task added", "ok");
+        })
+        .catch(function (err) {
+          var i = tasks.indexOf(temp); if (i !== -1) tasks.splice(i, 1); render();
+          toast("Couldn't add task: " + readErr(err), "err");
+        })
+        .then(function () { addBtn.disabled = false; pendingOps--; $("newTask").focus(); });
+    }
+    $("addBtn").addEventListener("click", submitNew);
+    $("newTask").addEventListener("keydown", function (e) { if (e.key === "Enter") submitNew(); });
+
+    /* ----- Edit modal ----- */
+    function openEdit(id) {
+      var t = findTask(id); if (!t || t._pending) return;
+      editingId = id; lastFocus = document.activeElement;
+      $("editName").value = t.Task_Name || "";
+      $("editStatus").value = normStatus(t.Status);
+      $("overlay").classList.add("open");
+      setTimeout(function () { $("editName").focus(); $("editName").select(); }, 40);
+    }
+    function closeEdit() {
+      $("overlay").classList.remove("open"); editingId = null;
+      // restore focus only to a node still in the DOM; else fall back to the composer
+      var fb = (lastFocus && lastFocus.focus && document.contains(lastFocus)) ? lastFocus : $("newTask");
+      if (fb && fb.focus) fb.focus();
+    }
+    function saveEdit() {
+      var t = findTask(editingId); if (!t) { closeEdit(); return; }
+      var name = $("editName").value.trim();
+      if (!name) { toast("Task name can't be empty", "err"); return; }
+      var status = $("editStatus").value;
+      var fields = {};
+      if (name !== t.Task_Name) fields.Task_Name = name;
+      if (status !== t.Status) fields.Status = status;
+      if (!Object.keys(fields).length) { closeEdit(); return; }
+      var saveBtn = $("saveBtn");
+      saveBtn.disabled = true; saveBtn.textContent = "Saving…";
+      $("overlay").setAttribute("aria-busy", "true");
+      $("cancelBtn").focus();                                      // move focus off the about-to-be-disabled Save
+      pendingOps++;
+      var id = editingId;
+      updateTask(id, fields)
+        .then(function () {
+          var tk = findTask(id); if (tk) { if (fields.Task_Name !== undefined) tk.Task_Name = name; if (fields.Status !== undefined) tk.Status = status; }
+          render(); closeEdit(); toast("Task updated", "ok");
+        })
+        .catch(function (err) { toast("Couldn't save: " + readErr(err), "err"); })
+        .then(function () {
+          saveBtn.disabled = false; saveBtn.textContent = "Save";
+          $("overlay").removeAttribute("aria-busy"); pendingOps--;
+        });
+    }
+    $("saveBtn").addEventListener("click", saveEdit);
+    $("deleteBtn").addEventListener("click", function () {
+      if (!editingId) return;
+      var id = editingId; closeEdit(); doDelete(id);
+      var nt = $("newTask"); if (nt) nt.focus();                   // land focus on a node render() never destroys
+    });
+    $("cancelBtn").addEventListener("click", closeEdit);
+    $("overlay").addEventListener("click", function (e) { if (e.target === $("overlay")) closeEdit(); });
+    $("editName").addEventListener("keydown", function (e) { if (e.key === "Enter") saveEdit(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && $("overlay").classList.contains("open")) closeEdit(); });
+    // Focus trap (skips disabled / hidden controls so a disabled Save isn't a dead Tab stop)
+    $("overlay").addEventListener("keydown", function (e) {
+      if (e.key !== "Tab" || !$("overlay").classList.contains("open")) return;
+      var nodes = $("overlay").querySelectorAll('button, input, select, [tabindex]:not([tabindex="-1"])');
+      var f = Array.prototype.filter.call(nodes, function (el) { return !el.disabled && el.offsetParent !== null; });
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+
+    /* ----- Search / refresh ----- */
+    var searchTimer = null;
+    $("search").addEventListener("input", function (e) {
+      var v = e.target.value.trim().toLowerCase();
+      clearTimeout(searchTimer);                                   // debounce: coalesce bursts of keystrokes into one render
+      searchTimer = setTimeout(function () { query = v; resetLimits(); render(); }, 120);   // filtered results start from the top
+    });
+    $("refreshBtn").addEventListener("click", function () {
+      if (pendingOps > 0) { toast("Hang on — finishing pending changes…", "err"); return; }
+      var b = $("refreshBtn"); b.classList.add("spin");
+      load().then(function () { setTimeout(function () { b.classList.remove("spin"); }, 350); });
+    });
+
+    /* ===================== Load ===================== */
+    function load() {
+      showLoading();
+      return fetchAll()
+        .then(function (data) { tasks = data || []; resetLimits(); render(); })
+        .catch(function (err) { showError(readErr(err)); });
+    }
+
+    /* ===================== Context (feature-detected) ===================== */
+    function applyContext() {
+      try {
+        if (ZOHO.CREATOR.UTIL && typeof ZOHO.CREATOR.UTIL.getInitParams === "function") {
+          return ZOHO.CREATOR.UTIL.getInitParams().then(function (p) {
+            if (!p) return;
+            if (p.themeBrandColor) document.documentElement.style.setProperty("--accent", p.themeBrandColor);
+            var env = (p.envUrlFragment || "");
+            if (/development/i.test(env)) showEnv("DEV");
+            else if (/stage/i.test(env)) showEnv("STAGE");
+          }).catch(function () {});
+        }
+      } catch (e) {}
+      return Promise.resolve();
+    }
+    function showEnv(label) { var b = $("envBadge"); b.textContent = label; b.style.display = "inline-block"; }
+
+    /* ===================== Boot ===================== */
+    function boot() {
+      if (typeof ZOHO === "undefined" || !ZOHO.CREATOR) { showFatal("The Creator widget SDK didn't load."); return; }
+      wireBoard();   // attach delegated board listeners exactly once
+      showLoading();
+      ZOHO.CREATOR.init()
+        .then(function () { return applyContext(); })
+        .then(function () { return load(); })
+        .catch(function (err) { showFatal(readErr(err)); });
+    }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+    else boot();
+  })();
+  </script>
+</body>
+</html>
