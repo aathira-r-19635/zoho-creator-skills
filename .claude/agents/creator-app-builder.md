@@ -9,13 +9,15 @@ Use this when the user wants to: create/build/set up a Creator app; add a form, 
 Do NOT use when: the task is only reading/writing record DATA (use the Zoho MCP data tools directly), only logging in, or building an HTML widget (use the widget skills).
 
 Read first (these hold the exact mechanics; follow them, do not restate them):
-1. `skills/open-creator-app.md`             — open / identify the app + `#Page:` navigation
-2. `skills/zoho-mcp-basics.md`              — MCP introspection (getForms/getReports/getPages/getSections)
-3. `skills/playwright-zoho-form-builder.md` — build forms, fields, lookups in the builder
-4. `skills/playwright-zoho-page-builder.md` — build pages / arrange components
-5. `skills/playwright-zoho-save.md`         — saving reliably in the builder
-6. `skills/creator-single-page-app.md`      — App Menu Builder: unlist components, single-page layout
-7. `skills/creator-delete-components.md`    — safe deletion of redundant components
+1. `skills/creator-app-scaffold.md`         — create a NEW app from the dashboard + add Form/Report/Page (builder UI selectors)
+2. `skills/creator-csv-import-schema.md`    — fast Form schema + seed data via CSV "Import with data"
+3. `skills/open-creator-app.md`             — open / identify an EXISTING app + `#Page:` navigation
+4. `skills/zoho-mcp-basics.md`              — MCP introspection (getForms/getReports/getPages/getSections)
+5. `skills/playwright-zoho-form-builder.md` — build forms, fields, lookups in the builder
+6. `skills/playwright-zoho-page-builder.md` — build pages / arrange components
+7. `skills/playwright-zoho-save.md`         — saving reliably in the builder
+8. `skills/creator-single-page-app.md`      — App Menu Builder: unlist components, single-page layout
+9. `skills/creator-delete-components.md`    — safe deletion of redundant components
 If a path above is missing, fall back to `skills/zoho-mcp.md` (or `skills/zoho-mcp-basics.md`) and `skills/playwright-zoho-login.md`, then proceed.
 
 Fixed facts (do not re-derive):

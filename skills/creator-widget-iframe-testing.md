@@ -12,6 +12,15 @@ Do NOT use to edit the widget — change `widget.html` and re-deploy (see `creat
 3. BUT an ELEMENT-SCOPED `browser_evaluate` runs INSIDE the iframe's frame. Pass any element ref
    that is inside the iframe; reach the widget's window with `el.ownerDocument.defaultView`.
 
+## Probe SDK capabilities BEFORE building (Phase 0 de-risk)
+Any EXISTING widget's initialized SDK lets you discover SDK facts cheaply, before committing a schema —
+run the same element-scoped eval against any live widget (e.g. the STM board). Verified 2026-06-13/14:
+- Server-side filter: `getAllRecords({ appName, reportName, page:1, pageSize:5, criteria:'(Status == "Done" && Task_Name.contains("LT"))' })` → `code 3000`, filtered. Operators verified: `==` `!=` `&&` `||` `.contains()` `.startsWith()`.
+- `getInitParams()` is SYNCHRONOUS → `{ scope, envUrlFragment, appLinkName, loginUser, themeBrandColor }` (read directly, never `.then`).
+- `deleteRecord` is criteria-based → one call can delete MANY rows (`{ result:[...], code:3000 }`).
+- `addRecord` echoes `{ code, data:{ID}, message }`; read response is `{ code, data }` (NO total-count field).
+Run a tiny add→delete inside the probe so it self-cleans. Full contract: `creator-widget-js-sdk.md`.
+
 ## Step 0 — get an element ref inside the iframe
 1. `browser_navigate` to the app base URL; `browser_wait_for` ~8s so the widget boots.
 2. `browser_snapshot` with `target: 'iframe[name="embedded-preview"]'`.

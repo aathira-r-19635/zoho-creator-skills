@@ -42,8 +42,8 @@ Verify: the widget row appears in the Widgets list.
 1. Click `Design` → `Add New` → `Page` → `Blank`.
 2. Give the page a UNIQUE name (must NOT match any existing report name — collisions break embedding/navigation).
 3. In the page builder, open the left panel `Widgets`.
-4. Drag the widget tile onto the canvas. It is jQuery-UI MOUSE-based (NOT HTML5 drag): mousedown on the tile → ≥3 mouse-move steps toward the canvas centre (~25%/50%/75% of the path, brief pause each) → mouseup over the canvas. A single instantaneous move or HTML5 `browser_drag` is IGNORED (use `browser_drag` only as a fallback); verify a placeholder appears on the canvas mid-drag.
-5. Save the page. Note its LinkName.
+4. Drag the widget tile onto the canvas with REAL mouse events (jQuery-UI based; HTML5/`browser_drag` and a single instantaneous move are IGNORED). VERIFIED recipe (run via `browser_run_code_unsafe`): `mouse.move(tileX,tileY)` → `mouse.down()` → ~16× `mouse.move(...,{steps:2})` stepping toward the canvas centre with ~25 ms pauses → `mouse.move(canvasX,canvasY)` → `mouse.up()`. (Verified 2026-06-14.)
+5. A "Widget Configuration" panel opens (confirms the associated widget). Close it (`#zc-pb-mb-closebtn`), then click Done (`#builder-close`) to save. Note the page LinkName.
 
 ### 5. Open the live page
 The page hash is `#Page:<LinkName>` (e.g. `#Page:Board`), NOT `#<LinkName>`.
@@ -66,6 +66,8 @@ Verify it is the NEW build (not cached): the widget runs in a cross-origin `zapp
 - If the deep-link hangs the app boot → you loaded `#Page:<LinkName>` before the app base was ready. Fix: load the app base URL first, then the hash (step 5).
 - If `zet init --zoho-service creator` errors or picks CRM → that flag only supports CRM. Fix: hand-build the structure (step 1).
 - If `zet pack` says "command not found" → `zet` is not installed. Fix: re-do preconditions step 1.
+- If a widget VIEW renders blank / "Cannot set properties of null (setting 'innerHTML')" → you queried `document.getElementById(...)` for an element inside a view node NOT yet appended to the DOM. Fix: build the node detached and query it with `viewEl.querySelector(...)`, append to the document last. (Verified 2026-06-14.)
+- Registering in a FRESH app (no widgets yet): `Create` (`#createWidget`) → `Upload File` → Name `#widgetForm #widgetName`, Browse `#widgetUploadField`, Index `#indexPage` = `/widget.html`, submit `#addWidget`.
 
 ## Related Skills
 - `creator-widget-js-sdk.md` — JS SDK calls inside the widget.
