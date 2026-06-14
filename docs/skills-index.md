@@ -46,6 +46,7 @@ Skills for building and modifying Zoho Creator apps — forms, pages, code, and 
 | MCP Data Operations | `zoho-mcp-data-operations.md` | Add, update, query, and delete records in Zoho Creator forms and reports |
 | Zoho Code MCP Setup | `zoho-code-mcp-setup.md` | Configure MCP server connection inside Zoho Code IDE |
 | Creator Widget JS SDK (v1) | `creator-widget-js-sdk.md` | Verified v1 ZOHO.CREATOR.API contract: server-side `criteria` read-filter (==/!=/&&/\|\|/contains/startsWith), double-data-wrap add/update, criteria/multi-row delete, code 3000, SYNC `getInitParams`, optimistic-CRUD hardening |
+| Scaffold a New Creator App + Components | `creator-app-scaffold.md` | Create a new app from the dashboard (New Application → Create from scratch) + add Form/Report/Page via the builder picker (verified selectors) |
 | Build, Package & Register a Creator Widget | `creator-widget-build-register.md` | Hand-build, zet-pack, register a custom HTML/JS widget, then embed it on a page (verified builder selectors + real mouse-API drag) |
 | Create Form Schema + Seed via CSV Import | `creator-csv-import-schema.md` | Stand up Creator form schema + seed data fast via CSV "Import with data" (auto-fields from headers; choice fields get allow_other_choice) |
 | Creator Widget Scalability | `creator-widget-scalability.md` | Keep a widget responsive at scale: debounce, event delegation, IMPLEMENTED lazy-load/infinite-scroll (per-column cap, `.board-wrap` scroll, position preserved); verified 545 records → 1,821 DOM nodes |

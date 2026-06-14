@@ -186,6 +186,7 @@ Before session closure, turn what you learned into reusable repo assets (skills/
 | `zoho-mcp-session-closure.md` | MCP-specific session closure context |
 | `zoho-code-mcp-setup.md` | Setting up MCP in Zoho Code IDE (.zcode/ai/mcp.json) |
 | `creator-widget-js-sdk.md` | Verified v1 ZOHO.CREATOR.API contract: server-side `criteria` read-filter (==/!=/&&/\|\|/contains/startsWith), double-data-wrap add/update, criteria/multi-row delete, code 3000, SYNC `getInitParams`, optimistic-CRUD hardening |
+| `creator-app-scaffold.md` | Create a NEW Creator app from the dashboard (New Application → Create from scratch) + add Form/Report/Page via the builder picker (`#create-form-trigger`/`#create-page-trigger`/`.zc-dem-create-header`) |
 | `creator-widget-build-register.md` | Hand-build, zet-pack, and register a custom HTML/JS widget in a Creator app, then embed it on a page (verified builder selectors + real mouse-API drag) |
 | `creator-csv-import-schema.md` | Stand up Creator form schema + seed data FAST via CSV "Import with data" (auto-fields from headers; choice fields get allow_other_choice); flat-FK-by-code joins |
 | `creator-widget-scalability.md` | Keep a widget responsive at scale: debounce search, event delegation, and IMPLEMENTED lazy-load/infinite-scroll (per-column cap, `.board-wrap` scroll, position preserved) — verified 545 records → 1,821 DOM nodes |
