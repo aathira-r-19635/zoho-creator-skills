@@ -1,0 +1,4 @@
+Project_Code,Project_Name,Status,Health,Start_Date,Due_Date,Budget_Hours,Color,Description
+ATL-001,Apollo Cloud Migration,Active,On Track,01-Jan-2026,30-Jun-2026,1200,#6366f1,Migrate core systems to cloud
+ATL-002,Helios Rebrand,Planning,At Risk,15-Feb-2026,15-Aug-2026,800,#22c55e,Company-wide brand refresh
+ATL-003,Orion Mobile App,Active,Off Track,01-Mar-2026,01-Sep-2026,1500,#f59e0b,New customer mobile app
