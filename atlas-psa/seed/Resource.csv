@@ -1,0 +1,6 @@
+Member_Name,Email,Role,Capacity_Hours_Per_Week,Cost_Rate,Is_Active,Avatar_Color
+Alice Johnson,alice@acme.com,PM,40,120,1,#6366f1
+Bob Smith,bob@acme.com,Engineer,40,100,1,#8b5cf6
+Carol Lee,carol@acme.com,Designer,35,90,1,#ec4899
+Dan Martinez,dan@acme.com,QA,40,85,1,#f59e0b
+Eve Patel,eve@acme.com,Engineer,40,110,1,#10b981

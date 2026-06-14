@@ -166,6 +166,10 @@
     /* ===================== Config (verified schema) ===================== */
     var APP="atlas";
     var R_TASK="Task_Report", F_TASK="Task", R_PROJ="Project_Report", F_PROJ="Project";
+    var R_RES="All_Resources", F_RES="Resource", R_TL="All_Time_Logs", F_TL="Time_Log";
+    var R_ALLOC="All_Allocations", F_ALLOC="Allocation", R_MSTONE="All_Milestones", F_MSTONE="Milestone";
+    var R_TAG="All_Tags", F_TAG="Tag", R_CMT="All_Comments", F_CMT="Comment";
+    var R_ATT="All_Attachments", F_ATT="Attachment";
     var STATUSES=["Backlog","To Do","In Progress","In Review","Done","Blocked"];
     var SCOLOR={"Backlog":"var(--backlog)","To Do":"var(--todo)","In Progress":"var(--prog)","In Review":"var(--review)","Done":"var(--done)","Blocked":"var(--blocked)"};
     var PRIOS=["Low","Medium","High","Urgent"];
@@ -174,11 +178,20 @@
     document.documentElement.style.setProperty("--arrow","url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239aa3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E\")");
 
     /* ===================== State / Store ===================== */
-    var S={ projects:[], tasks:[], byCode:{}, tasksByProj:{}, route:"portfolio", q:"", curProj:null, sort:{k:"Sort_Order",dir:1}, limit:80, pending:0 };
+    var S={
+      projects:[], tasks:[], resources:[], timeLogs:[], allocations:[], milestones:[], tags:[], comments:[], attachments:[],
+      byCode:{}, tasksByProj:{}, resourceById:{}, tagById:{}, timeLogByTask:{}, cmtByParent:{}, attByParent:{},
+      route:"portfolio", q:"", curProj:null, sort:{k:"Sort_Order",dir:1}, limit:80, pending:0
+    };
     function reindex(){
-      S.byCode={}; S.tasksByProj={};
+      S.byCode={}; S.tasksByProj={}; S.resourceById={}; S.tagById={}; S.timeLogByTask={}; S.cmtByParent={}; S.attByParent={};
       S.tasks.forEach(function(t){ if(t.Task_Code) S.byCode[t.Task_Code]=t; });
       S.tasks.forEach(function(t){ (S.tasksByProj[t.Project_Code]=S.tasksByProj[t.Project_Code]||[]).push(t); });
+      S.resources.forEach(function(r){ if(r.ID) S.resourceById[r.ID]=r; });
+      S.tags.forEach(function(tg){ if(tg.ID) S.tagById[tg.ID]=tg; });
+      S.timeLogs.forEach(function(tl){ if(tl.Task_ID) (S.timeLogByTask[tl.Task_ID]=S.timeLogByTask[tl.Task_ID]||[]).push(tl); });
+      S.comments.forEach(function(c){ var k=c.Parent_Type+"_"+c.Parent_ID; (S.cmtByParent[k]=S.cmtByParent[k]||[]).push(c); });
+      S.attachments.forEach(function(a){ var k=a.Parent_Type+"_"+a.Parent_ID; (S.attByParent[k]=S.attByParent[k]||[]).push(a); });
     }
     /* ===================== SDK ===================== */
     function call(m,c){ return ZOHO.CREATOR.API[m](c).then(function(r){ if(r&&r.code===3000) return r; var e=new Error((r&&(r.message||r.description))||("code "+(r&&r.code))); e.r=r; throw e; }); }
@@ -225,7 +238,8 @@
       {id:"board",name:"Board",icon:'<path d="M4 4h4v16H4zM10 4h4v10h-4zM16 4h4v13h-4z"/>'},
       {id:"gantt",name:"Timeline",icon:'<path d="M4 6h10M4 12h14M4 18h7"/>'},
       {id:"table",name:"Table",icon:'<path d="M3 5h18v14H3zM3 10h18M9 5v14"/>'},
-      {id:"projects",name:"Projects",icon:'<path d="M3 7h6l2 2h10v9a2 2 0 0 1-2 2H3z"/>'}
+      {id:"projects",name:"Projects",icon:'<path d="M3 7h6l2 2h10v9a2 2 0 0 1-2 2H3z"/>'},
+      {id:"timelogs",name:"Time Logs",icon:'<path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13h-1v6l5.3 3.2.7-1.2-5-3z"/>'}
     ];
     function buildNav(){ $("nav").innerHTML=VIEWS.map(function(v){ return '<a data-r="'+v.id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+v.icon+'</svg>'+v.name+'</a>'; }).join("");
       $("nav").addEventListener("click",function(e){ var a=e.target.closest("a[data-r]"); if(a) go(a.dataset.r); }); }
@@ -234,7 +248,7 @@
     /* ===================== Render dispatch ===================== */
     function render(){
       document.querySelectorAll("#nav a").forEach(function(a){ a.classList.toggle("on", a.dataset.r===S.route); });
-      var titles={portfolio:"Portfolio",board:"Board",gantt:"Timeline & critical path",table:"All tasks",projects:"Projects",search:"Search"};
+      var titles={portfolio:"Portfolio",board:"Board",gantt:"Timeline & critical path",table:"All tasks",projects:"Projects",timelogs:"Time Logs",search:"Search"};
       $("vTitle").textContent=S.curProj?S.curProj.Project_Name:(titles[S.route]||"Atlas");
       var w=$("wrap"); var v=document.createElement("div"); v.className="view";
       if(S.curProj) renderProject(v);
@@ -243,6 +257,7 @@
       else if(S.route==="gantt") renderGantt(v);
       else if(S.route==="table") renderTable(v);
       else if(S.route==="projects") renderProjects(v);
+      else if(S.route==="timelogs") renderTimeLogs(v);
       else if(S.route==="search") renderSearch(v);
       w.innerHTML=""; w.appendChild(v);
     }
@@ -331,6 +346,13 @@
       v.querySelectorAll("tr[data-id]").forEach(function(tr){ tr.addEventListener("click",function(){ openEdit(tr.dataset.id); }); });
     }
 
+    function renderTimeLogs(v){
+      var logs=S.timeLogs.slice().sort(function(a,b){return parseD(b.Log_Date)-(parseD(a.Log_Date)||0);});
+      $("vSub").textContent=logs.length+" time logs · "+logs.reduce(function(a,l){return a+num(l.Hours);},0)+" hours logged";
+      var cols=[["Log_Date","Date"],["Task_ID","Task"],["Member_ID","Member"],["Hours","Hours"],["Notes","Notes"]];
+      v.innerHTML='<table class="tbl"><thead><tr>'+cols.map(function(c){return '<th data-k="'+c[0]+'">'+c[1]+'</th>';}).join("")+'</tr></thead><tbody>'+
+        logs.slice(0,S.limit).map(function(l){ var task=S.tasks.find(function(t){return t.ID===l.Task_ID;}); var res=S.resourceById[l.Member_ID]; return '<tr><td>'+esc(l.Log_Date)+'</td><td><span class="tk-code">'+esc(task?task.Task_Code:"—")+'</span> '+esc(task?task.Task_Name:"Unknown")+'</td><td>'+esc(res?res.Member_Name:"—")+'</td><td>'+num(l.Hours)+'h</td><td>'+esc(l.Notes||"")+'</td></tr>'; }).join("")+'</tbody></table>';
+    }
     function renderSearch(v){ renderTable(v); }
     function filtered(){ var q=S.q.toLowerCase(); if(!q) return S.tasks; return S.tasks.filter(function(t){ return (t.Task_Name||"").toLowerCase().indexOf(q)!==-1||(t.Task_Code||"").toLowerCase().indexOf(q)!==-1||(t.Assignee||"").toLowerCase().indexOf(q)!==-1||(t.Project_Code||"").toLowerCase().indexOf(q)!==-1; }); }
 
@@ -382,7 +404,7 @@
     /* ===================== Boot ===================== */
     function themeIcon(){ var d=document.documentElement.getAttribute("data-theme")==="dark"; $("themeIcon").innerHTML=d?'<circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1.5 12h3M19.5 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>':'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>'; }
     function applyCtx(){ try{ var u=(ZOHO.CREATOR.UTIL&&ZOHO.CREATOR.UTIL.getInitParams)?ZOHO.CREATOR.UTIL.getInitParams():null; if(!u)return; if(u.appLinkName)APP=u.appLinkName; if(u.themeBrandColor)document.documentElement.style.setProperty("--accent",u.themeBrandColor); var env=u.envUrlFragment||""; if(/development|stage/i.test(env)){var b=$("env");b.textContent=/stage/i.test(env)?"STAGE":"DEV";b.style.display="inline-block";} }catch(e){} }
-    function load(){ return Promise.all([fetchAll(R_PROJ),fetchAll(R_TASK)]).then(function(res){ S.projects=res[0]; S.tasks=res[1]; reindex(); var d=new Date(); $("syncStamp").textContent="Synced "+("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2); render(); }); }
+    function load(){ return Promise.all([fetchAll(R_PROJ),fetchAll(R_TASK),fetchAll(R_RES),fetchAll(R_TL),fetchAll(R_ALLOC),fetchAll(R_MSTONE),fetchAll(R_TAG),fetchAll(R_CMT),fetchAll(R_ATT)]).then(function(res){ S.projects=res[0]; S.tasks=res[1]; S.resources=res[2]||[]; S.timeLogs=res[3]||[]; S.allocations=res[4]||[]; S.milestones=res[5]||[]; S.tags=res[6]||[]; S.comments=res[7]||[]; S.attachments=res[8]||[]; reindex(); var d=new Date(); $("syncStamp").textContent="Synced "+("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2); render(); }); }
     var qTimer; $("q").addEventListener("input",function(e){ var val=e.target.value.trim(); clearTimeout(qTimer); qTimer=setTimeout(function(){ S.q=val; S.limit=80; if(val&&S.route!=="table"&&S.route!=="board"){S.route="search";} render(); },130); });
     $("theme").addEventListener("click",function(){ document.documentElement.setAttribute("data-theme",document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark"); themeIcon(); });
     $("refresh").addEventListener("click",function(){ if(S.pending>0){toast("Finishing pending changes…","err");return;} var b=$("refresh"); b.style.transition="transform .6s var(--ease-emph)"; b.style.transform="rotate(360deg)"; setTimeout(function(){b.style.transform="";},600); load(); });

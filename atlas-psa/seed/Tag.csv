@@ -1,0 +1,8 @@
+Tag_Name,Color,Scope,Project_ID
+bug,#ef4444,Global,
+feature,#22c55e,Global,
+documentation,#3b82f6,Global,
+refactor,#f59e0b,Global,
+urgent,#ec4899,Global,
+frontend,#06b6d4,Project,PRJ002
+backend,#8b5cf6,Project,PRJ001

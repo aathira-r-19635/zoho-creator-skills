@@ -1,0 +1,5 @@
+Parent_Type,Parent_ID,Attachment_URL,Created_At
+Task,TSK001,https://docs.example.com/api-spec.pdf,01-Jun-2026
+Project,PRJ001,https://docs.example.com/project-charter.doc,01-Jun-2026
+Task,TSK002,https://github.com/example/repo,02-Jun-2026
+Comment,CMT001,https://figma.com/designs/project,03-Jun-2026

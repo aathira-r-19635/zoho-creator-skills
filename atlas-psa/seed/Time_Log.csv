@@ -1,0 +1,11 @@
+Task_ID,Project_ID,Member_ID,Log_Date,Hours,Billable,Notes
+TSK001,PRJ001,RES001,01-Jun-2026,8,1,Planning and design
+TSK002,PRJ001,RES002,01-Jun-2026,6,1,API development
+TSK003,PRJ001,RES003,02-Jun-2026,4,1,Design iteration
+TSK004,PRJ001,RES002,02-Jun-2026,8,1,Feature implementation
+TSK005,PRJ002,RES002,03-Jun-2026,4,1,Requirements gathering
+TSK006,PRJ002,RES004,03-Jun-2026,8,1,Development
+TSK007,PRJ002,RES005,04-Jun-2026,8,1,UI implementation
+TSK008,PRJ001,RES001,04-Jun-2026,6,1,Project review
+TSK009,PRJ002,RES004,05-Jun-2026,8,1,QA testing
+TSK010,PRJ001,RES003,05-Jun-2026,4,1,Final review

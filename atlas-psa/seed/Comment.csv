@@ -1,0 +1,6 @@
+Parent_Type,Parent_ID,Author_ID,Body,Parent_Comment_ID,Created_At,Mentions
+Task,TSK001,RES001,Initial planning notes,,01-Jun-2026,
+Task,TSK001,RES002,Agreed on architecture,,01-Jun-2026,RES003
+Task,TSK002,RES002,Completed first draft,,02-Jun-2026,
+Task,TSK003,RES003,Design review feedback,,03-Jun-2026,RES001
+Project,PRJ001,RES001,Project is on track,,04-Jun-2026,
