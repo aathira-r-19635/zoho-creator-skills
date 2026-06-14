@@ -37,6 +37,23 @@ from headers in ONE step and seeds data. (Verified 2026-06-14 building the Atlas
 - Name collision with an existing empty form → delete the empty form first (form builder `More` ⋮ →
   Delete `a#zc-del-comp`, confirm `input#proceedBtn`), then import.
 
+## Phase 1+ Learnings (verified 2026-06-14)
+
+**Multiple-entity seeding via parallel CSVs:**
+- Created 7 CSVs (Resource, Time_Log, Allocation, Milestone, Tag, Comment, Attachment); each imports independently in ~30s.
+- CSV order does NOT matter (FKs are text links, not auto-numeric relations).
+- Cross-entity references use stable code columns (e.g. `Project_Code` = ATL-001, `Member_ID` = RES001) to avoid ID churn on import.
+- After all CSVs imported, secondary indexes are built client-side in the widget (no post-import schema/db work needed).
+
+**Known Gotcha: ID/FK Precision Loss**
+- If you have an 18-digit ID (e.g. `4537000000123456`), the importer infers it as Number and truncates to ~15 digits.
+- **Fix:** In step 4 (import preview), set any `*_ID` or `*_Code` column to **Single Line** before clicking Create.
+- Catch this early — re-importing the same CSV is tedious.
+
+**Date Format Strict**
+- Widget parser expects `dd-MMM-yyyy` (e.g., "01-Jun-2026"). Other formats silently fail or parse as wrong date.
+- Verified: "01-Jun-2026" → Date type ✓, "2026-06-01" → text string ✗, "1/6/2026" → wrong date ✗
+
 ## Related Skills
 - `creator-widget-build-register.md` — register + embed the widget that reads this schema.
 - `playwright-zoho-form-builder.md` — the manual field-by-field alternative.

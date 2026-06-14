@@ -31,6 +31,13 @@ Skills for automating Zoho Creator using Playwright MCP and Zoho MCP tools.
 → Read `CONTRIBUTING.md` and `skills/github-identity-enforcement.md`
 - Use only your corporate GitHub account
 
+### Need to create forms (not just add fields)?
+→ **CSV Import is fastest** (verified 2026-06-14):
+- See `skills/creator-csv-import-schema.md` (single form) or `skills/creator-multi-entity-seeding.md` (7+ related forms)
+- Creates form + list report + seed rows in ~30s per CSV
+- **Avoid Playwright automation** — Creator builder dialogs have z-index/overlay issues (verified 2026-06-14); manual import is more reliable
+- **Note:** Zoho MCP has no form-creation tools (only read/add-records); form creation requires CSV import or manual builder UI
+
 ### User says "close session" / "be ready" / "wrap up"?
 → **MUST follow `skills/session-closure-workflow.md` completely**
 - Document learnings, update skills, update docs
@@ -188,7 +195,8 @@ Before session closure, turn what you learned into reusable repo assets (skills/
 | `creator-widget-js-sdk.md` | Verified v1 ZOHO.CREATOR.API contract: server-side `criteria` read-filter (==/!=/&&/\|\|/contains/startsWith), double-data-wrap add/update, criteria/multi-row delete, code 3000, SYNC `getInitParams`, optimistic-CRUD hardening |
 | `creator-app-scaffold.md` | Create a NEW Creator app from the dashboard (New Application → Create from scratch) + add Form/Report/Page via the builder picker (`#create-form-trigger`/`#create-page-trigger`/`.zc-dem-create-header`) |
 | `creator-widget-build-register.md` | Hand-build, zet-pack, and register a custom HTML/JS widget in a Creator app, then embed it on a page (verified builder selectors + real mouse-API drag) |
-| `creator-csv-import-schema.md` | Stand up Creator form schema + seed data FAST via CSV "Import with data" (auto-fields from headers; choice fields get allow_other_choice); flat-FK-by-code joins |
+| `creator-csv-import-schema.md` | Stand up Creator form schema + seed data FAST via CSV "Import with data" (auto-fields from headers; choice fields get allow_other_choice); flat-FK-by-code joins; verified ID precision loss gotcha (verified 2026-06-14) |
+| `creator-multi-entity-seeding.md` | Seed 3+ interdependent forms via parallel CSV imports; dependency order, cross-reference validation, widget hydration verification (verified 2026-06-14) |
 | `creator-widget-scalability.md` | Keep a widget responsive at scale: debounce search, event delegation, and IMPLEMENTED lazy-load/infinite-scroll (per-column cap, `.board-wrap` scroll, position preserved) — verified 545 records → 1,821 DOM nodes |
 | `creator-bulk-write-throttling.md` | Worker-pool (6) + exponential backoff for bulk/parallel writes; avoids the ~HTTP 429 that ~12 concurrent addRecord calls trigger after ~400 writes |
 | `creator-widget-iframe-testing.md` | Drive/seed/measure a deployed widget from a browser session via element-scoped eval on its cross-origin iframe (load-test, render timing, synthetic drag) |
